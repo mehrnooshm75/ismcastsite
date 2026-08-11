@@ -3,208 +3,668 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ISMCAST | ایسم کست</title>
+<title>ایسم‌کست | IsmCast Podcast</title>
+<meta name="description" content="پادکستی درباره مفاهیم و مکاتبی که به «ایسم» ختم می‌شوند.">
+<meta property="og:title" content="ایسم‌کست | IsmCast">
+<meta property="og:description" content="ایسم‌کست از یک سوال ساده حین پیاده‌روی شروع شد: چرا این‌همه مفهوم مهم در جهان به «ایسم» ختم می‌شوند؟">
+<meta property="og:image" content="./photo_6030706551644949563_y.jpg">
+<meta name="theme-color" content="#0d0c08">
+<link rel="icon" href="./photo_6030706551644949563_y.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-main: #0b0d0e;
-    --bg-card: #14171a;
-    --border: #24292e;
-    --accent: #e5a93c; /* طلایی/برنز برای حس فلسفی */
-    --text-main: #e6edf3;
-    --text-muted: #8b949e;
+    --bg: #0d0c08;
+    --bg-2: #14120c;
+    --panel: rgba(255, 255, 255, 0.045);
+    --panel-hover: rgba(255, 255, 255, 0.09);
+    --border: rgba(234, 179, 8, 0.28);
+    --border-hover: rgba(234, 179, 8, 0.65);
+    --gold: #f59e0b;
+    --gold-bright: #eab308;
+    --text: #f4f1e8;
+    --muted: #a1a1aa;
+    --eyebrow: #8e8e93;
+    --amber: #f5b632;
+    --amber-bright: #ffd166;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { background: var(--bg); scroll-behavior: smooth; }
+
   body {
-    background-color: var(--bg-main);
-    color: var(--text-main);
-    font-family: 'Vazirmatn', sans-serif;
-    line-height: 1.8;
-  }
-
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 24px 8%;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .logo {
-    font-family: 'Noto Naskh Arabic', serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: var(--accent);
-  }
-
-  nav a {
-    color: var(--text-muted);
-    text-decoration: none;
-    margin-right: 20px;
-    font-size: 0.95rem;
-    transition: 0.2s;
-  }
-  nav a:hover { color: var(--text-main); }
-
-  .hero {
-    text-align: center;
-    padding: 100px 8% 80px;
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .hero badge {
-    background: rgba(229, 169, 60, 0.1);
-    color: var(--accent);
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    border: 1px solid rgba(229, 169, 60, 0.3);
-  }
-
-  .hero h1 {
-    font-family: 'Noto Naskh Arabic', serif;
-    font-size: 3rem;
-    margin: 24px 0 16px;
-    line-height: 1.3;
-  }
-
-  .hero p {
-    color: var(--text-muted);
-    font-size: 1.1rem;
-    margin-bottom: 32px;
-  }
-
-  .platforms {
+    font-family: "Vazirmatn", -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
-    gap: 12px;
-    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 56px 18px 60px;
+    background:
+      radial-gradient(ellipse 620px 420px at 50% -8%, rgba(234, 179, 8, 0.18), transparent 60%),
+      radial-gradient(ellipse 500px 500px at 100% 100%, rgba(245, 158, 11, 0.06), transparent 55%),
+      linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+    color: var(--text);
+    position: relative;
+    overflow-x: hidden;
   }
 
-  .btn-platform {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    color: var(--text-main);
-    padding: 10px 20px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 0.9rem;
-    display: inline-flex;
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 12% 18%, rgba(244,241,232,0.5), transparent),
+      radial-gradient(1.5px 1.5px at 82% 12%, rgba(244,241,232,0.35), transparent),
+      radial-gradient(1px 1px at 68% 32%, rgba(244,241,232,0.45), transparent),
+      radial-gradient(1.5px 1.5px at 24% 70%, rgba(244,241,232,0.3), transparent),
+      radial-gradient(1px 1px at 90% 65%, rgba(244,241,232,0.35), transparent),
+      radial-gradient(1.5px 1.5px at 45% 85%, rgba(244,241,232,0.25), transparent),
+      radial-gradient(1px 1px at 6% 45%, rgba(244,241,232,0.3), transparent);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 680px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 8px;
   }
 
-  .btn-platform:hover {
-    border-color: var(--accent);
+  /* ---- Avatar Section ---- */
+  .avatar-wrapper {
+    position: relative;
+    width: 148px;
+    height: 148px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .season-section {
-    padding: 60px 8%;
-    border-top: 1px solid var(--border);
+  .orbit {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(234, 179, 8, 0.3);
+    animation: spin 22s linear infinite;
   }
 
-  .section-title {
-    font-size: 1.5rem;
-    margin-bottom: 30px;
+  .orbit::after {
+    content: "";
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--gold-bright);
+    border-radius: 50%;
+    top: -3px;
+    right: 50%;
+    transform: translateX(50%);
+    box-shadow: 0 0 8px 1px rgba(234, 179, 8, 0.8);
+  }
+
+  .orbit.reverse {
+    inset: -16px;
+    border-color: rgba(234, 179, 8, 0.15);
+    animation: spin 34s linear infinite reverse;
+  }
+
+  .orbit.reverse::after {
+    width: 4px;
+    height: 4px;
+    top: 50%;
+    right: -2px;
+    box-shadow: 0 0 6px 1px rgba(234, 179, 8, 0.6);
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .avatar {
+    width: 104px;
+    height: 104px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(244,241,232,0.85);
+    box-shadow: 0 0 0 6px rgba(234, 179, 8, 0.12), 0 8px 30px rgba(0,0,0,0.6);
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .handle {
+    font-size: 0.85rem;
+    color: var(--gold);
+    margin-bottom: 18px;
+    direction: ltr;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+
+  p.bio {
+    font-size: 0.95rem;
+    line-height: 1.85;
+    color: var(--muted);
+    margin-bottom: 34px;
+    padding: 0 8px;
+    max-width: 480px;
+  }
+
+  /* ---- Section Headers ---- */
+  .group {
+    width: 100%;
+    margin-bottom: 36px;
+  }
+
+  .eyebrow {
     display: flex;
     align-items: center;
     gap: 12px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--gold-bright);
+    letter-spacing: 0.5px;
+    margin-bottom: 18px;
+    padding: 0 4px;
+    text-transform: uppercase;
   }
-  .section-title::after {
+
+  .eyebrow::after {
     content: "";
     flex: 1;
     height: 1px;
-    background: var(--border);
+    background: linear-gradient(to left, rgba(234, 179, 8, 0.4), transparent);
   }
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+  /* ---- Main Platforms Grid ---- */
+  .links-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
-  .card {
-    background: var(--bg-card);
+  .link-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 15px 20px;
+    background: var(--panel);
+    color: var(--text);
+    text-decoration: none;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 0.94rem;
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 24px;
-    transition: transform 0.2s, border-color 0.2s;
-  }
-  .card:hover {
-    transform: translateY(-4px);
-    border-color: var(--accent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   }
 
-  .card-num {
-    color: var(--accent);
-    font-size: 0.85rem;
+  .link-card .icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    color: var(--gold-bright);
+  }
+
+  .link-card:hover, .link-card:focus-visible {
+    background: var(--panel-hover);
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+  }
+
+  /* ---- Episodes Section ---- */
+  .episodes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    text-align: right;
+  }
+
+  .ep-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .ep-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+  }
+
+  .ep-header {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .ep-cover {
+    width: 72px;
+    height: 72px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 1px solid rgba(234, 179, 8, 0.3);
+    background: var(--bg-2);
+  }
+
+  .ep-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .ep-tag {
+    font-size: 0.72rem;
+    color: var(--gold);
     font-weight: 700;
-    margin-bottom: 8px;
   }
 
-  .card h3 {
-    font-size: 1.2rem;
-    margin-bottom: 12px;
+  .ep-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
   }
 
-  .card p {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    line-height: 1.6;
+  .ep-desc {
+    font-size: 0.88rem;
+    line-height: 1.75;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .ep-links {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .btn-listen {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: rgba(234, 179, 8, 0.1);
+    border: 1px solid rgba(234, 179, 8, 0.3);
+    color: var(--gold-bright);
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+
+  .btn-listen:hover {
+    background: var(--gold-bright);
+    color: #16110a;
+  }
+
+  .btn-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--muted);
+    background: transparent;
+  }
+
+  /* ---- Promo Section: Women in Science ---- */
+  .ad-group {
+    width: 100%;
+    margin-top: 10px;
+    padding-top: 28px;
+    border-top: 1px dashed rgba(245,182,50,0.25);
+  }
+
+  .ad-tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #16110a;
+    background: var(--amber-bright);
+    padding: 3px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+
+  .link-card.ad {
+    background: linear-gradient(135deg, rgba(245,182,50,0.18), rgba(245,182,50,0.05));
+    border-color: rgba(245,182,50,0.55);
+  }
+
+  .link-card.ad .icon { color: var(--amber-bright); }
+
+  .link-card.ad:hover, .link-card.ad:focus-visible {
+    background: linear-gradient(135deg, var(--amber), var(--amber-bright));
+    color: #16110a;
+    border-color: transparent;
+  }
+
+  .link-card.ad:hover .icon, .link-card.ad:focus-visible .icon { color: #16110a; }
+
+  .link-card .label-main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: right;
+    gap: 2px;
+  }
+
+  .link-card .label-sub {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  .link-card.ad:hover .label-sub { color: rgba(22,17,10,0.75); }
+
+  .footer {
+    margin-top: 40px;
+    color: var(--eyebrow);
+    font-size: 0.75rem;
+    letter-spacing: 0.3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .orbit, .orbit.reverse { animation: none; }
+    .link-card, .ep-card { transform: none; }
   }
 </style>
 </head>
 <body>
 
-  <header>
-    <div class="logo">ISMCAST / ایسم کست</div>
-    <nav>
-      <a href="#">فصل‌ها</a>
-      <a href="#">نقشه ایسم‌ها</a>
-      <a href="#">کتاب‌خانه</a>
-      <a href="#">درباره</a>
-    </nav>
-  </header>
+  <div class="container">
 
-  <section class="hero">
-    <badge>پادکست تحلیلی اندیشه و فلسفه</badge>
-    <h1>کاوش در مکاتب، ایدئولوژی‌ها و ریشه‌های تفکر بشر</h1>
-    <p>روایتی ساختاریافته از سیر تحول اندیشه‌ها؛ از دترمینیسم و جبر تا مکاتب مدرن سیاسی و اجتماعی.</p>
-    
-    <div class="platforms">
-      <a href="#" class="btn-platform"><i class="fa-solid fa-podcast"></i> کست‌باکس</a>
-      <a href="#" class="btn-platform"><i class="fa-brands fa-spotify"></i> اسپاتیفای</a>
-      <a href="#" class="btn-platform"><i class="fa-brands fa-telegram"></i> تلگرام</a>
+    <!-- Avatar + Orbit Header -->
+    <div class="avatar-wrapper">
+      <div class="orbit reverse"></div>
+      <div class="orbit"></div>
+      <img class="avatar" src="./photo_6030706551644949563_y.jpg" alt="لوگوی ایسم‌کست">
     </div>
-  </section>
 
-  <section class="season-section">
-    <h2 class="section-title">فصل اول: پرونده جبر و اختیار (Determinism)</h2>
-    <div class="grid">
-      <div class="card">
-        <div class="card-num">قسمت ۰۱</div>
-        <h3>دترمینیسم فیزیکی</h3>
-        <p>بررسی نگرش ساعت‌وار به جهان؛ از مکانیک نیوتنی تا لاپلاس و مرزهای جهان تعیین‌شده.</p>
-      </div>
-      <div class="card">
-        <div class="card-num">قسمت ۰۲</div>
-        <h3>دترمینیسم زیستی و تکاملی</h3>
-        <p>آیا ژن‌ها و ساختار عصبی ما، تصمیمات آینده‌مان را از قبل امضا کرده‌اند؟</p>
-      </div>
-      <div class="card">
-        <div class="card-num">قسمت ۰۳</div>
-        <h3>اراده آزاد و سازگارگرایی</h3>
-        <p>پاسخ فیلسوفان به مرز میان جبر طبیعت و آزادی انتخاب در عمل انسانی.</p>
+    <h1>ایسم‌کست | IsmCast</h1>
+    <div class="handle">@ismcast</div>
+
+    <p class="bio">
+      ایسم‌کست از یک سوال ساده حین پیاده‌روی شروع شد:<br>
+      چرا این‌همه مفهوم مهم در جهان به «ایسم» ختم می‌شوند؟
+    </p>
+
+    <!-- Main Platforms Links -->
+    <div class="group">
+      <div class="eyebrow">پلتفرم‌های شنیدن پادکست</div>
+      <div class="links-wrapper">
+        <a href="https://castbox.fm/vd/940214627" target="_blank" rel="noopener" class="link-card">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M19 11a7 7 0 0 1-14 0"/><path d="M12 18v3"/></svg>
+          شنیدن در کست‌باکس
+        </a>
+        <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi?si=-Ja9SdSqS6aWAJM60wqnXQ" target="_blank" rel="noopener" class="link-card">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M19 11a7 7 0 0 1-14 0"/><path d="M12 18v3"/></svg>
+          شنیدن در اسپاتیفای
+        </a>
+        <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" rel="noopener" class="link-card">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M19 11a7 7 0 0 1-14 0"/><path d="M12 18v3"/></svg>
+          شنیدن در اپل پادکست
+        </a>
+        <a href="https://fidibo.com/channel/30000510-ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA" target="_blank" rel="noopener" class="link-card">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M19 11a7 7 0 0 1-14 0"/><path d="M12 18v3"/></svg>
+          شنیدن در فیدیبو
+        </a>
+        <a href="https://t.me/ismcast" target="_blank" rel="noopener" class="link-card">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4 3 11l6 2m12-9-4 16-8-6m12-10L9 13"/></svg>
+          کانال تلگرام
+        </a>
       </div>
     </div>
-  </section>
+
+    <!-- Season 1 Episodes -->
+    <div class="group">
+      <div class="eyebrow">فصل اول: نبرد ایدئولوژی‌ها</div>
+      <div class="episodes-list">
+
+        <!-- Episode 0 -->
+        <div class="ep-card">
+          <div class="ep-header">
+            <img src="./photo_6030706551644949563_y.jpg" alt="کاور قسمت صفرم" class="ep-cover">
+            <div class="ep-info">
+              <span class="ep-tag">قسمت صفرم</span>
+              <h2 class="ep-title">پشت پرده‌ی کلمات</h2>
+              <p class="ep-desc">این یک شروع است. داستان تولد ایسم‌کست و ورود به دنیای پسوندهایی که کلید فهم دنیای امروزند.</p>
+            </div>
+          </div>
+          <div class="ep-links">
+            <a href="https://castbox.fm/vi/940214627" target="_blank" rel="noopener" class="btn-listen">کست‌باکس</a>
+            <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" rel="noopener" class="btn-listen">اسپاتیفای</a>
+            <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" rel="noopener" class="btn-listen">اپل پادکست</a>
+          </div>
+        </div>
+
+        <!-- Episode 1 -->
+        <div class="ep-card">
+          <div class="ep-header">
+            <img src="./ep1.png" alt="کاور قسمت اول" class="ep-cover">
+            <div class="ep-info">
+              <span class="ep-tag">قسمت اول</span>
+              <h2 class="ep-title">لیبرالیسم</h2>
+              <p class="ep-desc">لیبرالیسم از کجا آمد؟ بررسی ریشه‌های آزادی فردی، حقوق طبیعی و محدود کردن قدرت دولت.</p>
+            </div>
+          </div>
+          <div class="ep-links">
+            <a href="https://castbox.fm/vi/942759884" target="_blank" rel="noopener" class="btn-listen">کست‌باکس</a>
+            <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" rel="noopener" class="btn-listen">اسپاتیفای</a>
+            <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" rel="noopener" class="btn-listen">اپل پادکست</a>
+          </div>
+        </div>
+
+        <!-- Episode 2 -->
+        <div class="ep-card">
+          <div class="ep-header">
+            <img src="./ep2.png" alt="کاور قسمت دوم" class="ep-cover">
+            <div class="ep-info">
+              <span class="ep-tag">قسمت دوم</span>
+              <h2 class="ep-title">کاپیتالیسم</h2>
+              <p class="ep-desc">ریشه‌های کاپیتالیسم؛ بررسی تصویر تولید، ثروت و پیشرفت در نظام اقتصادی مسلط جهان.</p>
+            </div>
+          </div>
+          <div class="ep-links">
+            <a href="https://castbox.fm/vi/944898412" target="_blank" rel="noopener" class="btn-listen">کست‌باکس</a>
+            <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" rel="noopener" class="btn-listen">اسپاتیفای</a>
+            <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" rel="noopener" class="btn-listen">اپل پادکست</a>
+          </div>
+        </div>
+
+        <!-- Episode 3 -->
+        <div class="ep-card">
+          <div class="ep-header">
+            <img src="./ep3.png" alt="کاور قسمت سوم" class="ep-cover">
+            <div class="ep-info">
+              <span class="ep-tag">قسمت سوم</span>
+              <h2 class="ep-title">امپریالیسم</h2>
+              <p class="ep-desc">رقابت قدرت‌های بزرگ برای منابع و بازارها؛ آیا امپریالیسم آخرین مرحله بقای سرمایه‌داری بود؟</p>
+            </div>
+          </div>
+          <div class="ep-links">
+            <a href="https://castbox.fm/vi/948485454" target="_blank" rel="noopener" class="btn-listen">کست‌باکس</a>
+            <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" rel="noopener" class="btn-listen">اسپاتیفای</a>
+            <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" rel="noopener" class="btn-listen">اپل پادکست</a>
+          </div>
+        </div>
+
+        <!-- Episode 4 -->
+        <div class="ep-card">
+          <div class="ep-header">
+            <img src="./ep4.png" alt="کاور قسمت چهارم" class="ep-cover">
+            <div class="ep-info">
+              <span class="ep-tag">قسمت چهارم</span>
+              <h2 class="ep-title">مارکسیسم</h2>
+              <p class="ep-desc">زندگی و تفکرات کارل مارکس؛ مانیفست عصیان طبقاتی و رویای لغو استثمار.</p>
+            </div>
+          </div>
+          <div class="ep-links">
+            <a href="https://castbox.fm/vi/950150036" target="_blank" rel="noopener" class="btn-listen">کست‌باکس</a>
+            <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" rel="noopener" class="btn-listen">اسپاتیفای</a>
+            <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" rel="noopener" class="btn-listen">اپل پادکست</a>
+          </div>
+        </div>
+
+        <!-- Episode 5 -->
+        <div class="ep-card">
+          <div class="ep-header">
+            <img src="./ep5.png" alt="کاور قسمت پنجم" class="ep-cover">
+            <div class="ep-info">
+              <span class="ep-tag">قسمت پنجم</span>
+              <h2 class="ep-title">سوسیالیسم</h2>
+              <p class="ep-desc">کالبدشکافی سوسیالیسم و سوسیال‌دموکراسی؛ رام کردن هیولای کاپیتالیسم با دولت رفاه.</p>
+            </div>
+          </div>
+          <div class="ep-links">
+            <a href="https://castbox.fm/vi/953938951" target="_blank" rel="noopener" class="btn-listen">کست‌باکس</a>
+            <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" rel="noopener" class="btn-listen">اسپاتیفای</a>
+            <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" rel="noopener" class="btn-listen">اپل پادکست</a>
+          </div>
+        </div>
+
+        <!-- Episode 6 -->
+        <div class="ep-card">
+          <div class="ep-header">
+            <img src="./ep6.png" alt="کاور قسمت ششم" class="ep-cover">
+            <div class="ep-info">
+              <span class="ep-tag">قسمت ششم</span>
+              <h2 class="ep-title">کمونیسم</h2>
+              <p class="ep-desc">از آرمان‌شهر مارکس تا لنینیسم؛ چطور رویای جامعه بدون طبقه به دولت متمرکز تبدیل شد؟</p>
+            </div>
+          </div>
+          <div class="ep-links">
+            <a href="https://castbox.fm/vi/960455204" target="_blank" rel="noopener" class="btn-listen">کست‌باکس</a>
+            <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" rel="noopener" class="btn-listen">اسپاتیفای</a>
+            <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" rel="noopener" class="btn-listen">اپل پادکست</a>
+          </div>
+        </div>
+
+        <!-- Episode 7 -->
+        <div class="ep-card">
+          <div class="ep-header">
+            <img src="./ep7.png" alt="کاور قسمت هفتم" class="ep-cover">
+            <div class="ep-info">
+              <span class="ep-tag">قسمت هفتم</span>
+              <h2 class="ep-title">ناسیونالیسم</h2>
+              <p class="ep-desc">چگونه «ملت» به مهم‌ترین هویت انسان مدرن تبدیل شد؟ همبستگی یا سرچشمه نژادپرستی؟</p>
+            </div>
+          </div>
+          <div class="ep-links">
+            <a href="https://castbox.fm/vi/964934868" target="_blank" rel="noopener" class="btn-listen">کست‌باکس</a>
+            <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" rel="noopener" class="btn-listen">اسپاتیفای</a>
+            <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" rel="noopener" class="btn-listen">اپل پادکست</a>
+          </div>
+        </div>
+
+        <!-- Episode 8 -->
+        <div class="ep-card">
+          <div class="ep-header">
+            <img src="./ep8.png" alt="کاور قسمت هشتم" class="ep-cover">
+            <div class="ep-info">
+              <span class="ep-tag">قسمت هشتم</span>
+              <h2 class="ep-title">فاشیسم</h2>
+              <p class="ep-desc">چگونه یک ملت آزادی‌اش را واگذار می‌کند؟ بررسی ایتالیای پس از جنگ و ظهور موسولینی.</p>
+            </div>
+          </div>
+          <div class="ep-links">
+            <a href="https://castbox.fm/vi/972931559" target="_blank" rel="noopener" class="btn-listen">کست‌باکس</a>
+            <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" rel="noopener" class="btn-listen">اسپاتیفای</a>
+            <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" rel="noopener" class="btn-listen">اپل پادکست</a>
+          </div>
+        </div>
+
+        <!-- Episode 9 -->
+        <div class="ep-card">
+          <div class="ep-header">
+            <img src="./ep9.png" alt="کاور قسمت نهم" class="ep-cover">
+            <div class="ep-info">
+              <span class="ep-tag">قسمت نهم</span>
+              <h2 class="ep-title">نازیسم</h2>
+              <p class="ep-desc">تحلیل ناسیونال‌سوسیالیسم، توهمات نژادی و برپایی ماشین رعب و جنگ در قرن بیستم.</p>
+            </div>
+          </div>
+          <div class="ep-links">
+            <span class="btn-listen btn-disabled">به‌زودی</span>
+          </div>
+        </div>
+
+        <!-- Episode 10 -->
+        <div class="ep-card">
+          <div class="ep-header">
+            <img src="./ep10.png" alt="کاور قسمت دهم" class="ep-cover">
+            <div class="ep-info">
+              <span class="ep-tag">قسمت دهم</span>
+              <h2 class="ep-title">توتالیتاریسم</h2>
+              <p class="ep-desc">کالبدشکافی حکومت‌های تمامیت‌خواه؛ سیطره بر اندیشه، زندگی شخصی و نفوذ در روح جامعه.</p>
+            </div>
+          </div>
+          <div class="ep-links">
+            <span class="btn-listen btn-disabled">به‌زودی</span>
+          </div>
+        </div>
+
+        <!-- Episode 11 -->
+        <div class="ep-card">
+          <div class="ep-header">
+            <img src="./ep11.png" alt="کاور قسمت یازدهم" class="ep-cover">
+            <div class="ep-info">
+              <span class="ep-tag">قسمت یازدهم</span>
+              <h2 class="ep-title">آنارشیسم</h2>
+              <p class="ep-desc">نفی هرگونه اقتدار و دولت؛ بررسی آرمان جامعه برپایه همکاری داوطلبانه و برابری.</p>
+            </div>
+          </div>
+          <div class="ep-links">
+            <span class="btn-listen btn-disabled">به‌زودی</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Ad Section -->
+    <div class="ad-group">
+      <span class="ad-tag">پیشنهاد ویژه</span>
+      <div class="links-wrapper">
+        <a href="https://mehrnooshm75.github.io/podcast/" target="_blank" rel="noopener" class="link-card ad">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M19 11a7 7 0 0 1-14 0"/><path d="M12 18v3"/></svg>
+          <span class="label-main">
+            پادکست زنان در علم
+            <span class="label-sub">پادکست دیگری از همین سازنده</span>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer">IsmCast Podcast © All Rights Reserved</div>
+  </div>
 
 </body>
 </html>
