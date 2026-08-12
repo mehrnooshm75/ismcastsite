@@ -69,15 +69,33 @@
     color: var(--accent);
   }
 
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
   nav a {
     color: var(--text-muted);
     text-decoration: none;
-    margin-right: 20px;
     font-size: 0.9rem;
     font-weight: 500;
     transition: 0.2s;
   }
   nav a:hover { color: var(--accent); }
+
+  /* دکمه برجسته در منو */
+  nav a.nav-quiz-btn {
+    color: var(--bg-main);
+    background: var(--accent);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: 700;
+  }
+  nav a.nav-quiz-btn:hover {
+    background: var(--accent-bright);
+    color: var(--bg-main);
+  }
 
   /* ---- Hero Section ---- */
   .hero {
@@ -120,6 +138,7 @@
     justify-content: center;
     gap: 10px;
     flex-wrap: wrap;
+    margin-bottom: 30px;
   }
 
   .btn-platform {
@@ -140,6 +159,29 @@
     border-color: var(--accent);
     color: var(--accent);
     transform: translateY(-2px);
+  }
+
+  /* دکمه اصلی تست در بخش Hero */
+  .hero-quiz-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--accent), #b88228);
+    color: #0b0d0e;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 14px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(229, 169, 60, 0.3);
+    transition: all 0.3s ease;
+    border: 1px solid var(--accent-bright);
+  }
+
+  .hero-quiz-cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(229, 169, 60, 0.5);
+    background: linear-gradient(135deg, var(--accent-bright), var(--accent));
   }
 
   /* ---- Season / Main Content Section ---- */
@@ -309,6 +351,7 @@
     </div>
     <nav>
       <a href="#season1">فصل اول</a>
+      <a href="/quiz" class="nav-quiz-btn"><i class="fa-solid fa-brain"></i> تست ایدئولوژی</a>
       <a href="https://t.me/ismcast" target="_blank">تلگرام</a>
       <a href="https://castbox.fm/vd/940214627" target="_blank">کست‌باکس</a>
     </nav>
@@ -326,6 +369,14 @@
       <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" class="btn-platform"><i class="fa-brands fa-apple"></i> اپل پادکست</a>
       <a href="https://fidibo.com/channel/30000510-ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA" target="_blank" class="btn-platform"><i class="fa-solid fa-book-open"></i> فیدیبو</a>
       <a href="https://t.me/ismcast" target="_blank" class="btn-platform"><i class="fa-brands fa-telegram"></i> کانال تلگرام</a>
+    </div>
+
+    <!-- CTA دکمه تست ایدئولوژی -->
+    <div>
+      <a href="/quiz" class="hero-quiz-cta">
+        <i class="fa-solid fa-compass"></i>
+        ورود به تست سنجش ایدئولوژی
+      </a>
     </div>
   </section>
 
