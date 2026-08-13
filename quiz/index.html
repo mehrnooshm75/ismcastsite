@@ -3,19 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>قطب‌نمای سیاسی</title>
+  <title>تست قطب‌نمای سیاسی</title>
   <style>
-    /* ==========================================
-       تنظیمات اصلی و واکنش‌گرایی
-       ========================================== */
     * {
       box-sizing: border-box;
     }
 
     body {
       font-family: Tahoma, Vazir, system-ui, -apple-system, sans-serif;
-      background-color: #f4f6f9;
-      color: #333;
+      background-color: #f1f5f9;
+      color: #1e293b;
       margin: 0;
       padding: 12px;
       display: flex;
@@ -24,39 +21,102 @@
       min-height: 100vh;
     }
 
-    .container {
+    .card {
       background: #ffffff;
-      padding: 16px;
+      padding: 20px;
       border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 25px rgba(0,0,0,0.08);
       width: 100%;
-      max-width: 420px; /* مناسب برای تمام موبایل‌ها */
+      max-width: 450px;
       text-align: center;
     }
 
     h2 {
-      margin: 0 0 16px 0;
-      color: #1a2b4c;
-      font-size: 1.25rem;
+      margin: 0 0 8px 0;
+      color: #0f172a;
+      font-size: 1.3rem;
+    }
+
+    .subtitle {
+      color: #64748b;
+      font-size: 0.85rem;
+      margin-bottom: 20px;
     }
 
     /* ==========================================
-       باکس قطب‌نما (ریسپانسیو با aspect-ratio)
+       استایل‌های بخش سوالات
        ========================================== */
+    .progress-bar {
+      height: 6px;
+      background-color: #e2e8f0;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background-color: #2563eb;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .question-box {
+      min-height: 80px;
+      font-size: 1rem;
+      font-weight: bold;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .opt-btn {
+      background-color: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.2s;
+      touch-action: manipulation;
+    }
+
+    .opt-btn:active {
+      background-color: #2563eb;
+      color: white;
+      border-color: #2563eb;
+      transform: scale(0.98);
+    }
+
+    /* ==========================================
+       استایل‌های بخش نتیجه و قطب‌نما
+       ========================================== */
+    #result-section {
+      display: none;
+    }
+
     .compass-wrapper {
       position: relative;
       width: 100%;
       max-width: 320px;
-      /* ساخت مربع کاملاً پاسخگو */
       aspect-ratio: 1 / 1;
-      margin: 10px auto 20px auto;
+      margin: 10px auto 15px auto;
       background-color: #f8fafc;
       border-radius: 12px;
     }
 
     .compass-box {
       position: absolute;
-      /* ایجاد فاصله مناسب از اطراف برای جا شدن برچسب‌ها */
       top: 36px;
       bottom: 36px;
       left: 36px;
@@ -69,12 +129,11 @@
       border-radius: 6px;
     }
 
-    /* چهار ربع قطب‌نما */
     .quadrant {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: bold;
       opacity: 0.85;
       user-select: none;
@@ -83,18 +142,15 @@
       line-height: 1.2;
     }
 
-    .q-tl { background-color: #fca5a5; color: #7f1d1d; } /* چپ اقتدارگرا */
-    .q-tr { background-color: #93c5fd; color: #1e3a8a; } /* راست اقتدارگرا */
-    .q-bl { background-color: #fde047; color: #713f12; } /* چپ آزادی‌خواه */
-    .q-br { background-color: #86efac; color: #14532d; } /* راست آزادی‌خواه */
+    .q-tl { background-color: #fca5a5; color: #7f1d1d; }
+    .q-tr { background-color: #93c5fd; color: #1e3a8a; }
+    .q-bl { background-color: #fde047; color: #713f12; }
+    .q-br { background-color: #86efac; color: #14532d; }
 
-    /* محورها */
     .axis-v {
       position: absolute;
-      top: 0;
-      left: 50%;
-      width: 2px;
-      height: 100%;
+      top: 0; left: 50%;
+      width: 2px; height: 100%;
       background-color: #334155;
       transform: translateX(-50%);
       z-index: 1;
@@ -102,16 +158,13 @@
 
     .axis-h {
       position: absolute;
-      top: 50%;
-      left: 0;
-      width: 100%;
-      height: 2px;
+      top: 50%; left: 0;
+      width: 100%; height: 2px;
       background-color: #334155;
       transform: translateY(-50%);
       z-index: 1;
     }
 
-    /* برچسب‌های محورها (تنظیم فواصل جهت نلغزیدن در موبایل) */
     .axis-label {
       position: absolute;
       font-size: 0.75rem;
@@ -125,7 +178,6 @@
     .label-left { left: 2px; top: 50%; transform: translateY(-50%); }
     .label-right { right: 2px; top: 50%; transform: translateY(-50%); }
 
-    /* نقطه نماینده با اندازه مناسب لمس و دید در موبایل */
     .compass-dot {
       position: absolute;
       width: 16px;
@@ -136,113 +188,174 @@
       box-shadow: 0 0 6px rgba(0,0,0,0.4);
       z-index: 10;
       transform: translate(-50%, -50%);
-      transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1), top 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: left 0.5s ease, top 0.5s ease;
     }
 
-    /* کنترل‌ها و نتیجه */
-    #result-text {
-      margin: 12px 0;
-      font-size: 0.9rem;
-      font-weight: bold;
-      color: #0f172a;
+    .result-badge {
       background: #f1f5f9;
-      padding: 10px;
-      border-radius: 8px;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 0.95rem;
+      margin-bottom: 15px;
+      color: #0f172a;
     }
 
-    .btn {
-      background-color: #2563eb;
+    .restart-btn {
+      background-color: #0f172a;
       color: white;
       border: none;
       width: 100%;
       padding: 12px;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       font-size: 0.95rem;
       font-weight: bold;
       font-family: inherit;
-      touch-action: manipulation;
-    }
-
-    .btn:active {
-      background-color: #1d4ed8;
-      transform: scale(0.98);
-    }
-
-    /* بهبود فونت برای گوشی‌های خیلی کوچک */
-    @media (max-width: 360px) {
-      .axis-label, .quadrant {
-        font-size: 0.65rem;
-      }
-      .compass-wrapper {
-        margin: 5px auto 15px auto;
-      }
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h2>نتیجه قطب‌نمای سیاسی</h2>
+  <div class="card">
+    
+    <!-- ================= بخش سوالات ================= -->
+    <div id="quiz-section">
+      <h2>آزمون قطب‌نمای سیاسی</h2>
+      <div class="subtitle" id="question-count">سوال ۱ از ۱۰</div>
 
-    <!-- wrapper قطب‌نما با dir="ltr" جهت حفظ محاسبات ریاضی درست -->
-    <div class="compass-wrapper" dir="ltr">
-      <span class="axis-label label-top">اقتدارگرایی</span>
-      <span class="axis-label label-bottom">آزادی‌خواهی</span>
-      <span class="axis-label label-left">اقتصاد چپ</span>
-      <span class="axis-label label-right">اقتصاد راست</span>
-      
-      <div class="compass-box">
-        <div class="axis-v"></div>
-        <div class="axis-h"></div>
-        
-        <div class="quadrant q-tl">چپ<br>اقتدارگرا</div>
-        <div class="quadrant q-tr">راست<br>اقتدارگرا</div>
-        <div class="quadrant q-bl">چپ<br>آزادی‌خواه</div>
-        <div class="quadrant q-br">راست<br>آزادی‌خواه</div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
 
-        <div id="compass-dot" class="compass-dot" style="left: 50%; top: 50%;"></div>
+      <div class="question-box" id="question-text">
+        در حال بارگذاری سوال...
+      </div>
+
+      <div class="options-grid">
+        <button class="opt-btn" onclick="handleAnswer(2)">کاملاً موافقم</button>
+        <button class="opt-btn" onclick="handleAnswer(1)">موافقم</button>
+        <button class="opt-btn" onclick="handleAnswer(-1)">مخالفم</button>
+        <button class="opt-btn" onclick="handleAnswer(-2)">کاملاً مخالفم</button>
       </div>
     </div>
 
-    <div id="result-text">موقعیت شما: مرکز (میانه)</div>
+    <!-- ================= بخش نتیجه ================= -->
+    <div id="result-section">
+      <h2>نتیجه سنجش شما</h2>
+      <div class="subtitle">موقعیت دقیق شما روی قطب‌نما</div>
 
-    <button class="btn" onclick="testRandomPosition()">تست نقطه تصادفی</button>
+      <div class="compass-wrapper" dir="ltr">
+        <span class="axis-label label-top">اقتدارگرایی</span>
+        <span class="axis-label label-bottom">آزادی‌خواهی</span>
+        <span class="axis-label label-left">اقتصاد چپ</span>
+        <span class="axis-label label-right">اقتصاد راست</span>
+        
+        <div class="compass-box">
+          <div class="axis-v"></div>
+          <div class="axis-h"></div>
+          
+          <div class="quadrant q-tl">چپ<br>اقتدارگرا</div>
+          <div class="quadrant q-tr">راست<br>اقتدارگرا</div>
+          <div class="quadrant q-bl">چپ<br>آزادی‌خواه</div>
+          <div class="quadrant q-br">راست<br>آزادی‌خواه</div>
+
+          <div id="compass-dot" class="compass-dot" style="left: 50%; top: 50%;"></div>
+        </div>
+      </div>
+
+      <div class="result-badge" id="result-text">---</div>
+
+      <button class="restart-btn" onclick="resetQuiz()">شرکت مجدد در آزمون</button>
+    </div>
+
   </div>
 
   <script>
-    function updateCompassDot(x, y) {
-      // محدوده حداقل و حداکثر امتیاز سیستم شما
-      const minX = -60, maxX = 60;
-      const minY = -60, maxY = 60;
+    // بانک سوالات (امتیاز مثبت X یعنی اقتصاد راست، امتیاز مثبت Y یعنی اقتدارگرایی)
+    const questions = [
+      { text: "بازار آزاد و رقابت بدون مداخله دولت، بهترین راه برای رشد اقتصادی جامعه است.", axis: "X", dir: 1 },
+      { text: "خدمات درمانی و آموزش باید کاملاً رایگان و تحت کنترل دولت باشد.", axis: "X", dir: -1 },
+      { text: "دولت باید برای به حداقل رساندن فاصله طبقاتی، ماليات سنگین‌تری از ثروتمندان بگیرد.", axis: "X", dir: -1 },
+      { text: "خصوصی‌سازی صنایع و خدمات دولتی همیشه به نفع مصرف‌کننده است.", axis: "X", dir: 1 },
+      { text: "حفظ نظم و امنیت جامعه مهم‌تر از آزادی‌های فردی شهروندان است.", axis: "Y", dir: 1 },
+      { text: "شهروندان باید حق داشته باشند بدون سانسور نظرات عقیدتی و سیاسی خود را بیان کنند.", axis: "Y", dir: -1 },
+      { text: "احترام به سنت‌ها و ارزش‌های قدیمی مهم‌ترین شرط سلامت یک جامعه است.", axis: "Y", dir: 1 },
+      { text: "قوانین کشور باید بر اساس انتخاب‌های فردی باشد، حتی اگر با ارزش‌های سنتی مغایر باشد.", axis: "Y", dir: -1 },
+      { text: "دولت حق دارد به خاطر امنیت ملی، ارتباطات پیام‌رسان‌ها را کنترل و نظارت کند.", axis: "Y", dir: 1 },
+      { text: "تجارت بین‌المللی باید بدون تعرفه‌های گمرکی و محدودیت‌های دولتی باشد.", axis: "X", dir: 1 }
+    ];
 
-      // تبدیل موقعیت به درصد
-      let posX = ((x - minX) / (maxX - minX)) * 100;
-      let posY = ((maxY - y) / (maxY - minY)) * 100;
+    let currentQuestionIndex = 0;
+    let scoreX = 0; // محور اقتصادی (-۱۰ چپ تا +۱۰ راست)
+    let scoreY = 0; // محور اجتماعی (-۱۰ آزادی‌خواه تا +۱۰ اقتدارگرا)
 
-      // مهار نقطه داخل کادر
-      posX = Math.max(4, Math.min(96, posX));
-      posY = Math.max(4, Math.min(96, posY));
+    function loadQuestion() {
+      const q = questions[currentQuestionIndex];
+      document.getElementById('question-text').innerText = q.text;
+      document.getElementById('question-count').innerText = `سوال ${currentQuestionIndex + 1} از ${questions.length}`;
+      
+      const progressPercent = ((currentQuestionIndex) / questions.length) * 100;
+      document.getElementById('progress-fill').style.width = progressPercent + '%';
+    }
+
+    function handleAnswer(weight) {
+      const q = questions[currentQuestionIndex];
+      
+      // اعمال امتیاز بر اساس جهت سوال (dir)
+      if (q.axis === 'X') {
+        scoreX += weight * q.dir;
+      } else if (q.axis === 'Y') {
+        scoreY += weight * q.dir;
+      }
+
+      currentQuestionIndex++;
+
+      if (currentQuestionIndex < questions.length) {
+        loadQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      document.getElementById('quiz-section').style.display = 'none';
+      document.getElementById('result-section').style.display = 'block';
+
+      // محاسبه حداقل و حداکثر امتیاز ممکن
+      // در این تست ۵ سوال X و ۵ سوال Y داریم (حداکثر امتیاز هر محور = ۵ * ۲ = ۱۰+)
+      const minVal = -10, maxVal = 10;
+
+      // تبدیل به درصد برای جاگذاری روی قطب‌نما
+      let posX = ((scoreX - minVal) / (maxVal - minVal)) * 100;
+      let posY = ((maxVal - scoreY) / (maxVal - minVal)) * 100; // معکوس برای Y
+
+      // مهار داخل کادر
+      posX = Math.max(6, Math.min(94, posX));
+      posY = Math.max(6, Math.min(94, posY));
 
       const dot = document.getElementById('compass-dot');
       dot.style.left = posX + '%';
       dot.style.top = posY + '%';
 
-      updateResultText(x, y);
+      // تحلیل عنوان گرایش
+      let eco = scoreX > 2 ? "راست‌گرای اقتصادی" : (scoreX < -2 ? "چپ‌گرای اقتصادی" : "میانه‌رو اقتصادی");
+      let soc = scoreY > 2 ? "اقتدارگرا" : (scoreY < -2 ? "آزادی‌خواه" : "میانه روی اجتماعی");
+
+      document.getElementById('result-text').innerText = `گرایش شما: ${eco} - ${soc}`;
     }
 
-    function updateResultText(x, y) {
-      let eco = x > 0 ? "راست‌گرای اقتصادی" : (x < 0 ? "چپ‌گرای اقتصادی" : "میانه‌رو");
-      let soc = y > 0 ? "اقتدارگرا" : (y < 0 ? "آزادی‌خواه" : "میانه");
-      
-      document.getElementById('result-text').innerText = `گرایش: ${eco} / ${soc} (X: ${x}, Y: ${y})`;
+    function resetQuiz() {
+      currentQuestionIndex = 0;
+      scoreX = 0;
+      scoreY = 0;
+      document.getElementById('quiz-section').style.display = 'block';
+      document.getElementById('result-section').style.display = 'none';
+      loadQuestion();
     }
 
-    function testRandomPosition() {
-      const randomX = Math.floor(Math.random() * 121) - 60;
-      const randomY = Math.floor(Math.random() * 121) - 60;
-      updateCompassDot(randomX, randomY);
-    }
+    // شروع اولین سوال هنگام بارگذاری
+    loadQuestion();
   </script>
 </body>
 </html>
