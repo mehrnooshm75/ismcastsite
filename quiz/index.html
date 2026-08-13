@@ -3,6 +3,240 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>قطب‌نمای سیاسی</title>
+  <style>
+    /* ==========================================
+       استایل‌های عمومی و بدنه
+       ========================================== */
+    body {
+      font-family: Tahoma, Vazir, sans-serif;
+      background-color: #f4f6f9;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #1a2b4c;
+    }
+
+    /* ==========================================
+       قطب‌نما (با جهت اجباری LTR برای محاسبات درست)
+       ========================================== */
+    .compass-wrapper {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      margin: 30px auto;
+      background-color: #f8fafc;
+      border-radius: 8px;
+    }
+
+    .compass-box {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      width: 260px;
+      height: 260px;
+      border: 2px solid #334155;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    /* چهار ربع قطب‌نما */
+    .quadrant {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+      opacity: 0.85;
+      user-select: none;
+      text-align: center;
+      padding: 4px;
+    }
+
+    .q-tl { background-color: #fca5a5; color: #7f1d1d; } /* چپ اقتدارگرا (قرمز) */
+    .q-tr { background-color: #93c5fd; color: #1e3a8a; } /* راست اقتدارگرا (آبی) */
+    .q-bl { background-color: #fde047; color: #713f12; } /* چپ آزادی‌خواه (زرد/سبز) */
+    .q-br { background-color: #86efac; color: #14532d; } /* راست آزادی‌خواه (سبز) */
+
+    /* محورهای مختصات */
+    .axis-v {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 2px;
+      height: 100%;
+      background-color: #334155;
+      transform: translateX(-50%);
+      z-index: 1;
+    }
+
+    .axis-h {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #334155;
+      transform: translateY(-50%);
+      z-index: 1;
+    }
+
+    /* برچسب‌های محورها */
+    .axis-label {
+      position: absolute;
+      font-size: 12px;
+      font-weight: bold;
+      color: #1e293b;
+      white-space: nowrap;
+    }
+
+    .label-top { top: 6px; left: 50%; transform: translateX(-50%); }
+    .label-bottom { bottom: 6px; left: 50%; transform: translateX(-50%); }
+    .label-left { left: 4px; top: 50%; transform: translateY(-50%); }
+    .label-right { right: 4px; top: 50%; transform: translateY(-50%); }
+
+    /* نقطه‌ی نماینده موقعیت کاربر */
+    .compass-dot {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background-color: #ef4444;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(0,0,0,0.5);
+      z-index: 10;
+      transform: translate(-50%, -50%);
+      transition: left 0.4s ease, top 0.4s ease;
+    }
+
+    /* دکمه و تست آزمایش */
+    .btn {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: inherit;
+      margin-top: 15px;
+    }
+
+    .btn:hover {
+      background-color: #1d4ed8;
+    }
+
+    #result-text {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>نتیجه قطب‌نمای سیاسی</h2>
+
+    <!-- wrapper قطب‌نما با جهت LTR برای درست کار کردن مختصات ریاضی -->
+    <div class="compass-wrapper" dir="ltr">
+      <span class="axis-label label-top">اقتدارگرایی</span>
+      <span class="axis-label label-bottom">آزادی‌خواهی</span>
+      <span class="axis-label label-left">اقتصاد چپ</span>
+      <span class="axis-label label-right">اقتصاد راست</span>
+      
+      <div class="compass-box">
+        <div class="axis-v"></div>
+        <div class="axis-h"></div>
+        
+        <!-- ترتیب صحیح ربع‌ها بر اساس استاندارد LTR دکارت -->
+        <div class="quadrant q-tl">چپ اقتدارگرا</div>
+        <div class="quadrant q-tr">راست اقتدارگرا</div>
+        <div class="quadrant q-bl">چپ آزادی‌خواه</div>
+        <div class="quadrant q-br">راست آزادی‌خواه</div>
+
+        <div id="compass-dot" class="compass-dot" style="left: 50%; top: 50%;"></div>
+      </div>
+    </div>
+
+    <div id="result-text">موقعیت شما: مرکز (میانه)</div>
+
+    <!-- دکمه تست جهت آزمایش تغییر موقعیت نقطه -->
+    <button class="btn" onclick="testRandomPosition()">تست نقطه تصادفی</button>
+  </div>
+
+  <script>
+    /**
+     * تابع به‌روزرسانی موقعیت نقطه روی قطب‌نما
+     * @param {number} x - امتیاز محور افقی (چپ منفی / راست مثبت)
+     * @param {number} y - امتیاز محور عمودی (آزادی‌خواه منفی / اقتدارگرا مثبت)
+     */
+    function updateCompassDot(x, y) {
+      // دامنه امتیازهای آزمون (مثلاً از ۶۰- تا ۶۰+)
+      // این دو مقدار را متناسب با حداکثر امتیاز ممکن در سیستم سوالات خود تنظیم کنید
+      const minX = -60, maxX = 60;
+      const minY = -60, maxY = 60;
+
+      // تبدیل مقادیر x و y به درصد از ۰ تا ۱۰۰
+      let posX = ((x - minX) / (maxX - minX)) * 100;
+      
+      // در CSS، بالای صفحه صفر است؛ بنابراین جهت محور Y معکوس می‌شود
+      let posY = ((maxY - y) / (maxY - minY)) * 100;
+
+      // محدود کردن موقعیت نقطه داخل مربع (جلوگیری از بیرون زدن)
+      posX = Math.max(5, Math.min(95, posX));
+      posY = Math.max(5, Math.min(95, posY));
+
+      // اعمال مختصات بر حسب درصد
+      const dot = document.getElementById('compass-dot');
+      dot.style.left = posX + '%';
+      dot.style.top = posY + '%';
+
+      // به‌روزرسانی متن توضیحی
+      updateResultText(x, y);
+    }
+
+    function updateResultText(x, y) {
+      let eco = x > 0 ? "راست‌گرای اقتصادی" : (x < 0 ? "چپ‌گرای اقتصادی" : "میانه‌رو اقتصادی");
+      let soc = y > 0 ? "اقتدارگرا" : (y < 0 ? "آزادی‌خواه" : "میانه");
+      
+      document.getElementById('result-text').innerText = `گرایش شما: ${eco} / ${soc} (X: ${x}, Y: ${y})`;
+    }
+
+    // تابع تست تصادفی جهت اطمینان از عملکرد صحیح
+    function testRandomPosition() {
+      const randomX = Math.floor(Math.random() * 121) - 60; // بین ۶۰- تا ۶۰+
+      const randomY = Math.floor(Math.random() * 121) - 60; // بین ۶۰- تا ۶۰+
+      updateCompassDot(randomX, randomY);
+    }
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>تست قطب‌نما و گرایش ایدئولوژیک | ایسم‌کست (IsmCast)</title>
   <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
   <!-- html2canvas for Instagram Story Export -->
