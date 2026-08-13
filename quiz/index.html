@@ -926,6 +926,62 @@
       document.getElementById('result-screen').style.display = 'none';
       document.getElementById('intro-screen').classList.remove('hidden');
     }
+    // تابع دانلود کارت استوری اینستاگرام
+function downloadInstagramStory() {
+  const exportArea = document.getElementById('export-container');
+  const shareActions = document.querySelector('.share-actions');
+  
+  // نمایش پیام در حال پردازش
+  const originalBtnText = event.target.innerText;
+  event.target.innerText = "⏳ در حال ساخت عکس...";
+  event.target.disabled = true;
+
+  // تنظیمات html2canvas برای خروجی باکیفیت
+  html2canvas(exportArea, {
+    scale: 2, // کیفیت بالا برای استوری
+    useCORS: true, // برای بارگیری عکس پرتره
+    backgroundColor: '#161a22',
+    logging: false
+  }).then(canvas => {
+    // ساخت لینک دانلود
+    const link = document.createElement('a');
+    link.download = 'IsmCast-Political-Compass.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+
+    // بازگرداندن دکمه به حالت اول
+    event.target.innerText = originalBtnText;
+    event.target.disabled = false;
+  }).catch(err => {
+    console.error("خطا در دانلود عکس:", err);
+    alert("مشکلی در دانلود عکس پیش آمد. لطفاً دوباره تلاش کنید.");
+    event.target.innerText = originalBtnText;
+    event.target.disabled = false;
+  });
+}
+
+// توابع اشتراک‌گذاری شبکه های اجتماعی
+function shareTelegram() {
+  const title = document.getElementById('result-title').innerText;
+  const text = `نتیجه تست قطب‌نمای فکری من در ایسم‌کست: ${title}\nشما هم تست بدهید:`;
+  const url = window.location.href;
+  window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`, '_blank');
+}
+
+function shareTwitter() {
+  const title = document.getElementById('result-title').innerText;
+  const text = `نتیجه تست قطب‌نمای فکری من در ایسم‌کست: ${title}`;
+  const url = window.location.href;
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+}
+
+function copyResultLink() {
+  const title = document.getElementById('result-title').innerText;
+  const text = `نتیجه تست قطب‌نمای فکری من در ایسم‌کست: ${title}\n${window.location.href}`;
+  navigator.clipboard.writeText(text).then(() => {
+    alert("متن نتیجه و لینک تست با موفقیت کپی شد!");
+  });
+}
   </script>
 </body>
 </html>
