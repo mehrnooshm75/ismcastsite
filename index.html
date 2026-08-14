@@ -1,630 +1,489 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ISMCAST | ایسم کست</title>
-<meta name="description" content="پادکست تحلیلی اندیشه و فلسفه؛ کاوش در مکاتب و ایدئولوژی‌ها">
-<link rel="icon" href="./photo_6030706551644949563_y.jpg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&family=Vazirmatn:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
-<style>
-  :root {
-    --bg-main: #0b0d0e;
-    --bg-card: #14171a;
-    --bg-card-hover: #1c2126;
-    --border: #24292e;
-    --border-gold: rgba(229, 169, 60, 0.4);
-    --accent: #e5a93c; /* طلایی/برنز برای حس فلسفی */
-    --accent-bright: #ffd166;
-    --text-main: #e6edf3;
-    --text-muted: #8b949e;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تست قطب‌نمای فکری - ایسم‌کست</title>
   
-  html { scroll-behavior: smooth; }
+  <!-- کتابخانه html2canvas برای دانلود عکس کارت -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  
+  <style>
+    :root {
+      --bg-color: #0f1218;
+      --card-bg: #161a22;
+      --accent-color: #58a6ff;
+      --text-color: #ffffff;
+      --border-color: #30363d;
+    }
 
-  body {
-    background-color: var(--bg-main);
-    color: var(--text-main);
-    font-family: 'Vazirmatn', sans-serif;
-    line-height: 1.8;
-  }
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
 
-  /* ---- Header Nav ---- */
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 8%;
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    background: rgba(11, 13, 14, 0.9);
-    backdrop-filter: blur(12px);
-    z-index: 100;
-  }
+    .container {
+      width: 100%;
+      max-width: 500px;
+    }
 
-  .logo-area {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+    /* --- بخش سوالات (Quiz Section) --- */
+    #quiz-card {
+      background-color: var(--card-bg);
+      border-radius: 20px;
+      padding: 25px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
 
-  .logo-img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid var(--accent);
-  }
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background-color: #21262d;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
 
-  .logo-text {
-    font-family: 'Noto Naskh Arabic', serif;
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--accent);
-  }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background-color: var(--accent-color);
+      transition: width 0.3s ease;
+    }
 
-  nav {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
+    .question-number {
+      font-size: 0.85rem;
+      color: #8b949e;
+      margin-bottom: 10px;
+    }
 
-  nav a {
-    color: var(--text-muted);
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: 0.2s;
-  }
-  nav a:hover { color: var(--accent); }
+    .question-text {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.6;
+      margin-bottom: 25px;
+      min-height: 60px;
+    }
 
-  /* دکمه برجسته در منو */
-  nav a.nav-quiz-btn {
-    color: var(--bg-main);
-    background: var(--accent);
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-weight: 700;
-  }
-  nav a.nav-quiz-btn:hover {
-    background: var(--accent-bright);
-    color: var(--bg-main);
-  }
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
-  /* ---- Hero Section ---- */
-  .hero {
-    text-align: center;
-    padding: 80px 8% 60px;
-    max-width: 900px;
-    margin: 0 auto;
-  }
+    .option-btn {
+      padding: 12px 16px;
+      background-color: #21262d;
+      color: #c9d1d9;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      text-align: right;
+    }
 
-  .hero .badge {
-    background: rgba(229, 169, 60, 0.1);
-    color: var(--accent);
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    border: 1px solid rgba(229, 169, 60, 0.3);
-    display: inline-block;
-    margin-bottom: 20px;
-  }
+    .option-btn:hover {
+      background-color: #30363d;
+      border-color: var(--accent-color);
+      color: #fff;
+    }
 
-  .hero h1 {
-    font-family: 'Noto Naskh Arabic', serif;
-    font-size: 2.8rem;
-    margin-bottom: 16px;
-    line-height: 1.3;
-    color: var(--text-main);
-  }
+    /* --- بخش نتیجه و کارت استوری --- */
+    #result-section {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
 
-  .hero p {
-    color: var(--text-muted);
-    font-size: 1.05rem;
-    margin-bottom: 32px;
-    max-width: 650px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+    #export-container {
+      width: 100%;
+      background-color: var(--card-bg);
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      box-sizing: border-box;
+      border: 1px solid var(--border-color);
+      position: relative;
+      margin-bottom: 20px;
+    }
 
-  .platforms {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 30px;
-  }
+    #export-container * {
+      box-sizing: border-box !important;
+    }
 
-  .btn-platform {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    color: var(--text-main);
-    padding: 10px 18px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 0.88rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: 0.2s;
-  }
+    .brand-header {
+      font-size: 1rem;
+      color: #8b949e;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
 
-  .btn-platform:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    transform: translateY(-2px);
-  }
+    #result-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--accent-color);
+      margin: 0 0 15px 0;
+    }
 
-  /* دکمه اصلی تست در بخش Hero */
-  .hero-quiz-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: linear-gradient(135deg, var(--accent), #b88228);
-    color: #0b0d0e;
-    font-weight: 700;
-    font-size: 1rem;
-    padding: 14px 28px;
-    border-radius: 10px;
-    text-decoration: none;
-    box-shadow: 0 4px 20px rgba(229, 169, 60, 0.3);
-    transition: all 0.3s ease;
-    border: 1px solid var(--accent-bright);
-  }
+    .portrait-wrapper {
+      margin: 10px auto;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid var(--accent-color);
+    }
 
-  .hero-quiz-cta:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 25px rgba(229, 169, 60, 0.5);
-    background: linear-gradient(135deg, var(--accent-bright), var(--accent));
-  }
+    .portrait-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-  /* ---- Season / Main Content Section ---- */
-  .season-section {
-    padding: 60px 8%;
-    max-width: 1300px;
-    margin: 0 auto;
-  }
+    /* نمودار قطب‌نما */
+    .compass-wrapper {
+      width: 260px !important;
+      height: 260px !important;
+      margin: 20px auto !important;
+      position: relative;
+      background: #1c2128;
+      border-radius: 12px;
+      border: 2px solid var(--border-color);
+    }
 
-  .section-title {
-    font-size: 1.6rem;
-    margin-bottom: 30px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    color: var(--accent);
-  }
+    .compass-box {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative;
+    }
 
-  .section-title::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to left, var(--border-gold), transparent);
-  }
+    .axis-h {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #484f58;
+    }
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 24px;
-  }
+    .axis-v {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background-color: #484f58;
+    }
 
-  .card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.2s, border-color 0.2s, background 0.2s;
-  }
+    /* برچسب‌های محورها */
+    .label-top { position: absolute; top: 4px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; color: #8b949e; }
+    .label-bottom { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; color: #8b949e; }
+    .label-right { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); font-size: 0.65rem; color: #8b949e; }
+    .label-left { position: absolute; left: 6px; top: 50%; transform: translateY(-50%); font-size: 0.65rem; color: #8b949e; }
 
-  .card:hover {
-    transform: translateY(-4px);
-    border-color: var(--accent);
-    background: var(--bg-card-hover);
-  }
+    /* نقطه خروجی روی نمودار */
+    .compass-point {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background-color: #f0883e;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 10px #f0883e;
+      top: 50%;
+      left: 50%;
+      transition: all 0.5s ease;
+    }
 
-  .card-top {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
+    .watermark {
+      font-size: 0.8rem;
+      color: #6e7681;
+      margin-top: 15px;
+    }
 
-  .card-img {
-    width: 80px;
-    height: 80px;
-    border-radius: 8px;
-    object-fit: cover;
-    border: 1px solid var(--border);
-    flex-shrink: 0;
-  }
+    /* اکشن‌ها و دکمه‌های اشتراک */
+    .share-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
 
-  .card-header-text {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
+    .btn {
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: inherit;
+    }
 
-  .card-num {
-    color: var(--accent);
-    font-size: 0.8rem;
-    font-weight: 700;
-  }
+    .btn-download { background-color: #238636; color: #fff; }
+    .btn-download:hover { background-color: #2ea043; }
 
-  .card h3 {
-    font-size: 1.15rem;
-    line-height: 1.4;
-    color: var(--text-main);
-  }
+    .social-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
 
-  .card p {
-    color: var(--text-muted);
-    font-size: 0.88rem;
-    line-height: 1.7;
-    margin-bottom: 20px;
-  }
-
-  .card-links {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    border-top: 1px solid var(--border);
-    padding-top: 14px;
-  }
-
-  .btn-listen {
-    padding: 5px 12px;
-    background: rgba(229, 169, 60, 0.1);
-    border: 1px solid rgba(229, 169, 60, 0.3);
-    color: var(--accent);
-    border-radius: 6px;
-    font-size: 0.78rem;
-    text-decoration: none;
-    transition: 0.2s;
-  }
-
-  .btn-listen:hover {
-    background: var(--accent);
-    color: #000;
-  }
-
-  .btn-disabled {
-    opacity: 0.4;
-    border-color: var(--border);
-    color: var(--text-muted);
-    background: transparent;
-    cursor: default;
-  }
-
-  /* ---- Promo / Women in Science ---- */
-  .promo-banner {
-    max-width: 1300px;
-    margin: 40px auto 80px;
-    padding: 0 8%;
-  }
-
-  .promo-card {
-    background: linear-gradient(135deg, rgba(229, 169, 60, 0.12), rgba(20, 23, 26, 0.8));
-    border: 1px solid var(--accent);
-    border-radius: 12px;
-    padding: 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-
-  .promo-text h4 {
-    color: var(--accent-bright);
-    font-size: 1.1rem;
-    margin-bottom: 4px;
-  }
-
-  .promo-text p {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-  }
-
-  footer {
-    text-align: center;
-    padding: 30px;
-    border-top: 1px solid var(--border);
-    color: var(--text-muted);
-    font-size: 0.8rem;
-  }
-</style>
+    .btn-sec {
+      background-color: #21262d;
+      color: #c9d1d9;
+      border: 1px solid var(--border-color);
+      font-size: 0.85rem;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Navigation Bar -->
-  <header>
-    <div class="logo-area">
-      <img src="./photo_6030706551644949563_y.jpg" alt="ایسم کست" class="logo-img">
-      <div class="logo-text">ISMCAST / ایسم کست</div>
-    </div>
-    <nav>
-      <a href="#season1">فصل اول</a>
-      <a href="./quiz/" class="nav-quiz-btn"><i class="fa-solid fa-brain"></i> تست ایدئولوژی</a>
-      <a href="https://t.me/ismcast" target="_blank">تلگرام</a>
-      <a href="https://castbox.fm/vd/940214627" target="_blank">کست‌باکس</a>
-    </nav>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="hero">
-    <span class="badge">پادکست تحلیلی اندیشه و فلسفه</span>
-    <h1>کاوش در مکاتب، ایدئولوژی‌ها و ریشه‌های تفکر بشر</h1>
-    <p>ایسم‌کست از یک سوال ساده حین پیاده‌روی شروع شد: چرا این‌همه مفهوم مهم در جهان به «ایسم» ختم می‌شوند؟</p>
+  <div class="container">
     
-    <div class="platforms">
-      <a href="https://castbox.fm/vd/940214627" target="_blank" class="btn-platform"><i class="fa-solid fa-podcast"></i> کست‌باکس</a>
-      <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" class="btn-platform"><i class="fa-brands fa-spotify"></i> اسپاتیفای</a>
-      <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" class="btn-platform"><i class="fa-brands fa-apple"></i> اپل پادکست</a>
-      <a href="https://fidibo.com/channel/30000510-ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA" target="_blank" class="btn-platform"><i class="fa-solid fa-book-open"></i> فیدیبو</a>
-      <a href="https://t.me/ismcast" target="_blank" class="btn-platform"><i class="fa-brands fa-telegram"></i> کانال تلگرام</a>
+    <!-- کارت سوالات -->
+    <div id="quiz-card">
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progress"></div>
+      </div>
+      <div class="question-number" id="q-number">سوال ۱ از ۶</div>
+      <div class="question-text" id="q-text">در حال بارگذاری سوال...</div>
+      
+      <div class="options-grid">
+        <button class="option-btn" onclick="handleAnswer(2)">کاملاً موافقم</button>
+        <button class="option-btn" onclick="handleAnswer(1)">موافقم</button>
+        <button class="option-btn" onclick="handleAnswer(-1)">مخالفم</button>
+        <button class="option-btn" onclick="handleAnswer(-2)">کاملاً مخالفم</button>
+      </div>
     </div>
 
-    <!-- CTA دکمه تست ایدئولوژی با آدرس اصلاح شده -->
-    <div>
-      <a href="./quiz/" class="hero-quiz-cta">
-        <i class="fa-solid fa-compass"></i>
-        ورود به تست سنجش ایدئولوژی
-      </a>
+    <!-- کارت نتیجه (پس از پاسخ به همه سوالات) -->
+    <div id="result-section">
+      <div id="export-container">
+        <div class="brand-header">ISMCAST • ایسم‌کست</div>
+        <h2 id="result-title">سوسیال دمکرات متمايل به چپ</h2>
+        
+        <div class="portrait-wrapper">
+          <img id="result-portrait" src="figures/marx.png" alt="پرتره" onerror="this.src='https://via.placeholder.com/100';">
+        </div>
+
+        <div class="compass-wrapper">
+          <div class="compass-box">
+            <span class="label-top">اقتدارگرا</span>
+            <span class="label-bottom">آزادی‌خواه</span>
+            <span class="label-right">راست</span>
+            <span class="label-left">چپ</span>
+            
+            <div class="axis-h"></div>
+            <div class="axis-v"></div>
+            <div class="compass-point" id="point"></div>
+          </div>
+        </div>
+
+        <div class="watermark">podcast.ismcast.com | قطب‌نمای فکری</div>
+      </div>
+
+      <!-- دکمه‌های دانلود و اشتراک -->
+      <div class="share-actions">
+        <button class="btn btn-download" onclick="downloadInstagramStory(event)">
+          📥 دانلود کارت استوری اینستاگرام
+        </button>
+
+        <div class="social-buttons">
+          <button class="btn btn-sec" onclick="shareTelegram()">تلگرام</button>
+          <button class="btn btn-sec" onclick="shareTwitter()">توییتر</button>
+          <button class="btn btn-sec" onclick="copyResultLink()">کپی لینک</button>
+        </div>
+      </div>
     </div>
-  </section>
 
-  <!-- Season 1 Section -->
-  <section class="season-section" id="season1">
-    <h2 class="section-title">فصل اول: نبرد ایدئولوژی‌ها</h2>
-    
-    <div class="grid">
-
-      <!-- Ep 0 -->
-      <div class="card">
-        <div>
-          <div class="card-top">
-            <img src="./ep0.jpg" alt="اپیزود صفر" class="card-img">
-            <div class="card-header-text">
-              <span class="card-num">قسمت صفرم</span>
-              <h3>پشت پرده‌ی کلمات</h3>
-            </div>
-          </div>
-          <p>داستان تولد ایسم‌کست و ورود به دنیای پسوندهایی که کلید فهم دنیای امروزند؛ از دل سیاست و فلسفه تا هنر و فرهنگ.</p>
-        </div>
-        <div class="card-links">
-          <a href="https://castbox.fm/vi/940214627" target="_blank" class="btn-listen">کست‌باکس</a>
-          <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" class="btn-listen">اسپاتیفای</a>
-          <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" class="btn-listen">اپل پادکست</a>
-        </div>
-      </div>
-
-      <!-- Ep 1 -->
-      <div class="card">
-        <div>
-          <div class="card-top">
-            <img src="./ep1.png" alt="لیبرالیسم" class="card-img">
-            <div class="card-header-text">
-              <span class="card-num">قسمت اول</span>
-              <h3>لیبرالیسم</h3>
-            </div>
-          </div>
-          <p>لیبرالیسم از کجا آمد؟ بررسی ریشه‌های آزادی فردی، حقوق طبیعی و تلاش برای محدود کردن قدرت دولت.</p>
-        </div>
-        <div class="card-links">
-          <a href="https://castbox.fm/vi/942759884" target="_blank" class="btn-listen">کست‌باکس</a>
-          <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" class="btn-listen">اسپاتیفای</a>
-          <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" class="btn-listen">اپل پادکست</a>
-        </div>
-      </div>
-
-      <!-- Ep 2 -->
-      <div class="card">
-        <div>
-          <div class="card-top">
-            <img src="./ep2.png" alt="کاپیتالیسم" class="card-img">
-            <div class="card-header-text">
-              <span class="card-num">قسمت دوم</span>
-              <h3>کاپیتالیسم</h3>
-            </div>
-          </div>
-          <p>ریشه‌های کاپیتالیسم؛ بررسی تصویر این مکتب از تولید، ثروت و پیشرفت در نظام اقتصادی مسلط جهان.</p>
-        </div>
-        <div class="card-links">
-          <a href="https://castbox.fm/vi/944898412" target="_blank" class="btn-listen">کست‌باکس</a>
-          <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" class="btn-listen">اسپاتیفای</a>
-          <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" class="btn-listen">اپل پادکست</a>
-        </div>
-      </div>
-
-      <!-- Ep 3 -->
-      <div class="card">
-        <div>
-          <div class="card-top">
-            <img src="./ep3.png" alt="امپریالیسم" class="card-img">
-            <div class="card-header-text">
-              <span class="card-num">قسمت سوم</span>
-              <h3>امپریالیسم</h3>
-            </div>
-          </div>
-          <p>رقابت قدرت‌های بزرگ برای منابع و بازارها؛ بررسی ضرورت‌های اقتصادی سرمایه‌داری و سلطه بر جهان.</p>
-        </div>
-        <div class="card-links">
-          <a href="https://castbox.fm/vi/948485454" target="_blank" class="btn-listen">کست‌باکس</a>
-          <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" class="btn-listen">اسپاتیفای</a>
-          <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" class="btn-listen">اپل پادکست</a>
-        </div>
-      </div>
-
-      <!-- Ep 4 -->
-      <div class="card">
-        <div>
-          <div class="card-top">
-            <img src="./ep4.png" alt="مارکسیسم" class="card-img">
-            <div class="card-header-text">
-              <span class="card-num">قسمت چهارم</span>
-              <h3>مارکسیسم</h3>
-            </div>
-          </div>
-          <p>زندگی و تفکرات کارل مارکس؛ مانیفست عصیان طبقاتی، لغو استثمار و موتور محرک انقلاب‌های بزرگ.</p>
-        </div>
-        <div class="card-links">
-          <a href="https://castbox.fm/vi/950150036" target="_blank" class="btn-listen">کست‌باکس</a>
-          <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" class="btn-listen">اسپاتیفای</a>
-          <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" class="btn-listen">اپل پادکست</a>
-        </div>
-      </div>
-
-      <!-- Ep 5 -->
-      <div class="card">
-        <div>
-          <div class="card-top">
-            <img src="./ep5.png" alt="سوسیالیسم" class="card-img">
-            <div class="card-header-text">
-              <span class="card-num">قسمت پنجم</span>
-              <h3>سوسیالیسم</h3>
-            </div>
-          </div>
-          <p>کالبدشکافی سوسیال‌دموکراسی؛ چطور ایده بازتوزیع ثروت و دولت رفاه توانست سرمایه‌داری را رام کند؟</p>
-        </div>
-        <div class="card-links">
-          <a href="https://castbox.fm/vi/953938951" target="_blank" class="btn-listen">کست‌باکس</a>
-          <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" class="btn-listen">اسپاتیفای</a>
-          <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" class="btn-listen">اپل پادکست</a>
-        </div>
-      </div>
-
-      <!-- Ep 6 -->
-      <div class="card">
-        <div>
-          <div class="card-top">
-            <img src="./ep6.png" alt="کمونیسم" class="card-img">
-            <div class="card-header-text">
-              <span class="card-num">قسمت ششم</span>
-              <h3>کمونیسم</h3>
-            </div>
-          </div>
-          <p>از آرمان‌شهر مارکس تا لنینیسم؛ بررسی نحوه تبدیل رویای جامعه بدون طبقه به متمرکزترین دولت‌های تاریخ.</p>
-        </div>
-        <div class="card-links">
-          <a href="https://castbox.fm/vi/960455204" target="_blank" class="btn-listen">کست‌باکس</a>
-          <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" class="btn-listen">اسپاتیفای</a>
-          <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" class="btn-listen">اپل پادکست</a>
-        </div>
-      </div>
-
-      <!-- Ep 7 -->
-      <div class="card">
-        <div>
-          <div class="card-top">
-            <img src="./ep7.png" alt="ناسیونالیسم" class="card-img">
-            <div class="card-header-text">
-              <span class="card-num">قسمت هفتم</span>
-              <h3>ناسیونالیسم</h3>
-            </div>
-          </div>
-          <p>چگونه «ملت» به مهم‌ترین هویت انسان مدرن تبدیل شد؟ تفاوت میهن‌دوستی و ناسیونالیسم افراطی.</p>
-        </div>
-        <div class="card-links">
-          <a href="https://castbox.fm/vi/964934868" target="_blank" class="btn-listen">کست‌باکس</a>
-          <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" class="btn-listen">اسپاتیفای</a>
-          <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" class="btn-listen">اپل پادکست</a>
-        </div>
-      </div>
-
-      <!-- Ep 8 -->
-      <div class="card">
-        <div>
-          <div class="card-top">
-            <img src="./ep8.png" alt="فاشیسم" class="card-img">
-            <div class="card-header-text">
-              <span class="card-num">قسمت هشتم</span>
-              <h3>فاشیسم</h3>
-            </div>
-          </div>
-          <p>چگونه یک ملت آزادی را واگذار می‌کند؟ بررسی ایتالیای پس از جنگ، ظهور موسولینی و روان‌شناسی توده‌ها.</p>
-        </div>
-        <div class="card-links">
-          <a href="https://castbox.fm/vi/972931559" target="_blank" class="btn-listen">کست‌باکس</a>
-          <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" class="btn-listen">اسپاتیفای</a>
-          <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" class="btn-listen">اپل پادکست</a>
-        </div>
-      </div>
-
-      <!-- Ep 9 -->
-      <div class="card">
-        <div>
-          <div class="card-top">
-            <img src="./ep10.png" alt="نازیسم" class="card-img">
-            <div class="card-header-text">
-              <span class="card-num">قسمت نهم</span>
-              <h3>نازیسم</h3>
-            </div>
-          </div>
-          <p>کالبدشکافی ناسیونال‌سوسیالیسم، ایدئولوژی نژادی و ماشین برپایی جنگ در آلمان قرن بیستم.</p>
-        </div>
-        <div class="card-links">
-          <span class="btn-listen btn-disabled">به‌زودی</span>
-        </div>
-      </div>
-
-      <!-- Ep 10 -->
-      <div class="card">
-        <div>
-          <div class="card-top">
-            <img src="./ep11.PNG" alt="توتالیتاریسم" class="card-img">
-            <div class="card-header-text">
-              <span class="card-num">قسمت دهم</span>
-              <h3>توتالیتاریسم</h3>
-            </div>
-          </div>
-          <p>تحلیل حکومت‌های تمامیت‌خواه؛ سیطره بر اندیشه، جامعه و ساختار کنترل مطلق انسان.</p>
-        </div>
-        <div class="card-links">
-          <span class="btn-listen btn-disabled">به‌زودی</span>
-        </div>
-      </div>
-
-      <!-- Ep 11 -->
-      <div class="card">
-        <div>
-          <div class="card-top">
-            <img src="./ep12.png" alt="آنارشیسم" class="card-img">
-            <div class="card-header-text">
-              <span class="card-num">قسمت یازدهم</span>
-              <h3>آنارشیسم</h3>
-            </div>
-          </div>
-          <p>نفی هرگونه اقتدار و دولت؛ بررسی آرمان جامعه بدون ساختار اجباری برپایه همکاری داوطلبانه.</p>
-        </div>
-        <div class="card-links">
-          <span class="btn-listen btn-disabled">به‌زودی</span>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Promo Section -->
-  <div class="promo-banner">
-    <div class="promo-card">
-      <div class="promo-text">
-        <h4>پیشنهاد ویژه: پادکست زنان در علم</h4>
-        <p>پادکست دیگری از همین سازنده درباره تاریخچه و تاثیرگذاری زنان در پیشرفت علوم.</p>
-      </div>
-      <a href="https://mehrnooshm75.github.io/podcast/" target="_blank" class="btn-platform" style="border-color: var(--accent); color: var(--accent);">مشاهده و شنیدن</a>
-    </div>
   </div>
 
-  <footer>
-    <p>IsmCast Podcast © All Rights Reserved</p>
-  </footer>
+  <script>
+    // بانک سوالات (می‌توانید سوال اضافه کنید)
+    // axis: 'econ' (اقتصاد) | 'social' (اجتماعی)
+    // weight: 1 (موافقت = راست/اقتدارگرا) | -1 (موافقت = چپ/آزادی‌خواه)
+    const questions = [
+      {
+        text: "دولت باید برای بازدارندگی و کاهش ناعدالتی، بازار و اقتصاد را کنترل کند.",
+        axis: "econ",
+        weight: -1
+      },
+      {
+        text: "بازار آزاد و رقابت بدون مداخله دولت، بهترین مسیر برای رشد اقتصادی است.",
+        axis: "econ",
+        weight: 1
+      },
+      {
+        text: "خدمات درمانی و آموزش باید به صورت کاملاً رایگان توسط دولت تامین شود.",
+        axis: "econ",
+        weight: -1
+      },
+      {
+        text: "برای حفظ نظم و ثبات جامعه، وجود یک حکومت مقتدر و سنتی ضروری است.",
+        axis: "social",
+        weight: 1
+      },
+      {
+        text: "آزادی‌های فردی و سبک زندگی اشخاص باید بر هرگونه ارزش یا سنت جامعه ارجحیت داشته باشد.",
+        axis: "social",
+        weight: -1
+      },
+      {
+        text: "امنیت ملی جامعه مهم‌تر از حفظ برخی آزادی‌های مدنی فردی است.",
+        axis: "social",
+        weight: 1
+      }
+    ];
 
+    let currentQuestion = 0;
+    let econScore = 0;
+    let socialScore = 0;
+
+    // نمایش سوال فعلی
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById('q-number').innerText = `سوال ${currentQuestion + 1} از ${questions.length}`;
+      document.getElementById('q-text').innerText = q.text;
+      
+      const progressPercent = ((currentQuestion) / questions.length) * 100;
+      document.getElementById('progress').style.width = `${progressPercent}%`;
+    }
+
+    // ثبت پاسخ کاربر
+    function handleAnswer(value) {
+      const q = questions[currentQuestion];
+      
+      if (q.axis === 'econ') {
+        econScore += value * q.weight;
+      } else if (q.axis === 'social') {
+        socialScore += value * q.weight;
+      }
+
+      currentQuestion++;
+
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        renderResult();
+      }
+    }
+
+    // محاسبه نتیجه و جانمایی نقطه روی قطب‌نما
+    function renderResult() {
+      document.getElementById('quiz-card').style.display = 'none';
+      document.getElementById('result-section').style.display = 'flex';
+
+      // محاسبه موقعیت نقطه (محدوده بین ۱۰% تا ۹۰%)
+      const maxEconScore = questions.filter(q => q.axis === 'econ').length * 2;
+      const maxSocialScore = questions.filter(q => q.axis === 'social').length * 2;
+
+      // X: چپ (-100%) تا راست (+100%)
+      const posX = 50 + (econScore / maxEconScore) * 40; 
+      // Y: آزادی‌خواه (-100% پایین) تا اقتدارگرا (+100% بالا)
+      const posY = 50 - (socialScore / maxSocialScore) * 40; 
+
+      const point = document.getElementById('point');
+      point.style.left = `${posX}%`;
+      point.style.top = `${posY}%`;
+
+      // تعیین عنوان و عکس بر اساس ربع قطب‌نما
+      const titleElem = document.getElementById('result-title');
+      const portraitElem = document.getElementById('result-portrait');
+
+      if (econScore <= 0 && socialScore > 0) {
+        titleElem.innerText = "سوسیالیست اقتدارگرا";
+        portraitElem.src = "figures/marx.png";
+      } else if (econScore > 0 && socialScore > 0) {
+        titleElem.innerText = "محافظه‌کار راست‌گرا";
+        portraitElem.src = "figures/smith.png";
+      } else if (econScore <= 0 && socialScore <= 0) {
+        titleElem.innerText = "سوسیال دمکرات / چپ لیبرال";
+        portraitElem.src = "figures/sandeers.png";
+      } else {
+        titleElem.innerText = "لیبرتارین راست‌گرا";
+        portraitElem.src = "figures/locke.png";
+      }
+    }
+
+    // تابع دانلود کارت بدون بهم‌ریختگی در موبایل
+    function downloadInstagramStory(e) {
+      const exportArea = document.getElementById('export-container');
+      const btn = e.currentTarget;
+      const originalText = btn.innerText;
+
+      btn.innerText = "⏳ در حال ساخت عکس...";
+      btn.disabled = true;
+
+      const originalWidth = exportArea.style.width;
+      const originalMaxWidth = exportArea.style.maxWidth;
+
+      // قفل ابعاد به ۵۵۰px برای رندر دقیق روی موبایل
+      exportArea.style.width = '550px';
+      exportArea.style.maxWidth = 'none';
+
+      html2canvas(exportArea, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#161a22',
+        logging: false,
+        windowWidth: 1200
+      }).then(canvas => {
+        exportArea.style.width = originalWidth;
+        exportArea.style.maxWidth = originalMaxWidth;
+
+        const link = document.createElement('a');
+        link.download = 'IsmCast-Political-Compass.png';
+        link.href = canvas.toDataURL('image/png', 1.0);
+        link.click();
+
+        btn.innerText = originalText;
+        btn.disabled = false;
+      }).catch(err => {
+        exportArea.style.width = originalWidth;
+        exportArea.style.maxWidth = originalMaxWidth;
+        console.error("خطا در گرفتن عکس:", err);
+        alert("خطایی در ساخت عکس رخ داد.");
+        btn.innerText = originalText;
+        btn.disabled = false;
+      });
+    }
+
+    // توابع اشتراک‌گذاری
+    function shareTelegram() {
+      const title = document.getElementById('result-title').innerText;
+      const text = `نتیجه تست قطب‌نمای فکری من در ایسم‌کست: ${title}`;
+      window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    function shareTwitter() {
+      const title = document.getElementById('result-title').innerText;
+      const text = `نتیجه تست قطب‌نمای فکری من در ایسم‌کست: ${title}`;
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`, '_blank');
+    }
+
+    function copyResultLink() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        alert("لینک کپی شد!");
+      });
+    }
+
+    // شروع کوییز
+    showQuestion();
+  </script>
 </body>
 </html>
