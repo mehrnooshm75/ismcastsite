@@ -33,7 +33,7 @@
 
     .container {
       width: 100%;
-      max-width: 500px;
+      max-width: 520px;
     }
 
     /* --- بخش سوالات (Quiz Section) --- */
@@ -78,20 +78,21 @@
     .options-grid {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     .option-btn {
-      padding: 12px 16px;
+      padding: 14px 16px;
       background-color: #21262d;
       color: #c9d1d9;
       border: 1px solid var(--border-color);
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
       font-size: 0.95rem;
       font-family: inherit;
       transition: all 0.2s ease;
       text-align: right;
+      line-height: 1.4;
     }
 
     .option-btn:hover {
@@ -260,18 +261,15 @@
       <div class="progress-bar-container">
         <div class="progress-bar" id="progress"></div>
       </div>
-      <div class="question-number" id="q-number">سوال ۱ از ۶</div>
+      <div class="question-number" id="q-number">سوال ۱ از ۱۵</div>
       <div class="question-text" id="q-text">در حال بارگذاری سوال...</div>
       
-      <div class="options-grid">
-        <button class="option-btn" onclick="handleAnswer(2)">کاملاً موافقم</button>
-        <button class="option-btn" onclick="handleAnswer(1)">موافقم</button>
-        <button class="option-btn" onclick="handleAnswer(-1)">مخالفم</button>
-        <button class="option-btn" onclick="handleAnswer(-2)">کاملاً مخالفم</button>
+      <div class="options-grid" id="options-container">
+        <!-- گزینه‌ها از طریق جاوااسکریپت جایگذاری می‌شوند -->
       </div>
     </div>
 
-    <!-- کارت نتیجه (پس از پاسخ به همه سوالات) -->
+    <!-- کارت نتیجه (پس از پاسخ به تمام ۱۵ سوال) -->
     <div id="result-section">
       <div id="export-container">
         <div class="brand-header">ISMCAST • ایسم‌کست</div>
@@ -314,39 +312,158 @@
   </div>
 
   <script>
-    // بانک سوالات (می‌توانید سوال اضافه کنید)
-    // axis: 'econ' (اقتصاد) | 'social' (اجتماعی)
-    // weight: 1 (موافقت = راست/اقتدارگرا) | -1 (موافقت = چپ/آزادی‌خواه)
+    // بانک ۱۵ تایی سوالات با گزینه‌های توضیحی
+    // axis: 'econ' (اقتصادی) | 'social' (اجتماعی/سیاسی)
     const questions = [
       {
-        text: "دولت باید برای بازدارندگی و کاهش ناعدالتی، بازار و اقتصاد را کنترل کند.",
+        text: "نقش دولت در مدیریت و مالکیت صنایع و منابع کشور باید چگونه باشد؟",
         axis: "econ",
-        weight: -1
+        options: [
+          { text: "دولت باید مالک کل منابع و صنایع کلیدی باشد تا ناعدالتی از بین برود.", score: -2 },
+          { text: "دولت باید با قوانین و مالیات، صنایع را تنظیم کند اما مالکیت خصوصاً خصوصی باشد.", score: -1 },
+          { text: "بازار آزاد باید اولویت داشته باشد، ولی حضور حداقل دولت برای صنایع دفاعی لازم است.", score: 1 },
+          { text: "مالکیت باید ۱۰۰٪ خصوصی باشد و دولت هیچ دخالتی در صنایع نداشته باشد.", score: 2 }
+        ]
       },
       {
-        text: "بازار آزاد و رقابت بدون مداخله دولت، بهترین مسیر برای رشد اقتصادی است.",
+        text: "نظرتان درباره نظام خدمات درمان و آموزش چیست؟",
         axis: "econ",
-        weight: 1
+        options: [
+          { text: "باید کاملاً رایگان، دولتی و یکسان برای همه باشد.", score: -2 },
+          { text: "بخش دولتی رایگان وجود داشته باشد، اما بخش خصوصی هم مجاز باشد.", score: -1 },
+          { text: "باید بر اساس بیمه‌های خصوصی و بازار رقابتی مدیریت شود.", score: 1 },
+          { text: "آموزش و درمان تماماً کالاهایی خصوصی هستند و دولت نباید هزینه‌ای بدهد.", score: 2 }
+        ]
       },
       {
-        text: "خدمات درمانی و آموزش باید به صورت کاملاً رایگان توسط دولت تامین شود.",
+        text: "مالیات بر ثروت و درآمدهای بالا را چگونه ارزیابی می‌کنید؟",
         axis: "econ",
-        weight: -1
+        options: [
+          { text: "باید مالیات‌های سنگین و تصاعدی بر ثروتمندان بسته شود تا شکاف طبقاتی کم شود.", score: -2 },
+          { text: "مالیات تصاعدی منصفانه برای تامین خدمات عمومی ضروری است.", score: -1 },
+          { text: "مالیات‌ها باید ثابت و کم باشند تا انگیزه سرمایه‌گذاری از بین نرود.", score: 1 },
+          { text: "مالیات نوعی دست‌اندازی دولت به دارایی شخصی است و باید لغو یا حداقل شود.", score: 2 }
+        ]
       },
       {
-        text: "برای حفظ نظم و ثبات جامعه، وجود یک حکومت مقتدر و سنتی ضروری است.",
-        axis: "social",
-        weight: 1
+        text: "روابط کارگر و کارفرما در بازار کار چگونه باید تنظیم شود؟",
+        axis: "econ",
+        options: [
+          { text: "اتحادیه‌ها و شوراهای کارگری باید قدرت اصلی در تصمیم‌گیری‌ها باشند.", score: -2 },
+          { text: "قوانین کار باید از حقوق کارگران حمایت کرده و حداقل دستمزد را تعیین کند.", score: -1 },
+          { text: "قرارداد بین کارگر و کارفرما بر اساس توافق طرفین و عرضه-تقاضا باشد.", score: 1 },
+          { text: "هیچ قانون حداقل دستمزدی نباید وجود داشته باشد و بازار آزاد همه‌چیز را تنظیم کند.", score: 2 }
+        ]
       },
       {
-        text: "آزادی‌های فردی و سبک زندگی اشخاص باید بر هرگونه ارزش یا سنت جامعه ارجحیت داشته باشد.",
-        axis: "social",
-        weight: -1
+        text: "تجارت بین‌الملل و واردات کالا باید دارای چه سیاست‌هایی باشد؟",
+        axis: "econ",
+        options: [
+          { text: "تعرفه‌های سنگین برای حمایت از تولید داخلی و خودکفایی کاملاً لازم است.", score: -2 },
+          { text: "حمایت هوشمند از صنایع داخلی همگام با تجارت جهانی صورت گیرد.", score: -1 },
+          { text: "تجارت آزاد با کشورهای جهان با حداقل تعرفه گمرکی صورت پذیرد.", score: 1 },
+          { text: "مرزهای اقتصادی کاملاً باز باشد و تعرفه‌های گمرکی به‌کلی حذف شوند.", score: 2 }
+        ]
       },
       {
-        text: "امنیت ملی جامعه مهم‌تر از حفظ برخی آزادی‌های مدنی فردی است.",
+        text: "چگونه باید با بحران‌های اقتصادی و تورم مقابله کرد؟",
+        axis: "econ",
+        options: [
+          { text: "کنترل قیمت‌ها توسط دولت و تزریق یارانه مستقیم به اقشار کم‌درآمد.", score: -2 },
+          { text: "سیاست‌های کینزی (افزایش مخارج دولتی برای ایجاد اشتغال در رکود).", score: -1 },
+          { text: "کاهش هزینه‌های دولت، اصلاح نظام بانکی و مقررات‌زدایی از کسب‌وکارها.", score: 1 },
+          { text: "اجازه دادن به بازار برای اصلاح خودکار، بدون کوچک‌ترین مداخله مالی یا پولی.", score: 2 }
+        ]
+      },
+      {
+        text: "آزادی‌های مدنی و سبک زندگی فردی تا چه حد باید محترم شمرده شوند؟",
         axis: "social",
-        weight: 1
+        options: [
+          { text: "جامعه و سنت‌ها باید چارچوب سبک زندگی افراد را تعیین کنند.", score: 2 },
+          { text: "ارزش‌های اخلاقی جامعه باید حفظ شوند، اما تا حدی انعطاف وجود داشته باشد.", score: 1 },
+          { text: "هر فرد تا زمانی که به دیگران آسیب نزند، آزادی مطلق در انتخاب سبک زندگی دارد.", score: -1 },
+          { text: "دولت و جامعه هیچ حقی برای دخالت در هیچ پوشش، عقیده یا رفتار شخصی ندارند.", score: -2 }
+        ]
+      },
+      {
+        text: "نظرتان درباره حفظ ساختارهای سنتی و نهاد خانواده در جامعه چیست؟",
+        axis: "social",
+        options: [
+          { text: "حفظ سنت‌ها و ارزش‌های دینی/ملی اولویت اصلی ثبات جامعه است.", score: 2 },
+          { text: "سنت‌ها آموزنده هستند اما باید با تغییرات روز منطبق شوند.", score: 1 },
+          { text: "ساختارهای سنتی نباید مانعی برای آزادی‌های فردی و برابری جنسیتی باشند.", score: -1 },
+          { text: "سنت‌های گذشته بازدارنده رشد فردی هستند و باید نقد و ساختارشکنی شوند.", score: -2 }
+        ]
+      },
+      {
+        text: "حدود سانسور، آزادی بیان و مطبوعات کجاست؟",
+        axis: "social",
+        options: [
+          { text: "رسانه‌ها باید تحت نظارت دقیق حکومت باشند تا امنیت و اخلاق حفظ شود.", score: 2 },
+          { text: "آزادی بیان لازم است، اما خطوط قرمزی برای امنیت ملی و باورها وجود دارد.", score: 1 },
+          { text: "آزادی بیان باید حداکثری باشد و سانسور ممانعت شود، مگر در موارد تشویق به خشونت.", score: -1 },
+          { text: "آزادی بیان و قلم باید مطلقا بدون هیچ قید، شرط یا سانسوری باشد.", score: -2 }
+        ]
+      },
+      {
+        text: "میزان اختیارات نیروهای امنیتی و پلیس در جامعه باید چگونه باشد؟",
+        axis: "social",
+        options: [
+          { text: "پلیس و نظارت نظامی باید قدرت بالایی داشته باشند تا نظمی متقن برقرار باشد.", score: 2 },
+          { text: "اختیارات کافی به پلیس داده شود اما نظارت قانونی هم برقرار باشد.", score: 1 },
+          { text: "حقوق شهروندی و حریم خصوصی بر هرگونه اختیارات فوق‌العاده پلیس ارجح است.", score: -1 },
+          { text: "نظارت پلیسی و کنترل شهروندان باید به حداقل ممکن (یا صفر) کاهش یابد.", score: -2 }
+        ]
+      },
+      {
+        text: "در مواجهه با مهاجرت و تنوع فرهنگی در کشور، چه موضعی دارید؟",
+        axis: "social",
+        options: [
+          { text: "مرزها باید سخت‌گیرانه کنترل شوند و هویت ملی/فرهنگی در اولویت باشد.", score: 2 },
+          { text: "مهاجرت باید قانونی، محدود و طبق نیازهای تخصصی کشور مدیریت شود.", score: 1 },
+          { text: "پذیرش مهاجران و پناهجویان همراه با ادغام فرهنگی گامی مثبت است.", score: -1 },
+          { text: "مرزهای جغرافیایی باید باز باشند و تنوع کثرت‌گرایانه پذیرفته شود.", score: -2 }
+        ]
+      },
+      {
+        text: "قوانین جزا و مجازات مجرمین باید بر چه پایه‌ای استوار باشد؟",
+        axis: "social",
+        options: [
+          { text: "مجازات‌های مجازات‌گرایانه و شدید (مانند اعدام) برای بازدارندگی ضروری است.", score: 2 },
+          { text: "ترکیبی از مجازات‌های قاطع و بازپروری زندانیان اعمال شود.", score: 1 },
+          { text: "تمرکز اصلی باید روی اصلاح، آموزش و ریشه‌یابی جرائم باشد، نه انتقام.", score: -1 },
+          { text: "مجازات‌های سلب‌کننده حیات (اعدام) به‌کلی لغو و نظام مجازات انسان‌محور شود.", score: -2 }
+        ]
+      },
+      {
+        text: "مسائل زیست‌محیطی در برابر توسعه صنعتی چه جایگاهی دارند؟",
+        axis: "econ",
+        options: [
+          { text: "رشد صنعتی و اشتغال در اولویت است؛ محیط زیست فرع بر توسعه است.", score: 2 },
+          { text: "باید تعادلی میان حفظ محیط زیست و توسعه کسب‌وکارها ایجاد شود.", score: 1 },
+          { text: "دولت باید قوانین و جریمه‌های سخت‌گیرانه‌ای برای کربن و آلودگی وضع کند.", score: -1 },
+          { text: "مبارزه با تغییرات اقلیمی اولویت حیاتی است، حتی اگر رشد اقتصادی کند شود.", score: -2 }
+        ]
+      },
+      {
+        text: "مواجهه حکومت با اقلیت‌های عقیدتی و قومی چگونه باید باشد؟",
+        axis: "social",
+        options: [
+          { text: "اقلیت‌ها باید قوانین اکثریت و مذهب/فرهنگ رسمی را کاملاً رعایت کنند.", score: 2 },
+          { text: "حقوق اولیه اقلیت‌ها حفظ شود اما چارچوب عمومی کشور دست‌نخورده بماند.", score: 1 },
+          { text: "حقوق برابری برای همه اقلیت‌ها تضمین شده و تبعیض مثبت اعمال شود.", score: -1 },
+          { text: "تمام اشکال تبعیض ساختاری محو شود و آزادی‌های قومی و عقیدتی بی‌قیدوشرط باشد.", score: -2 }
+        ]
+      },
+      {
+        text: "در نهایت، مفهوم «عدالت» را چگونه معنا می‌کنید؟",
+        axis: "econ",
+        options: [
+          { text: "عدالت یعنی برابر ساختن فرصت‌ها و پیامدهای زندگی برای همه طبق نیاز.", score: -2 },
+          { text: "عدالت یعنی ایجاد حداقل رفاه و فرصت برابر آموزشی برای تمام افراد.", score: -1 },
+          { text: "عدالت یعنی هرکس بر اساس تلاش و استعداد خود دستاورد داشته باشد.", score: 1 },
+          { text: "عدالت یعنی آزادی کامل در مبادله و عدم دستبرد به دارایی‌های مشروع فرد.", score: 2 }
+        ]
       }
     ];
 
@@ -362,16 +479,26 @@
       
       const progressPercent = ((currentQuestion) / questions.length) * 100;
       document.getElementById('progress').style.width = `${progressPercent}%`;
+
+      // ساخت گزینه‌ها
+      const optionsContainer = document.getElementById('options-container');
+      optionsContainer.innerHTML = '';
+
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = opt.text;
+        btn.onclick = () => handleAnswer(opt.score, q.axis);
+        optionsContainer.appendChild(btn);
+      });
     }
 
-    // ثبت پاسخ کاربر
-    function handleAnswer(value) {
-      const q = questions[currentQuestion];
-      
-      if (q.axis === 'econ') {
-        econScore += value * q.weight;
-      } else if (q.axis === 'social') {
-        socialScore += value * q.weight;
+    // ثبت پاسخ
+    function handleAnswer(score, axis) {
+      if (axis === 'econ') {
+        econScore += score;
+      } else if (axis === 'social') {
+        socialScore += score;
       }
 
       currentQuestion++;
@@ -383,44 +510,46 @@
       }
     }
 
-    // محاسبه نتیجه و جانمایی نقطه روی قطب‌نما
+    // محاسبه نتیجه و تعیین طیف فکری
     function renderResult() {
       document.getElementById('quiz-card').style.display = 'none';
       document.getElementById('result-section').style.display = 'flex';
 
-      // محاسبه موقعیت نقطه (محدوده بین ۱۰% تا ۹۰%)
-      const maxEconScore = questions.filter(q => q.axis === 'econ').length * 2;
-      const maxSocialScore = questions.filter(q => q.axis === 'social').length * 2;
+      // حداکثر امتیاز ممکن بر اساس سوالات اقتصادی و اجتماعی
+      const econQuestions = questions.filter(q => q.axis === 'econ').length;
+      const socialQuestions = questions.filter(q => q.axis === 'social').length;
 
-      // X: چپ (-100%) تا راست (+100%)
+      const maxEconScore = econQuestions * 2;
+      const maxSocialScore = socialQuestions * 2;
+
+      // محاسبه موقعیت نقطه رو نمودار (در بازه ۱۰٪ تا ۹۰٪)
       const posX = 50 + (econScore / maxEconScore) * 40; 
-      // Y: آزادی‌خواه (-100% پایین) تا اقتدارگرا (+100% بالا)
       const posY = 50 - (socialScore / maxSocialScore) * 40; 
 
       const point = document.getElementById('point');
       point.style.left = `${posX}%`;
       point.style.top = `${posY}%`;
 
-      // تعیین عنوان و عکس بر اساس ربع قطب‌نما
+      // تعیین عنوان و پرتره
       const titleElem = document.getElementById('result-title');
       const portraitElem = document.getElementById('result-portrait');
 
       if (econScore <= 0 && socialScore > 0) {
-        titleElem.innerText = "سوسیالیست اقتدارگرا";
+        titleElem.innerText = "سوسیالیست اقتدارگرا (چپ سنتی)";
         portraitElem.src = "figures/marx.png";
       } else if (econScore > 0 && socialScore > 0) {
         titleElem.innerText = "محافظه‌کار راست‌گرا";
         portraitElem.src = "figures/smith.png";
       } else if (econScore <= 0 && socialScore <= 0) {
         titleElem.innerText = "سوسیال دمکرات / چپ لیبرال";
-        portraitElem.src = "figures/sandeers.png";
+        portraitElem.src = "figures/sanders.png";
       } else {
-        titleElem.innerText = "لیبرتارین راست‌گرا";
+        titleElem.innerText = "لیبرتارین راست‌گرا (مبتنی بر بازار آزاد)";
         portraitElem.src = "figures/locke.png";
       }
     }
 
-    // تابع دانلود کارت بدون بهم‌ریختگی در موبایل
+    // دانلود بدون بهم‌ریختگی در موبایل
     function downloadInstagramStory(e) {
       const exportArea = document.getElementById('export-container');
       const btn = e.currentTarget;
@@ -432,7 +561,7 @@
       const originalWidth = exportArea.style.width;
       const originalMaxWidth = exportArea.style.maxWidth;
 
-      // قفل ابعاد به ۵۵۰px برای رندر دقیق روی موبایل
+      // قفل کردن عرض برای رندر صحیح در مرورگرهای موبایل
       exportArea.style.width = '550px';
       exportArea.style.maxWidth = 'none';
 
@@ -456,8 +585,8 @@
       }).catch(err => {
         exportArea.style.width = originalWidth;
         exportArea.style.maxWidth = originalMaxWidth;
-        console.error("خطا در گرفتن عکس:", err);
-        alert("خطایی در ساخت عکس رخ داد.");
+        console.error("خطا در دانلود:", err);
+        alert("مشکلی در ساخت عکس پیش آمد.");
         btn.innerText = originalText;
         btn.disabled = false;
       });
@@ -478,11 +607,11 @@
 
     function copyResultLink() {
       navigator.clipboard.writeText(window.location.href).then(() => {
-        alert("لینک کپی شد!");
+        alert("لینک تست کپی شد!");
       });
     }
 
-    // شروع کوییز
+    // شروع اولین سوال
     showQuestion();
   </script>
 </body>
