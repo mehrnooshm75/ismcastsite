@@ -74,10 +74,15 @@
       color: var(--accent);
     }
 
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
     nav a {
       color: var(--text-muted);
       text-decoration: none;
-      margin-right: 20px;
       font-size: 0.9rem;
       font-weight: 500;
       transition: 0.2s;
@@ -85,6 +90,22 @@
 
     nav a:hover {
       color: var(--accent);
+    }
+
+    .btn-quiz-nav {
+      background: var(--accent);
+      color: #000 !important;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 700 !important;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s;
+    }
+
+    .btn-quiz-nav:hover {
+      background: var(--accent-bright);
+      transform: scale(1.03);
     }
 
     .hero {
@@ -147,6 +168,14 @@
       border-color: var(--accent);
       color: var(--accent);
       transform: translateY(-2px);
+    }
+
+    .btn-quiz-hero {
+      background: linear-gradient(135deg, #e5a93c, #ffd166);
+      color: #000;
+      border: none;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(229, 169, 60, 0.3);
     }
 
     .season-section {
@@ -266,6 +295,137 @@
       cursor: default;
     }
 
+    /* ---- Quiz Modal & Styles ---- */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .quiz-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 650px;
+      padding: 30px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .close-btn:hover {
+      color: var(--accent);
+    }
+
+    .quiz-header {
+      margin-bottom: 25px;
+    }
+
+    .quiz-progress {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      margin-top: 15px;
+      overflow: hidden;
+    }
+
+    .quiz-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .quiz-question {
+      font-size: 1.15rem;
+      margin-bottom: 20px;
+      font-weight: 600;
+      line-height: 1.6;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .quiz-option {
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      padding: 14px 18px;
+      border-radius: 8px;
+      color: var(--text-main);
+      cursor: pointer;
+      text-align: right;
+      font-size: 0.95rem;
+      transition: 0.2s;
+    }
+
+    .quiz-option:hover {
+      border-color: var(--accent);
+      background: var(--bg-card-hover);
+    }
+
+    .quiz-result {
+      text-align: center;
+      display: none;
+    }
+
+    .quiz-result h2 {
+      color: var(--accent);
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    .quiz-result p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 25px;
+      line-height: 1.8;
+    }
+
+    .result-btn {
+      background: var(--accent);
+      color: #000;
+      padding: 10px 24px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: 0.2s;
+    }
+
+    .result-btn:hover {
+      background: var(--accent-bright);
+    }
+
     footer {
       text-align: center;
       padding: 40px 30px;
@@ -277,6 +437,7 @@
 </head>
 <body>
 
+  <!-- Navigation Bar -->
   <header>
     <div class="logo-area">
       <img src="./photo_6030706551644949563_y.jpg" alt="ایسم کست" class="logo-img">
@@ -284,17 +445,20 @@
     </div>
     <nav>
       <a href="#season1">فصل اول</a>
+      <button class="btn-quiz-nav" onclick="openQuiz()"><i class="fa-solid fa-brain"></i> تست ایدئولوژی</button>
       <a href="https://t.me/ismcast" target="_blank">تلگرام</a>
       <a href="https://castbox.fm/vd/940214627" target="_blank">کست‌باکس</a>
     </nav>
   </header>
 
+  <!-- Hero Section -->
   <section class="hero">
     <span class="badge">پادکست تحلیلی اندیشه و فلسفه</span>
     <h1>کاوش در مکاتب، ایدئولوژی‌ها و ریشه‌های تفکر بشر</h1>
     <p>ایسم‌کست از یک سوال ساده حین پیاده‌روی شروع شد: چرا این‌همه مفهوم مهم در جهان به «ایسم» ختم می‌شوند؟</p>
     
     <div class="platforms">
+      <button onclick="openQuiz()" class="btn-platform btn-quiz-hero"><i class="fa-solid fa-compass"></i> کدام «ایسم» به تفکر شما نزدیک‌تر است؟ (کوییز)</button>
       <a href="https://castbox.fm/vd/940214627" target="_blank" class="btn-platform"><i class="fa-solid fa-podcast"></i> کست‌باکس</a>
       <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" class="btn-platform"><i class="fa-brands fa-spotify"></i> اسپاتیفای</a>
       <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" class="btn-platform"><i class="fa-brands fa-apple"></i> اپل پادکست</a>
@@ -303,6 +467,7 @@
     </div>
   </section>
 
+  <!-- Season 1 Section -->
   <section class="season-section" id="season1">
     <h2 class="section-title">فصل اول: نبرد ایدئولوژی‌ها</h2>
     
@@ -521,9 +686,165 @@
     </div>
   </section>
 
+  <!-- Modal Quiz -->
+  <div class="modal-overlay" id="quizModal">
+    <div class="quiz-container">
+      <button class="close-btn" onclick="closeQuiz()"><i class="fa-solid fa-xmark"></i></button>
+      
+      <div id="quizBody">
+        <div class="quiz-header">
+          <span style="color: var(--accent); font-size: 0.85rem; font-weight: 700;">تست ایدئولوژی ایسم‌کست</span>
+          <div class="quiz-progress">
+            <div class="quiz-progress-bar" id="progressBar"></div>
+          </div>
+        </div>
+        <div class="quiz-question" id="questionText">در حال بارگذاری سوال...</div>
+        <div class="quiz-options" id="optionsContainer"></div>
+      </div>
+
+      <div class="quiz-result" id="quizResult">
+        <h2 id="resultTitle">عنوان نتیجه</h2>
+        <p id="resultDesc">توضیحات مربوط به مکتب فکری شما...</p>
+        <button class="result-btn" onclick="resetQuiz()">امتحان دوباره</button>
+      </div>
+    </div>
+  </div>
+
   <footer>
     <p>IsmCast Podcast © All Rights Reserved</p>
   </footer>
+
+  <script>
+    const questions = [
+      {
+        q: "نقش اصلی دولت در جامعه باید چه باشد؟",
+        options: [
+          { text: "حفظ امنیت، دادگستری و صیانت از آزادی‌های فردی و مالکیت خصوصی", scores: { liberal: 2 } },
+          { text: "کاهش شکاف طبقاتی، فراهم کردن آموزش و بهداشت رایگان و بازتوزیع ثروت", scores: { socialist: 2 } },
+          { text: "دولت اصلاً نباید وجود داشته باشد؛ ساختارهای اجباری باید حذف شوند", scores: { anarchist: 2 } },
+          { text: "ایجاد نظم مطلق، حفظ انسجام ملی و جهت‌دهی به تمام ابعاد جامعه", scores: { authoritarian: 2 } }
+        ]
+      },
+      {
+        q: "نظر شما درباره بازار آزاد و سیستم اقتصادی چیست؟",
+        options: [
+          { text: "رقابت آزاد و بازار بدون دخالت دولت، بهترین موتور پیشرفت بشر است", scores: { liberal: 2 } },
+          { text: "بازار آزاد باعث استثمار و نابرابری می‌شود و باید توسط جامعه یا دولت کنترل شود", scores: { socialist: 2 } },
+          { text: "اقتصاد باید بر اساس همکاری داوطلبانه و همیاری خودمختار اداره شود", scores: { anarchist: 2 } },
+          { text: "اقتصاد باید تماماً در خدمت منافع و قدرت اهداف ملی/دولتی قرار گیرد", scores: { authoritarian: 2 } }
+        ]
+      },
+      {
+        q: "حقوق فردی در برابر خیر جمعی چه جایگاهی دارد؟",
+        options: [
+          { text: "آزادی و حقوق فرد تحت هر شرایطی ارجح بر خواسته جامعه یا دولت است", scores: { liberal: 2 } },
+          { text: "آزادی‌های فردی مهم هستند اما نباید عدالت اجتماعی و رفاه عموم را تهدید کنند", scores: { socialist: 2 } },
+          { text: "فردیت مطلق است و هیچ ساختار قدرتی حق تعیین تکلیف برای فرد را ندارد", scores: { anarchist: 2 } },
+          { text: "منافع کل جامعه و حفظ اقتدار بر هرگونه آزادی فردی ترجیح دارد", scores: { authoritarian: 2 } }
+        ]
+      },
+      {
+        q: "مفهوم «ملت» و مرزهای ملی از دیدگاه شما چیست؟",
+        options: [
+          { text: "چارچوبی حقوقی برای حفظ قانون و آزادی شهروندان متکثر", scores: { liberal: 1 } },
+          { text: "مرزها نباید مانع همبستگی انسان‌ها در برابر ناعدالتی شوند", scores: { socialist: 1 } },
+          { text: "مرزهای سیاسی اعتباری ندارند و باید حذف شوند", scores: { anarchist: 2 } },
+          { text: "ملت بالاترین هویت و انسجام‌بخش انسان‌ها در برابر دیگران است", scores: { authoritarian: 2 } }
+        ]
+      },
+      {
+        q: "ریشه اصلی ناعدالتی‌ها و مشکلات جامعه چیست؟",
+        options: [
+          { text: "دخالت بیش از حد دولت‌ها و انحصار در فرصت‌ها", scores: { liberal: 2 } },
+          { text: "توزیع ناعدالانه ثروت و ساختار طبقاتی سرمایه‌داری", scores: { socialist: 2 } },
+          { text: "وجود اصل سلسله‌مراتب و اقتدار اجباری دولتی", scores: { anarchist: 2 } },
+          { text: "سست شدن نظم، انحطاط اخلاقی و تضعیف اقتدار مرکزی", scores: { authoritarian: 2 } }
+        ]
+      }
+    ];
+
+    let currentQuestion = 0;
+    let scores = { liberal: 0, socialist: 0, anarchist: 0, authoritarian: 0 };
+
+    function openQuiz() {
+      document.getElementById('quizModal').classList.add('active');
+      resetQuiz();
+    }
+
+    function closeQuiz() {
+      document.getElementById('quizModal').classList.remove('active');
+    }
+
+    function resetQuiz() {
+      currentQuestion = 0;
+      scores = { liberal: 0, socialist: 0, anarchist: 0, authoritarian: 0 };
+      document.getElementById('quizBody').style.display = 'block';
+      document.getElementById('quizResult').style.display = 'none';
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById('questionText').innerText = `سوال ${currentQuestion + 1} از ${questions.length}: ${q.q}`;
+      
+      const progressPercent = ((currentQuestion) / questions.length) * 100;
+      document.getElementById('progressBar').style.width = `${progressPercent}%`;
+
+      const optionsContainer = document.getElementById('optionsContainer');
+      optionsContainer.innerHTML = '';
+
+      q.options.forEach(opt => {
+        const btn = document.createElement('div');
+        btn.className = 'quiz-option';
+        btn.innerText = opt.text;
+        btn.onclick = () => selectOption(opt.scores);
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function selectOption(selectedScores) {
+      for (let key in selectedScores) {
+        scores[key] += selectedScores[key];
+      }
+
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById('quizBody').style.display = 'none';
+      const resultDiv = document.getElementById('quizResult');
+      resultDiv.style.display = 'block';
+
+      let maxKey = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+
+      const resultsData = {
+        liberal: {
+          title: "تفکر شما بیشتر برپایه «لیبرالیسم» است",
+          desc: "شما بر آزادی‌های فردی، بازار آزاد و محدود بودن قدرت دولت تاکید دارید. برای درک ریشه‌های تاریخی این تفکر، پیشنهاد می‌کنیم قسمت‌های «۱: لیبرالیسم» و «۲: کاپیتالیسم» ایسم‌کست را بشنوید."
+        },
+        socialist: {
+          title: "تفکر شما بیشتر به «سوسیالیسم / مارکسیسم» نزدیک است",
+          desc: "دغدغه اصلی شما عدالت اجتماعی، کاهش فاصله طبقاتی و کنترل عمومی بر ثروت است. پیشنهاد می‌کنیم قسمت‌های «۴: مارکسیسم» و «۵: سوسیالیسم» ایسم‌کست را حتماً گوش کنید."
+        },
+        anarchist: {
+          title: "دیدگاه شما متأثر از «آنارشیسم» است",
+          desc: "شما به نفی اقتدار اجباری، ساختارهای دولتی و آزادی کامل انسان برپایه همکاری داوطلبانه باور دارید. پیشنهاد می‌کنیم قسمت «۱۱: آنارشیسم» را دنبال کنید."
+        },
+        authoritarian: {
+          title: "دیدگاه شما متمایل به «اقتدارگرایی / توتالیتاریسم» است",
+          desc: "شما برای نظم، اقتدار مرکزی و حفظ انسجام جامعیت ارجحیت قائل هستید. پیشنهاد می‌کنیم قسمت‌های «۸: فاشیسم» و «۱۰: توتالیتاریسم» ایسم‌کست را بشنوید تا ریشه‌های این ساختار را تحلیل کنید."
+        }
+      };
+
+      document.getElementById('resultTitle').innerText = resultsData[maxKey].title;
+      document.getElementById('resultDesc').innerText = resultsData[maxKey].desc;
+    }
+  </script>
 
 </body>
 </html>
