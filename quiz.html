@@ -156,12 +156,11 @@
       color: #fff;
     }
 
-    /* بخش نتیجه (جهت خروجی تصویر) */
+    /* بخش نتیجه */
     .result-box {
       display: none;
     }
 
-    /* کارتی که اسکرین‌شات گرفته می‌شود */
     #captureArea {
       background: #0f1215;
       padding: 20px;
@@ -229,7 +228,7 @@
       padding: 0 5px;
     }
 
-    /* نمودار قطب‌نما Political Compass */
+    /* قطب‌نما */
     .compass-container {
       width: 290px;
       height: 290px;
@@ -287,7 +286,7 @@
       transition: all 0.5s ease;
     }
 
-    /* فوتر داخل کارت */
+    /* فوتر کارت */
     .result-footer {
       background: #12161b;
       border: 1px solid var(--border);
@@ -307,7 +306,7 @@
       font-size: 0.85rem;
     }
 
-    /* دکمه‌های عملیاتی نتایج */
+    /* دکمه‌ها */
     .action-buttons {
       display: flex;
       gap: 10px;
@@ -335,19 +334,10 @@
       color: #000;
     }
 
-    .btn-download:hover {
-      opacity: 0.9;
-    }
-
     .btn-restart {
       background: var(--bg-card);
       border: 1px solid var(--border);
       color: var(--text-muted);
-    }
-
-    .btn-restart:hover {
-      border-color: var(--accent);
-      color: var(--accent);
     }
 
     @media (max-width: 480px) {
@@ -384,15 +374,12 @@
       <div class="q-cat" id="qCat">دسته‌بندی</div>
       <div class="q-text" id="qText">در حال بارگذاری...</div>
 
-      <div class="options" id="optionsBox">
-        <!-- گزینه‌ها به صورت دینامیک ساخته می‌شوند -->
-      </div>
+      <div class="options" id="optionsBox"></div>
     </div>
 
     <!-- بخش نتیجه -->
     <div class="result-box" id="resultBox">
       
-      <!-- ناحیه ثبت تصویر (کارت نتیجه) -->
       <div id="captureArea">
         <div class="top-result-card">
           <div class="res-info">
@@ -403,11 +390,9 @@
           <div class="res-avatar" id="resAvatar"></div>
         </div>
 
-        <p class="res-desc" id="resDesc">
-          توضیحات نتیجه
-        </p>
+        <p class="res-desc" id="resDesc">توضیحات نتیجه</p>
 
-        <!-- نمودار قطب‌نما -->
+        <!-- قطب‌نما -->
         <div class="compass-container">
           <span class="axis-label axis-top">اقتدارگرایی</span>
           <span class="axis-label axis-bottom">آزادی‌خواهی</span>
@@ -422,14 +407,14 @@
           <div class="compass-pointer" id="pointer" style="left: 50%; top: 50%;"></div>
         </div>
 
-        <!-- فوتر کارت -->
+        <!-- فوتر -->
         <div class="result-footer">
           <div class="rf-item">اینستاگرام و تلگرام: <strong>IsmCast@</strong></div>
           <div class="rf-item"><i class="fa-solid fa-headphones"></i> کست‌باکس: <strong>IsmCast / ایسم‌کست</strong></div>
         </div>
       </div>
 
-      <!-- دکمه‌های عملیاتی -->
+      <!-- دکمه‌ها -->
       <div class="action-buttons">
         <button class="btn-action btn-download" onclick="downloadCard()">
           <i class="fa-solid fa-download"></i> دانلود عکس نتیجه
@@ -444,8 +429,6 @@
   </div>
 
   <script>
-    // ۱۵ سوال با ۴ گزینه اختصاصی بر روی دو محور X (اقتصاد) و Y (اجتماعی/سیاسی)
-    // وزن‌دهی: گزینه‌های ۱ تا ۴ مقادیر از منفی به مثبت روی محورها دارند.
     const questions = [
       {
         cat: "۱. نقش دولت در اقتصاد و صنایع",
@@ -600,8 +583,8 @@
     ];
 
     let currentQ = 0;
-    let scoreX = 0; // اقتصاد: چپ (-) تا راست (+)
-    let scoreY = 0; // اجتماعی: آزادی‌خواه (-) تا اقتدارگرا (+)
+    let scoreX = 0;
+    let scoreY = 0;
 
     function showQuestion() {
       const q = questions[currentQ];
@@ -638,15 +621,12 @@
       document.getElementById('quizBox').style.display = 'none';
       document.getElementById('resultBox').style.display = 'block';
 
-      // دامنه مجاز امتیازها برای نگاشت روی نمودار
       let maxScoreX = 35; 
       let maxScoreY = 35;
 
       let xPercent = Math.min(Math.max(((scoreX + maxScoreX) / (maxScoreX * 2)) * 100, 10), 90);
       let yPercent = Math.min(Math.max(((scoreY + maxScoreY) / (maxScoreY * 2)) * 100, 10), 90);
 
-      // در نمودار Y=0 بالا (اقتدارگرا) و Y=100 پایین (آزادی‌خواه) است.
-      // scoreY مثبت -> اقتدارگرا (top کمتر)
       let topPercent = 100 - yPercent;
 
       const pointer = document.getElementById('pointer');
@@ -680,19 +660,75 @@
       document.getElementById('resDesc').innerText = desc;
     }
 
-    // دانلود کارت به صورت تصویر
-    function downloadCard() {
+    // تابع دانلود بازنویسی‌شده برای موبایل و دسکتاپ
+    async function downloadCard() {
       const captureElement = document.getElementById('captureArea');
+      const downloadBtn = document.querySelector('.btn-download');
       
-      html2canvas(captureElement, {
-        backgroundColor: '#0f1215',
-        scale: 2 // کیفیت بالای خروجی
-      }).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'IsmCast-Political-Compass.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-      });
+      const originalBtnText = downloadBtn.innerHTML;
+      downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> در حال ساخت عکس...';
+      downloadBtn.disabled = true;
+
+      try {
+        const canvas = await html2canvas(captureElement, {
+          backgroundColor: '#0f1215',
+          scale: 2,
+          useCORS: true
+        });
+
+        canvas.toBlob(async (blob) => {
+          if (!blob) {
+            alert('خطا در تولید تصویر.');
+            resetBtn();
+            return;
+          }
+
+          const file = new File([blob], 'IsmCast-Result.png', { type: 'image/png' });
+
+          // ۱. استفاده از Web Share API در آیفون و اندروید
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+              await navigator.share({
+                files: [file],
+                title: 'نتیجه آزمون ایسم‌کست',
+                text: 'الگوی فکری و قطب‌نمای سیاسی من در آزمون ایسم‌کست!'
+              });
+            } catch (err) {
+              console.log('Share canceled', err);
+            }
+          } 
+          // ۲. روش مستقیم در دسکتاپ
+          else {
+            const link = document.createElement('a');
+            link.download = 'IsmCast-Result.png';
+            link.href = URL.createObjectURL(blob);
+            
+            if ('download' in link) {
+              link.click();
+              URL.revokeObjectURL(link.href);
+            } else {
+              // ۳. پشتیبانی جایگزین در مرورگرهای محدود
+              const newTab = window.open();
+              if (newTab) {
+                newTab.document.write(`<img src="${canvas.toDataURL()}" style="width:100%; height:auto;" />`);
+              } else {
+                alert('لطفاً اجازه باز شدن Pop-up را در مرورگر خود بدهید.');
+              }
+            }
+          }
+          resetBtn();
+        }, 'image/png');
+
+      } catch (error) {
+        console.error(error);
+        alert('مشکلی در ساخت عکس پیش آمد.');
+        resetBtn();
+      }
+
+      function resetBtn() {
+        downloadBtn.innerHTML = originalBtnText;
+        downloadBtn.disabled = false;
+      }
     }
 
     function restartQuiz() {
@@ -704,7 +740,6 @@
       showQuestion();
     }
 
-    // شروع آزمون
     showQuestion();
   </script>
 </body>
