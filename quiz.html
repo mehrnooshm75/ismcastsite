@@ -329,55 +329,6 @@
       color: var(--text-muted);
     }
 
-    /* پاپ‌آپ ویژه ذخیره عکس در موبایل */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.85);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      padding: 20px;
-    }
-
-    .modal-content {
-      background: #14171a;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      max-width: 450px;
-      width: 100%;
-      padding: 16px;
-      text-align: center;
-      position: relative;
-    }
-
-    .modal-content img {
-      width: 100%;
-      border-radius: 12px;
-      margin-bottom: 12px;
-    }
-
-    .modal-hint {
-      color: var(--accent);
-      font-size: 0.85rem;
-      margin-bottom: 12px;
-      font-weight: 600;
-    }
-
-    .btn-close-modal {
-      background: var(--border);
-      color: #fff;
-      border: none;
-      padding: 8px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
     @media (max-width: 480px) {
       .container { padding: 16px 12px; }
       .compass-container { width: 240px; height: 240px; }
@@ -454,7 +405,7 @@
       <!-- دکمه‌ها -->
       <div class="action-buttons">
         <button class="btn-action btn-download" onclick="downloadCard()">
-          <i class="fa-solid fa-download"></i> دریافت عکس کارت
+          <i class="fa-solid fa-share-nodes"></i> ذخیره یا اشتراک‌گذاری عکس
         </button>
         <button class="btn-action btn-restart" onclick="restartQuiz()">
           <i class="fa-solid fa-rotate-right"></i> آزمون مجدد
@@ -463,15 +414,6 @@
 
     </div>
 
-  </div>
-
-  <!-- پاپ‌آپ نمایش عکس جهت ذخیره دستی در موبایل -->
-  <div class="modal-overlay" id="imgModal">
-    <div class="modal-content">
-      <div class="modal-hint">👇 انگشت خود را روی عکس بگذارید و نگه دارید (Save Image)</div>
-      <img id="generatedImg" src="" alt="کارت نتیجه ایسم‌کست">
-      <button class="btn-close-modal" onclick="closeModal()">بستن</button>
-    </div>
   </div>
 
   <script>
@@ -706,13 +648,13 @@
       document.getElementById('resDesc').innerText = desc;
     }
 
-    // منطق متضمن ساخت عکس بدون وابستگی به مکانیزم مرورگر موبایل
+    // عملکرد کاملاً یوزرفرندلی بر پایه منوی بومی اشتراک‌گذاری/ذخیره سیستم‌عامل
     async function downloadCard() {
       const captureElement = document.getElementById('captureArea');
       const downloadBtn = document.querySelector('.btn-download');
       
       const originalBtnText = downloadBtn.innerHTML;
-      downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> در حال ساخت...';
+      downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> در حال پردازش...';
       downloadBtn.disabled = true;
 
       try {
@@ -722,45 +664,34 @@
           useCORS: true
         });
 
-        const imgData = canvas.toDataURL('image/png');
+        const dataUrl = canvas.toDataURL('image/png');
+        const res = await fetch(dataUrl);
+        const blob = await res.blob();
+        const file = new File([blob], 'IsmCast-Result.png', { type: 'image/png' });
 
-        // ۱. تلاش برای منوی Share بومی دستگاه
-        canvas.toBlob(async (blob) => {
-          if (blob && navigator.canShare && navigator.canShare({ files: [new File([blob], 'IsmCast.png', {type: 'image/png'})] })) {
-            try {
-              const file = new File([blob], 'IsmCast-Result.png', { type: 'image/png' });
-              await navigator.share({
-                files: [file],
-                title: 'نتیجه آزمون ایسم‌کست',
-                text: 'الگوی فکری من در آزمون ایسم‌کست!'
-              });
-              resetBtn();
-              return;
-            } catch (err) {
-              console.log('Share canceled');
-            }
-          }
-
-          // ۲. راهکار قطعی تضمینی: نمایش پاپ‌آپ جهت ذخیره دستی
-          document.getElementById('generatedImg').src = imgData;
-          document.getElementById('imgModal').style.display = 'flex';
-          resetBtn();
-        }, 'image/png');
+        // ۱. استفاده مستقیم از منوی بومی گوشی (یک کلیک تا ذخیره در آلبوم یا ارسال)
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'نتیجه آزمون ایسم‌کست',
+            text: 'الگوی فکری و قطب‌نمای سیاسی من در آزمون ایسم‌کست!'
+          });
+        } else {
+          // ۲. دانلود مستقیم سریع در سیستم‌های دسکتاپ
+          const link = document.createElement('a');
+          link.download = 'IsmCast-Result.png';
+          link.href = dataUrl;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
 
       } catch (error) {
-        console.error(error);
-        alert('مشکلی در ساخت عکس پیش آمد.');
-        resetBtn();
-      }
-
-      function resetBtn() {
+        console.log('Share/Download canceled or error:', error);
+      } finally {
         downloadBtn.innerHTML = originalBtnText;
         downloadBtn.disabled = false;
       }
-    }
-
-    function closeModal() {
-      document.getElementById('imgModal').style.display = 'none';
     }
 
     function restartQuiz() {
