@@ -9,7 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&family=Vazirmatn:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   
-  <!-- کتابخانه تبدیل HTML به عکس -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <style>
@@ -33,7 +32,7 @@
       background-color: var(--bg-main);
       color: var(--text-main);
       font-family: 'Vazirmatn', sans-serif;
-      line-height: 1.8;
+      line-height: 1.7;
       padding: 15px 10px;
       min-height: 100vh;
       display: flex;
@@ -43,33 +42,32 @@
 
     .container {
       width: 100%;
-      max-width: 680px;
+      max-width: 600px;
       background: #0f1215;
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 24px 20px;
-      position: relative;
+      padding: 20px 16px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.6);
     }
 
-    /* هدر */
+    /* هدر اصلی سایت */
     .header-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     .header-titles h2 {
       font-family: 'Noto Naskh Arabic', serif;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       color: var(--text-main);
       font-weight: 700;
     }
 
     .header-titles .sub {
       color: var(--accent);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
       letter-spacing: 1px;
     }
@@ -78,9 +76,9 @@
       background: var(--accent);
       color: #000;
       font-weight: 700;
-      padding: 4px 14px;
+      padding: 3px 10px;
       border-radius: 20px;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
     }
 
     .divider {
@@ -90,16 +88,14 @@
     }
 
     /* بخش آزمون */
-    .quiz-box {
-      display: block;
-    }
+    .quiz-box { display: block; }
 
     .progress-bar-wrap {
       background: var(--bg-card);
-      height: 8px;
+      height: 6px;
       border-radius: 4px;
       overflow: hidden;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       border: 1px solid var(--border);
     }
 
@@ -111,23 +107,23 @@
     }
 
     .q-step {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--accent);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       font-weight: 600;
     }
 
     .q-cat {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: var(--text-muted);
       margin-bottom: 4px;
     }
 
     .q-text {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 700;
-      margin-bottom: 20px;
-      line-height: 1.6;
+      margin-bottom: 18px;
+      line-height: 1.5;
     }
 
     .options {
@@ -140,14 +136,13 @@
       background: var(--bg-card);
       border: 1px solid var(--border);
       color: var(--text-main);
-      padding: 12px 16px;
+      padding: 11px 14px;
       border-radius: 10px;
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       cursor: pointer;
       text-align: right;
       transition: all 0.2s;
-      line-height: 1.5;
     }
 
     .opt-btn:hover, .opt-btn:active {
@@ -156,74 +151,90 @@
       color: #fff;
     }
 
-    /* بخش نتیجه */
-    .result-box {
-      display: none;
-    }
+    /* بخش نتیجه - کارت قابل اشتراک‌گذاری (فشرده و شیک) */
+    .result-box { display: none; }
 
     #captureArea {
-      background: #0f1215;
-      padding: 20px;
-      border-radius: 14px;
+      background: #121519;
+      padding: 18px 16px;
+      border-radius: 16px;
+      border: 1px solid #282e36;
+      max-width: 400px; /* سایز استاندارد کارت استوری/پست */
+      margin: 0 auto;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
     }
 
-    .top-result-card {
-      background: #12161b;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 20px;
+    .card-brand-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      border-bottom: 1px dashed var(--border);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
     }
 
-    .res-info {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+    .card-brand-header span {
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .card-brand-header small {
+      color: var(--text-muted);
+      font-size: 0.7rem;
+    }
+
+    .top-result-card {
+      background: #181d23;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      text-align: center;
+      margin-bottom: 12px;
     }
 
     .res-label {
       color: var(--text-muted);
-      font-size: 0.85rem;
+      font-size: 0.78rem;
+      display: block;
+      margin-bottom: 2px;
     }
 
     .res-title {
       color: var(--accent);
-      font-size: 1.4rem;
+      font-size: 1.25rem;
       font-weight: 800;
       line-height: 1.3;
     }
 
     .res-peer {
       display: inline-block;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 3px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 2px 10px;
+      border-radius: 15px;
+      font-size: 0.75rem;
       color: var(--text-main);
-      margin-top: 4px;
-      width: fit-content;
+      margin-top: 6px;
     }
 
     .res-desc {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      line-height: 1.7;
+      color: #a0aabe;
+      font-size: 0.82rem;
+      line-height: 1.6;
       text-align: center;
-      margin-bottom: 24px;
-      padding: 0 5px;
+      margin-bottom: 16px;
+      padding: 0 4px;
     }
 
-    /* قطب‌نما */
+    /* قطب‌نمای فشرده */
     .compass-container {
-      width: 290px;
-      height: 290px;
-      margin: 0 auto 25px;
+      width: 220px;
+      height: 220px;
+      margin: 0 auto 16px;
       position: relative;
-      border-radius: 12px;
+      border-radius: 10px;
       overflow: hidden;
       border: 1px solid var(--border);
       display: grid;
@@ -232,13 +243,12 @@
     }
 
     .quadrant {
-      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 8px;
+      padding: 4px;
       text-align: center;
-      font-size: 0.8rem;
+      font-size: 0.72rem;
       font-weight: 700;
     }
 
@@ -249,73 +259,72 @@
 
     .axis-label {
       position: absolute;
-      background: rgba(15, 18, 21, 0.9);
+      background: rgba(15, 18, 21, 0.92);
       color: var(--text-muted);
-      font-size: 0.68rem;
-      padding: 2px 6px;
-      border-radius: 4px;
+      font-size: 0.6rem;
+      padding: 1px 5px;
+      border-radius: 3px;
       z-index: 5;
     }
 
-    .axis-top { top: 4px; left: 50%; transform: translateX(-50%); }
-    .axis-bottom { bottom: 4px; left: 50%; transform: translateX(-50%); }
-    .axis-left { left: 4px; top: 50%; transform: translateY(-50%); }
-    .axis-right { right: 4px; top: 50%; transform: translateY(-50%); }
+    .axis-top { top: 3px; left: 50%; transform: translateX(-50%); }
+    .axis-bottom { bottom: 3px; left: 50%; transform: translateX(-50%); }
+    .axis-left { left: 3px; top: 50%; transform: translateY(-50%); }
+    .axis-right { right: 3px; top: 50%; transform: translateY(-50%); }
 
     .compass-pointer {
       position: absolute;
-      width: 14px;
-      height: 14px;
+      width: 12px;
+      height: 12px;
       background: #fff;
       border: 3px solid var(--accent);
       border-radius: 50%;
       transform: translate(-50%, -50%);
-      box-shadow: 0 0 10px var(--accent);
+      box-shadow: 0 0 8px var(--accent);
       z-index: 10;
-      transition: all 0.5s ease;
     }
 
-    /* فوتر کارت */
+    /* فوتر فشرده کارت */
     .result-footer {
-      background: #12161b;
+      background: #181d23;
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 16px;
+      border-radius: 8px;
+      padding: 8px 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       color: var(--text-muted);
-      flex-wrap: wrap;
-      gap: 8px;
     }
 
     .rf-item strong {
       color: var(--accent);
-      font-size: 0.85rem;
     }
 
-    /* دکمه‌ها */
+    /* دکمه‌های عملیات */
     .action-buttons {
       display: flex;
       gap: 10px;
-      margin-top: 20px;
+      margin-top: 16px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .btn-action {
       flex: 1;
-      padding: 12px;
+      padding: 11px;
       border-radius: 10px;
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      transition: all 0.2s;
+      gap: 6px;
       border: none;
+      transition: all 0.2s;
     }
 
     .btn-download {
@@ -329,66 +338,55 @@
       color: var(--text-muted);
     }
 
-    /* نمایش هوشمند عکس برای تلگرام/اینستاگرام */
+    /* لایت‌باکس نمایش عکس (تلگرام/اینستاگرام) */
     .img-modal-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0,0,0,0.88);
       z-index: 9999;
-      padding: 20px;
+      padding: 15px;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      backdrop-filter: blur(5px);
+      backdrop-filter: blur(6px);
     }
 
     .img-modal-card {
       background: #14171a;
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 15px;
-      max-width: 90%;
-      max-height: 85vh;
+      padding: 14px;
+      max-width: 360px;
+      width: 100%;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
 
     .img-modal-card img {
-      max-width: 100%;
-      max-height: 60vh;
+      width: 100%;
+      height: auto;
       border-radius: 10px;
       margin: 10px 0;
+      border: 1px solid var(--border);
     }
 
     .img-modal-hint {
       color: var(--accent);
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      margin-bottom: 10px;
     }
 
     .btn-close-modal {
       background: var(--border);
       color: #fff;
       border: none;
-      padding: 8px 20px;
+      padding: 8px 18px;
       border-radius: 8px;
       font-family: inherit;
       cursor: pointer;
-      font-size: 0.85rem;
-    }
-
-    @media (max-width: 480px) {
-      .container { padding: 16px 12px; }
-      .compass-container { width: 240px; height: 240px; }
-      .top-result-card { flex-direction: column; text-align: center; gap: 10px; }
-      .res-peer { margin: 4px auto 0; }
-      .result-footer { flex-direction: column; text-align: center; }
-      .action-buttons { flex-direction: column; }
+      font-size: 0.8rem;
+      margin-top: 4px;
     }
   </style>
 </head>
@@ -396,7 +394,7 @@
 
   <div class="container">
 
-    <!-- هدر -->
+    <!-- هدر سایت -->
     <div class="header-bar">
       <div class="header-titles">
         <div class="sub">ISMCAST PODCAST</div>
@@ -419,16 +417,19 @@
       <div class="options" id="optionsBox"></div>
     </div>
 
-    <!-- بخش نتیجه -->
+    <!-- بخش نتیجه (کارت قابل اشتراک‌گذاری) -->
     <div class="result-box" id="resultBox">
       
       <div id="captureArea">
+        <div class="card-brand-header">
+          <span>ISMCAST | آزمون ایسم‌شناسی</span>
+          <small>IsmCast.com</small>
+        </div>
+
         <div class="top-result-card">
-          <div class="res-info">
-            <span class="res-label">الگوی فکری اصلی شما:</span>
-            <div class="res-title" id="resTitle">آنارشیسم و اقتدارزدایی</div>
-            <div class="res-peer" id="resPeer">هم‌مسیر: میخائیل باکونین</div>
-          </div>
+          <span class="res-label">الگوی فکری شما:</span>
+          <div class="res-title" id="resTitle">آنارشیسم و اقتدارزدایی</div>
+          <div class="res-peer" id="resPeer">هم‌مسیر: میخائیل باکونین</div>
         </div>
 
         <p class="res-desc" id="resDesc">توضیحات نتیجه</p>
@@ -448,10 +449,10 @@
           <div class="compass-pointer" id="pointer" style="left: 50%; top: 50%;"></div>
         </div>
 
-        <!-- فوتر -->
+        <!-- فوتر کارت -->
         <div class="result-footer">
-          <div class="rf-item">اینستاگرام و تلگرام: <strong>IsmCast@</strong></div>
-          <div class="rf-item"><i class="fa-solid fa-headphones"></i> کست‌باکس: <strong>IsmCast / ایسم‌کست</strong></div>
+          <div class="rf-item">تلگرام و اینستاگرام: <strong>IsmCast@</strong></div>
+          <div class="rf-item">کست‌باکس: <strong>IsmCast</strong></div>
         </div>
       </div>
 
@@ -461,7 +462,7 @@
           <i class="fa-solid fa-share-nodes"></i> ذخیره یا اشتراک‌گذاری
         </button>
         <button class="btn-action btn-restart" onclick="restartQuiz()">
-          <i class="fa-solid fa-rotate-right"></i> آزمون مجدد
+          <i class="fa-solid fa-rotate-right"></i> دوباره
         </button>
       </div>
 
@@ -469,7 +470,7 @@
 
   </div>
 
-  <!-- پاپ‌آپ هوشمند ذخیره (فقط برای مرورگرهای درون‌برنامه‌ای مثل تلگرام) -->
+  <!-- پاپ‌آپ هوشمند ذخیره (برای مرورگرهای درون‌برنامه‌ای) -->
   <div class="img-modal-overlay" id="imgModal">
     <div class="img-modal-card">
       <div class="img-modal-hint"><i class="fa-solid fa-circle-check"></i> عکس آماده شد! انگشتت رو روی عکس نگه دار و Save رو بزن</div>
@@ -690,19 +691,19 @@
       if (scoreX <= 0 && scoreY <= 0) {
         title = "آنارشیسم و چپ آزادی‌خواه";
         peer = "هم‌مسیر: میخائیل باکونین / نوام چامسکی";
-        desc = "شما به تمرکز قدرت، دولت‌ها و ناعدالتی اقتصادی بی‌اعتماد هستید. جامعه آرمانی شما بر پایه همکاری داوطلبانه، شوراهای محلی، عدالت اجتماعی و حذف سلطه بنا می‌شود.";
+        desc = "شما به تمرکز قدرت و ناعدالتی بی‌اعتمادید. جامعه آرمانی شما بر پایه همکاری داوطلبانه، شوراهای محلی و حذف سلطه بنا می‌شود.";
       } else if (scoreX > 0 && scoreY <= 0) {
         title = "لیبرالیسم و راست آزادی‌خواه";
         peer = "هم‌مسیر: آدام اسمیت / آین رند";
-        desc = "شما بر آزادی‌های فردی و بازار آزاد تاکید دارید. باور دارید که بهترین محرک جامعه، عدم مداخله دولت، رقابت اقتصادی و احترام کامل به حقوق و مالکیت خصوصی است.";
+        desc = "شما بر آزادی‌های فردی و بازار آزاد تاکید دارید. باور دارید بهترین محرک جامعه، رقابت اقتصادی و عدم مداخله دولت است.";
       } else if (scoreX <= 0 && scoreY > 0) {
         title = "سوسیالیسم متمرکز و مارکسیسم";
         peer = "هم‌مسیر: کارل مارکس / ولادیمیر لنین";
-        desc = "شما اولویت را بر برابری، حذف طبقات اجتماعی و مهار سرمایه‌داری می‌دانید و معتقدید برای تحقق عدالت واقعی، اقتدار دولتی و مدیریت متمرکز منابع لازم است.";
+        desc = "شما اولویت را بر برابری و حذف طبقات می‌دانید و معتقدید برای تحقق عدالت واقعی، اقتدار دولتی و مدیریت منابع لازم است.";
       } else {
-        title = "ناسیونالیسم و محافظه‌کاری اقتدارگرا";
+        title = "محافظه‌کاری و اقتدارگرایی";
         peer = "هم‌مسیر: توماس هابز / سنت‌گرایان";
-        desc = "شما برای حفظ نظم، امنیت، ارزش‌های سنتی و اقتدار ملی ارزش بالایی قائلید و معتقدید ساختار حاکمیتی مقتدر برای پیشگیری از هرج‌ومرج و حفظ انسجام ضروری است.";
+        desc = "شما برای نظم، ارزش‌های سنتی و اقتدار ملی ارزش بالایی قائلید و ساختار مقتدر را برای پیشگیری از هرج‌ومرج ضروری می‌دانید.";
       }
 
       document.getElementById('resTitle').innerText = title;
@@ -710,28 +711,24 @@
       document.getElementById('resDesc').innerText = desc;
     }
 
-    // الگوریتم هوشمند و ضد قفل برای تولید و ذخیره عکس
     async function downloadCard() {
       const captureElement = document.getElementById('captureArea');
       const downloadBtn = document.querySelector('.btn-download');
       
       const originalBtnText = downloadBtn.innerHTML;
-      downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> در حال پردازش...';
+      downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ساخت عکس...';
       downloadBtn.disabled = true;
 
       try {
-        // ۱. تنظیمات ویژه برای جلوگیری از هنگ کردن html2canvas در موبایل
         const canvas = await html2canvas(captureElement, {
-          backgroundColor: '#0f1215',
-          scale: 2,
+          backgroundColor: '#121519',
+          scale: 2, // خروجی شفاف و باکیفیت
           useCORS: true,
-          allowTaint: true,
           logging: false
         });
 
-        const dataUrl = canvas.toDataURL('image/png', 1.0);
+        const dataUrl = canvas.toDataURL('image/png');
 
-        // ۲. آیا مرورگر اجازه Share مستقیم می‌دهد؟
         let sharedSuccessfully = false;
         if (navigator.share && navigator.canShare) {
           try {
@@ -742,25 +739,22 @@
               await navigator.share({
                 files: [file],
                 title: 'نتیجه آزمون ایسم‌کست',
-                text: 'الگوی فکری من در آزمون ایسم‌کست'
+                text: 'الگوی فکری من در آزمون ایسم‌کست!'
               });
               sharedSuccessfully = true;
             }
           } catch (e) {
-            console.log('Share API skipped/canceled by user');
+            console.log('Share canceled');
           }
         }
 
-        // ۳. اگر مرورگر Share را پشتیبانی نکرد یا تلگرام/اینستاگرام بود:
         if (!sharedSuccessfully) {
           const isWebView = /Telegram|Instagram|FB_IAB|FB4A|Snapchat/i.test(navigator.userAgent);
           
           if (isWebView) {
-            // نمایش عکس در لایت‌باکس هوشمند (چون تلگرام اجازه لینک دانلود مستقیم نمی‌دهد)
             document.getElementById('renderedImg').src = dataUrl;
             document.getElementById('imgModal').style.display = 'flex';
           } else {
-            // دانلود استاندارد مرسوم روی کروم/سافاری
             const link = document.createElement('a');
             link.download = 'IsmCast-Result.png';
             link.href = dataUrl;
@@ -771,8 +765,7 @@
         }
 
       } catch (error) {
-        alert('خطا در پردازش تصویر. لطفاً دوباره امتحان کنید.');
-        console.error(error);
+        alert('خطا در پردازش تصویر.');
       } finally {
         downloadBtn.innerHTML = originalBtnText;
         downloadBtn.disabled = false;
