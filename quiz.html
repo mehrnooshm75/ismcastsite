@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>کوییز ایسم‌شناسی | ایسم کست</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&family=Vazirmatn:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-main: #0b0d0e;
+      --bg-card: #14171a;
+      --bg-card-hover: #1c2126;
+      --border: #24292e;
+      --border-gold: rgba(229, 169, 60, 0.4);
+      --accent: #e5a93c;
+      --accent-bright: #ffd166;
+      --text-main: #e6edf3;
+      --text-muted: #8b949e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: 'Vazirmatn', sans-serif;
+      line-height: 1.8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 8%;
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 13, 14, 0.9);
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--accent);
+      object-fit: cover;
+    }
+
+    .logo-text {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .btn-back {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.25s;
+    }
+
+    .btn-back:hover {
+      color: var(--accent);
+    }
+
+    .quiz-container {
+      max-width: 750px;
+      margin: 50px auto;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    .quiz-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 35px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .quiz-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .quiz-header h1 {
+      font-family: 'Noto Naskh Arabic', serif;
+      color: var(--accent);
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .quiz-header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .question-block {
+      display: none;
+    }
+
+    .question-block.active {
+      display: block;
+    }
+
+    .question-title {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: var(--text-main);
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-btn {
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 14px 20px;
+      border-radius: 10px;
+      text-align: right;
+      font-family: inherit;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .option-btn:hover {
+      border-color: var(--accent);
+      background: var(--bg-card-hover);
+      color: var(--accent);
+      transform: translateX(-4px);
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      margin-top: 30px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    #result-box {
+      display: none;
+      text-align: center;
+    }
+
+    .result-icon {
+      font-size: 3rem;
+      color: var(--accent);
+      margin-bottom: 15px;
+    }
+
+    .result-title {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 2rem;
+      color: var(--accent-bright);
+      margin-bottom: 15px;
+    }
+
+    .result-desc {
+      color: var(--text-main);
+      font-size: 1.05rem;
+      line-height: 1.9;
+      margin-bottom: 30px;
+    }
+
+    .btn-restart {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .btn-restart:hover {
+      background: var(--accent-bright);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="./index.html" class="logo-area">
+      <img src="./photo_6030706551644949563_y.jpg" alt="ایسم کست" class="logo-img">
+      <span class="logo-text">ISMCAST</span>
+    </a>
+    <a href="./index.html" class="btn-back"><i class="fa-solid fa-arrow-right"></i> بازگشت به صفحه اصلی</a>
+  </header>
+
+  <div class="quiz-container">
+    <div class="quiz-card">
+      <div class="quiz-header">
+        <h1>کوییز: شما به کدام «ایسم» نزدیک‌ترید؟</h1>
+        <p>به ۴ سوال زیر پاسخ دهید تا مکتب فکری غالب خود را کشف کنید.</p>
+      </div>
+
+      <!-- سوال ۱ -->
+      <div class="question-block active" data-q="1">
+        <div class="question-title">۱. از نظر شما مهم‌ترین ارزش در یک جامعه چیست؟</div>
+        <div class="options-list">
+          <button class="option-btn" onclick="answer(1, 'liberalism')">آزادی‌های فردی و انتخاب شخصی <span>←</span></button>
+          <button class="option-btn" onclick="answer(1, 'socialism')">برابری اقتصادی و عدالت اجتماعی <span>←</span></button>
+          <button class="option-btn" onclick="answer(1, 'nationalism')">حفظ هویت ملی، وحدت و اقتدار کشور <span>←</span></button>
+          <button class="option-btn" onclick="answer(1, 'anarchism')">استقلال کامل انسان و نفی هرگونه سلطه <span>←</span></button>
+        </div>
+      </div>
+
+      <!-- سوال ۲ -->
+      <div class="question-block" data-q="2">
+        <div class="question-title">۲. نقش دولت در اقتصاد و زندگی مردم باید چگونه باشد؟</div>
+        <div class="options-list">
+          <button class="option-btn" onclick="answer(2, 'liberalism')">حداقلی؛ فقط برای حفظ امنیت و قوانین بازار آزاد <span>←</span></button>
+          <button class="option-btn" onclick="answer(2, 'socialism')">فعال؛ برای بازتوزیع ثروت و ارائه خدمات عمومی <span>←</span></button>
+          <button class="option-btn" onclick="answer(2, 'nationalism')">مقتدر؛ برای هدایت منابع در جهت منافع کل ملت <span>←</span></button>
+          <button class="option-btn" onclick="answer(2, 'anarchism')">دولت اصلاً نباید وجود داشته باشد <span>←</span></button>
+        </div>
+      </div>
+
+      <!-- سوال ۳ -->
+      <div class="question-block" data-q="3">
+        <div class="question-title">۳. ریشه اصلی مشکلات و جوامع امروزی را در چه می‌بینید؟</div>
+        <div class="options-list">
+          <button class="option-btn" onclick="answer(3, 'liberalism')">دخالت بیش از حد دولت‌ها و محدود شدن آزادی‌ها <span>←</span></button>
+          <button class="option-btn" onclick="answer(3, 'socialism')">شکاف طبقاتی و نظام سرمایه‌داری افسارگسیخته <span>←</span></button>
+          <button class="option-btn" onclick="answer(3, 'nationalism')">تضعیف فرهنگ اصیل، هویت و یکپارچگی ملی <span>←</span></button>
+          <button class="option-btn" onclick="answer(3, 'anarchism')">وجود ساختارهای قدرت اجباری و نهادهای حاکمیتی <span>←</span></button>
+        </div>
+      </div>
+
+      <!-- سوال ۴ -->
+      <div class="question-block" data-q="4">
+        <div class="question-title">۴. جامعه ایده‌آل شما بر چه پایه‌ای بنا شده است؟</div>
+        <div class="options-list">
+          <button class="option-btn" onclick="answer(4, 'liberalism')">رقابت سالم، فرصت‌های برابر و حقوق فردی <span>←</span></button>
+          <button class="option-btn" onclick="answer(4, 'socialism')">همبستگی جمعی، رفاه همگانی و لغو استثمار <span>←</span></button>
+          <button class="option-btn" onclick="answer(4, 'nationalism')">انسجام ملی، پیشرفت کشور و وفاداری به وطن <span>←</span></button>
+          <button class="option-btn" onclick="answer(4, 'anarchism')">همکاری داوطلبانه، خودگردانی و نبود اجبار <span>←</span></button>
+        </div>
+      </div>
+
+      <!-- بخش نتیجه -->
+      <div id="result-box">
+        <div class="result-icon"><i class="fa-solid fa-compass"></i></div>
+        <div class="result-title" id="result-title">...</div>
+        <div class="result-desc" id="result-desc">...</div>
+        <button class="btn-restart" onclick="restartQuiz()">تکرار مجدد کوییز</button>
+      </div>
+
+      <div class="progress-bar-container" id="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>IsmCast Podcast © All Rights Reserved</p>
+  </footer>
+
+  <script>
+    let scores = { liberalism: 0, socialism: 0, nationalism: 0, anarchism: 0 };
+    let currentQ = 1;
+    const totalQ = 4;
+
+    const resultsData = {
+      liberalism: {
+        title: "دیدگاه شما به «لیبرالیسم» نزدیک‌تر است",
+        desc: "شما برای آزادی‌های فردی، حقوق طبیعی انسان و بازار آزاد ارزش بالایی قائلید. اعتقاد دارید که جامعه زمانی رشد می‌کند که مداخله دولت‌ها به حداقل برسد و فرصت برابر برای رقابت آزاد فراهم باشد."
+      },
+      socialism: {
+        title: "دیدگاه شما به «سوسیالیسم» نزدیک‌تر است",
+        desc: "شما بر عدالت اجتماعی، کاهش شکاف طبقاتی و رفاه همگانی تاکید دارید. باور دارید که ثروت و منابع جامعه باید به صورت عادلانه توزیع شود و دولت وظیفه حمایت از اقشار مختلف را دارد."
+      },
+      nationalism: {
+        title: "دیدگاه شما به «ناسیونالیسم» نزدیک‌تر است",
+        desc: "انسجام ملی، هویت تاریخی و اقتدار کشور برای شما در اولویت است. شما منفعت کل ملت و حفظ یکپارچگی فرهنگی را بر منافع فردی مقدم می‌دانید."
+      },
+      anarchism: {
+        title: "دیدگاه شما به «آنارشیسم» نزدیک‌تر است",
+        desc: "شما با هرگونه ساختار اجباری، قدرت متمرکز و سلطه دولت مخالفید. باور شما بر همکاری داوطلبانه انسان‌ها و جوامع خودگردان بدون نیاز به حاکمیت است."
+      }
+    };
+
+    function answer(qNum, type) {
+      scores[type]++;
+      
+      if (qNum < totalQ) {
+        document.querySelector(`[data-q="${qNum}"]`).classList.remove('active');
+        currentQ++;
+        document.querySelector(`[data-q="${currentQ}"]`).classList.add('active');
+        document.getElementById('progress-bar').style.width = ((currentQ - 1) / totalQ * 100) + '%';
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      // مخفی کردن سوالات و پروگرس بار
+      document.querySelectorAll('.question-block').forEach(el => el.style.display = 'none');
+      document.getElementById('progress-container').style.display = 'none';
+      
+      // محاسبه بیشترین امتیاز
+      let topIsm = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+      
+      document.getElementById('result-title').innerText = resultsData[topIsm].title;
+      document.getElementById('result-desc').innerText = resultsData[topIsm].desc;
+      document.getElementById('result-box').style.display = 'block';
+    }
+
+    function restartQuiz() {
+      scores = { liberalism: 0, socialism: 0, nationalism: 0, anarchism: 0 };
+      currentQ = 1;
+      
+      document.getElementById('result-box').style.display = 'none';
+      document.getElementById('progress-container').style.display = 'block';
+      document.getElementById('progress-bar').style.width = '0%';
+      
+      document.querySelectorAll('.question-block').forEach(el => el.classList.remove('active'));
+      document.querySelector(`[data-q="1"]`).classList.add('active');
+      document.querySelectorAll('.question-block').forEach(el => el.style.display = '');
+    }
+  </script>
+</body>
+</html>
