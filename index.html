@@ -3,13 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ISMCAST | ایسم کست</title>
+  <title>ISMCAST | ایسم کست - تست قطب‌نمای فکری</title>
   <meta name="description" content="پادکست تحلیلی اندیشه و فلسفه؛ کاوش در مکاتب و ایدئولوژی‌ها">
   <link rel="icon" href="./photo_6030706551644949563_y.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&family=Vazirmatn:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <!-- کتابخانه html2canvas برای دانلود کارت استوری -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <style>
     :root {
@@ -41,6 +44,7 @@
       line-height: 1.8;
     }
 
+    /* --- Header --- */
     header {
       display: flex;
       justify-content: space-between;
@@ -65,6 +69,7 @@
       height: 40px;
       border-radius: 50%;
       border: 1px solid var(--accent);
+      object-fit: cover;
     }
 
     .logo-text {
@@ -101,6 +106,7 @@
       cursor: pointer;
       border: none;
       transition: 0.2s;
+      font-family: inherit;
     }
 
     .btn-quiz-nav:hover {
@@ -108,6 +114,7 @@
       transform: scale(1.03);
     }
 
+    /* --- Hero --- */
     .hero {
       text-align: center;
       padding: 80px 8% 60px;
@@ -162,6 +169,8 @@
       align-items: center;
       gap: 8px;
       transition: 0.2s;
+      cursor: pointer;
+      font-family: inherit;
     }
 
     .btn-platform:hover {
@@ -178,6 +187,7 @@
       box-shadow: 0 4px 15px rgba(229, 169, 60, 0.3);
     }
 
+    /* --- Season Section --- */
     .season-section {
       padding: 60px 8%;
       max-width: 1300px;
@@ -295,135 +305,259 @@
       cursor: default;
     }
 
-    /* ---- Quiz Modal & Styles ---- */
+    /* --- Quiz Modal System --- */
     .modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(0, 0, 0, 0.88);
       backdrop-filter: blur(8px);
       display: none;
       justify-content: center;
       align-items: center;
       z-index: 1000;
       padding: 20px;
+      overflow-y: auto;
     }
 
     .modal-overlay.active {
       display: flex;
     }
 
-    .quiz-container {
-      background: var(--bg-card);
-      border: 1px solid var(--border-gold);
-      border-radius: 16px;
+    .quiz-modal-container {
       width: 100%;
-      max-width: 650px;
-      padding: 30px;
+      max-width: 520px;
       position: relative;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      margin: auto;
     }
 
-    .close-btn {
+    .close-modal-btn {
       position: absolute;
-      top: 20px;
-      left: 20px;
+      top: -40px;
+      left: 0;
       background: none;
       border: none;
-      color: var(--text-muted);
-      font-size: 1.2rem;
+      color: #fff;
+      font-size: 1.5rem;
       cursor: pointer;
-      transition: 0.2s;
+      z-index: 1010;
     }
 
-    .close-btn:hover {
-      color: var(--accent);
+    /* --- Quiz Cards Styles --- */
+    #quiz-card {
+      background-color: var(--bg-card);
+      border-radius: 20px;
+      padding: 25px;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     }
 
-    .quiz-header {
-      margin-bottom: 25px;
-    }
-
-    .quiz-progress {
+    .progress-bar-container {
+      width: 100%;
       height: 6px;
-      background: var(--border);
-      border-radius: 3px;
-      margin-top: 15px;
+      background-color: #21262d;
+      border-radius: 10px;
+      margin-bottom: 20px;
       overflow: hidden;
     }
 
-    .quiz-progress-bar {
+    .progress-bar {
       height: 100%;
       width: 0%;
-      background: var(--accent);
+      background-color: var(--accent);
       transition: width 0.3s ease;
     }
 
-    .quiz-question {
-      font-size: 1.15rem;
-      margin-bottom: 20px;
-      font-weight: 600;
-      line-height: 1.6;
+    .question-number {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 10px;
     }
 
-    .quiz-options {
+    .question-text {
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.6;
+      margin-bottom: 25px;
+      min-height: 50px;
+    }
+
+    .options-grid {
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    .quiz-option {
-      background: var(--bg-main);
-      border: 1px solid var(--border);
-      padding: 14px 18px;
-      border-radius: 8px;
+    .option-btn {
+      padding: 14px 16px;
+      background-color: var(--bg-main);
       color: var(--text-main);
+      border: 1px solid var(--border);
+      border-radius: 12px;
       cursor: pointer;
+      font-size: 0.92rem;
+      font-family: inherit;
+      transition: all 0.2s ease;
       text-align: right;
-      font-size: 0.95rem;
-      transition: 0.2s;
+      line-height: 1.5;
     }
 
-    .quiz-option:hover {
+    .option-btn:hover {
+      background-color: var(--bg-card-hover);
       border-color: var(--accent);
-      background: var(--bg-card-hover);
     }
 
-    .quiz-result {
-      text-align: center;
+    /* --- Result & Story Card --- */
+    #result-section {
       display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
     }
 
-    .quiz-result h2 {
-      color: var(--accent);
-      font-family: 'Noto Naskh Arabic', serif;
-      font-size: 2rem;
-      margin-bottom: 15px;
+    #export-container {
+      width: 100%;
+      background-color: var(--bg-card);
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      box-sizing: border-box;
+      border: 1px solid var(--border-gold);
+      position: relative;
+      margin-bottom: 20px;
     }
 
-    .quiz-result p {
+    #export-container * {
+      box-sizing: border-box !important;
+    }
+
+    .brand-header {
+      font-size: 0.95rem;
       color: var(--text-muted);
-      font-size: 1rem;
-      margin-bottom: 25px;
-      line-height: 1.8;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
     }
 
-    .result-btn {
-      background: var(--accent);
-      color: #000;
-      padding: 10px 24px;
-      border-radius: 8px;
-      border: none;
+    #result-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin: 0 0 15px 0;
+    }
+
+    .portrait-wrapper {
+      margin: 10px auto;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid var(--accent);
+    }
+
+    .portrait-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .compass-wrapper {
+      width: 250px !important;
+      height: 250px !important;
+      margin: 20px auto !important;
+      position: relative;
+      background: #101419;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+    }
+
+    .compass-box {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative;
+    }
+
+    .axis-h {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #30363d;
+    }
+
+    .axis-v {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background-color: #30363d;
+    }
+
+    .label-top { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; color: var(--text-muted); }
+    .label-bottom { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; color: var(--text-muted); }
+    .label-right { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); font-size: 0.65rem; color: var(--text-muted); }
+    .label-left { position: absolute; left: 6px; top: 50%; transform: translateY(-50%); font-size: 0.65rem; color: var(--text-muted); }
+
+    .compass-point {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background-color: var(--accent);
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 12px var(--accent);
+      top: 50%;
+      left: 50%;
+      transition: all 0.5s ease;
+    }
+
+    .watermark {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 15px;
+    }
+
+    .share-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .btn-action {
+      padding: 12px;
+      font-size: 0.95rem;
       font-weight: 700;
+      border: none;
+      border-radius: 10px;
       cursor: pointer;
       font-family: inherit;
       transition: 0.2s;
     }
 
-    .result-btn:hover {
-      background: var(--accent-bright);
+    .btn-download { background-color: var(--accent); color: #000; }
+    .btn-download:hover { background-color: var(--accent-bright); }
+
+    .social-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-sec {
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      font-size: 0.82rem;
+    }
+    
+    .btn-sec:hover {
+      border-color: var(--accent);
     }
 
     footer {
@@ -440,12 +574,12 @@
   <!-- Navigation Bar -->
   <header>
     <div class="logo-area">
-      <img src="./photo_6030706551644949563_y.jpg" alt="ایسم کست" class="logo-img">
+      <img src="./photo_6030706551644949563_y.jpg" alt="ایسم کست" class="logo-img" onerror="this.src='https://via.placeholder.com/40';">
       <div class="logo-text">ISMCAST / ایسم کست</div>
     </div>
     <nav>
       <a href="#season1">فصل اول</a>
-      <button class="btn-quiz-nav" onclick="openQuiz()"><i class="fa-solid fa-brain"></i> تست ایدئولوژی</button>
+      <button class="btn-quiz-nav" onclick="openQuizModal()"><i class="fa-solid fa-compass"></i> قطب‌نمای فکری</button>
       <a href="https://t.me/ismcast" target="_blank">تلگرام</a>
       <a href="https://castbox.fm/vd/940214627" target="_blank">کست‌باکس</a>
     </nav>
@@ -458,7 +592,7 @@
     <p>ایسم‌کست از یک سوال ساده حین پیاده‌روی شروع شد: چرا این‌همه مفهوم مهم در جهان به «ایسم» ختم می‌شوند؟</p>
     
     <div class="platforms">
-      <button onclick="openQuiz()" class="btn-platform btn-quiz-hero"><i class="fa-solid fa-compass"></i> کدام «ایسم» به تفکر شما نزدیک‌تر است؟ (کوییز)</button>
+      <button onclick="openQuizModal()" class="btn-platform btn-quiz-hero"><i class="fa-solid fa-compass"></i> تست قطب‌نمای فکری (کوییز)</button>
       <a href="https://castbox.fm/vd/940214627" target="_blank" class="btn-platform"><i class="fa-solid fa-podcast"></i> کست‌باکس</a>
       <a href="https://open.spotify.com/show/5c15Jkz26DDegYNruiCSSi" target="_blank" class="btn-platform"><i class="fa-brands fa-spotify"></i> اسپاتیفای</a>
       <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" class="btn-platform"><i class="fa-brands fa-apple"></i> اپل پادکست</a>
@@ -476,7 +610,7 @@
       <div class="card">
         <div>
           <div class="card-top">
-            <img src="./photo_6030706551644949563_y.jpg" alt="اپیزود صفر" class="card-img">
+            <img src="./photo_6030706551644949563_y.jpg" alt="اپیزود صفر" class="card-img" onerror="this.src='https://via.placeholder.com/80';">
             <div class="card-header-text">
               <span class="card-num">قسمت صفرم</span>
               <h3>پشت پرده‌ی کلمات</h3>
@@ -494,7 +628,7 @@
       <div class="card">
         <div>
           <div class="card-top">
-            <img src="./ep1.png" alt="لیبرالیسم" class="card-img">
+            <img src="./ep1.png" alt="لیبرالیسم" class="card-img" onerror="this.src='https://via.placeholder.com/80';">
             <div class="card-header-text">
               <span class="card-num">قسمت اول</span>
               <h3>لیبرالیسم</h3>
@@ -512,7 +646,7 @@
       <div class="card">
         <div>
           <div class="card-top">
-            <img src="./ep2.png" alt="کاپیتالیسم" class="card-img">
+            <img src="./ep2.png" alt="کاپیتالیسم" class="card-img" onerror="this.src='https://via.placeholder.com/80';">
             <div class="card-header-text">
               <span class="card-num">قسمت دوم</span>
               <h3>کاپیتالیسم</h3>
@@ -530,7 +664,7 @@
       <div class="card">
         <div>
           <div class="card-top">
-            <img src="./ep3.png" alt="امپریالیسم" class="card-img">
+            <img src="./ep3.png" alt="امپریالیسم" class="card-img" onerror="this.src='https://via.placeholder.com/80';">
             <div class="card-header-text">
               <span class="card-num">قسمت سوم</span>
               <h3>امپریالیسم</h3>
@@ -548,7 +682,7 @@
       <div class="card">
         <div>
           <div class="card-top">
-            <img src="./ep4.png" alt="مارکسیسم" class="card-img">
+            <img src="./ep4.png" alt="مارکسیسم" class="card-img" onerror="this.src='https://via.placeholder.com/80';">
             <div class="card-header-text">
               <span class="card-num">قسمت چهارم</span>
               <h3>مارکسیسم</h3>
@@ -566,7 +700,7 @@
       <div class="card">
         <div>
           <div class="card-top">
-            <img src="./ep5.png" alt="سوسیالیسم" class="card-img">
+            <img src="./ep5.png" alt="سوسیالیسم" class="card-img" onerror="this.src='https://via.placeholder.com/80';">
             <div class="card-header-text">
               <span class="card-num">قسمت پنجم</span>
               <h3>سوسیالیسم</h3>
@@ -584,7 +718,7 @@
       <div class="card">
         <div>
           <div class="card-top">
-            <img src="./ep6.png" alt="کمونیسم" class="card-img">
+            <img src="./ep6.png" alt="کمونیسم" class="card-img" onerror="this.src='https://via.placeholder.com/80';">
             <div class="card-header-text">
               <span class="card-num">قسمت ششم</span>
               <h3>کمونیسم</h3>
@@ -602,7 +736,7 @@
       <div class="card">
         <div>
           <div class="card-top">
-            <img src="./ep7.png" alt="ناسیونالیسم" class="card-img">
+            <img src="./ep7.png" alt="ناسیونالیسم" class="card-img" onerror="this.src='https://via.placeholder.com/80';">
             <div class="card-header-text">
               <span class="card-num">قسمت هفتم</span>
               <h3>ناسیونالیسم</h3>
@@ -620,7 +754,7 @@
       <div class="card">
         <div>
           <div class="card-top">
-            <img src="./ep8.png" alt="فاشیسم" class="card-img">
+            <img src="./ep8.png" alt="فاشیسم" class="card-img" onerror="this.src='https://via.placeholder.com/80';">
             <div class="card-header-text">
               <span class="card-num">قسمت هشتم</span>
               <h3>فاشیسم</h3>
@@ -638,7 +772,7 @@
       <div class="card">
         <div>
           <div class="card-top">
-            <img src="./ep9.png" alt="نازیسم" class="card-img">
+            <img src="./ep9.png" alt="نازیسم" class="card-img" onerror="this.src='https://via.placeholder.com/80';">
             <div class="card-header-text">
               <span class="card-num">قسمت نهم</span>
               <h3>نازیسم</h3>
@@ -654,7 +788,7 @@
       <div class="card">
         <div>
           <div class="card-top">
-            <img src="./ep10.PNG" alt="توتالیتاریسم" class="card-img">
+            <img src="./ep10.PNG" alt="توتالیتاریسم" class="card-img" onerror="this.src='https://via.placeholder.com/80';">
             <div class="card-header-text">
               <span class="card-num">قسمت دهم</span>
               <h3>توتالیتاریسم</h3>
@@ -670,7 +804,7 @@
       <div class="card">
         <div>
           <div class="card-top">
-            <img src="./ep11.png" alt="آنارشیسم" class="card-img">
+            <img src="./ep11.png" alt="آنارشیسم" class="card-img" onerror="this.src='https://via.placeholder.com/80';">
             <div class="card-header-text">
               <span class="card-num">قسمت یازدهم</span>
               <h3>آنارشیسم</h3>
@@ -686,27 +820,64 @@
     </div>
   </section>
 
-  <!-- Modal Quiz -->
+  <!-- Quiz Modal (Compass Section) -->
   <div class="modal-overlay" id="quizModal">
-    <div class="quiz-container">
-      <button class="close-btn" onclick="closeQuiz()"><i class="fa-solid fa-xmark"></i></button>
-      
-      <div id="quizBody">
-        <div class="quiz-header">
-          <span style="color: var(--accent); font-size: 0.85rem; font-weight: 700;">تست ایدئولوژی ایسم‌کست</span>
-          <div class="quiz-progress">
-            <div class="quiz-progress-bar" id="progressBar"></div>
-          </div>
+    <div class="quiz-modal-container">
+      <button class="close-modal-btn" onclick="closeQuizModal()"><i class="fa-solid fa-xmark"></i></button>
+
+      <!-- کارت سوالات -->
+      <div id="quiz-card">
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progress"></div>
         </div>
-        <div class="quiz-question" id="questionText">در حال بارگذاری سوال...</div>
-        <div class="quiz-options" id="optionsContainer"></div>
+        <div class="question-number" id="q-number">سوال ۱ از ۱۵</div>
+        <div class="question-text" id="q-text">در حال بارگذاری سوال...</div>
+        
+        <div class="options-grid" id="options-container"></div>
       </div>
 
-      <div class="quiz-result" id="quizResult">
-        <h2 id="resultTitle">عنوان نتیجه</h2>
-        <p id="resultDesc">توضیحات مربوط به مکتب فکری شما...</p>
-        <button class="result-btn" onclick="resetQuiz()">امتحان دوباره</button>
+      <!-- کارت نتیجه -->
+      <div id="result-section">
+        <div id="export-container">
+          <div class="brand-header">ISMCAST • ایسم‌کست</div>
+          <h2 id="result-title">سوسیال دمکرات متمايل به چپ</h2>
+          
+          <div class="portrait-wrapper">
+            <img id="result-portrait" src="figures/marx.png" alt="پرتره" onerror="this.src='https://via.placeholder.com/100';">
+          </div>
+
+          <div class="compass-wrapper">
+            <div class="compass-box">
+              <span class="label-top">اقتدارگرا</span>
+              <span class="label-bottom">آزادی‌خواه</span>
+              <span class="label-right">راست</span>
+              <span class="label-left">چپ</span>
+              
+              <div class="axis-h"></div>
+              <div class="axis-v"></div>
+              <div class="compass-point" id="point"></div>
+            </div>
+          </div>
+
+          <div class="watermark">podcast.ismcast.com | قطب‌نمای فکری</div>
+        </div>
+
+        <!-- دکمه‌های دانلود و اشتراک -->
+        <div class="share-actions">
+          <button class="btn-action btn-download" onclick="downloadInstagramStory(event)">
+            📥 دانلود کارت استوری اینستاگرام
+          </button>
+
+          <div class="social-buttons">
+            <button class="btn-action btn-sec" onclick="shareTelegram()">تلگرام</button>
+            <button class="btn-action btn-sec" onclick="shareTwitter()">توییتر</button>
+            <button class="btn-action btn-sec" onclick="copyResultLink()">کپی لینک</button>
+          </div>
+          
+          <button class="btn-action btn-sec" style="margin-top: 5px;" onclick="resetQuiz()">🔄 شرکت مجدد در تست</button>
+        </div>
       </div>
+
     </div>
   </div>
 
@@ -717,134 +888,308 @@
   <script>
     const questions = [
       {
-        q: "نقش اصلی دولت در جامعه باید چه باشد؟",
+        text: "نقش دولت در مدیریت و مالکیت صنایع و منابع کشور باید چگونه باشد؟",
+        axis: "econ",
         options: [
-          { text: "حفظ امنیت، دادگستری و صیانت از آزادی‌های فردی و مالکیت خصوصی", scores: { liberal: 2 } },
-          { text: "کاهش شکاف طبقاتی، فراهم کردن آموزش و بهداشت رایگان و بازتوزیع ثروت", scores: { socialist: 2 } },
-          { text: "دولت اصلاً نباید وجود داشته باشد؛ ساختارهای اجباری باید حذف شوند", scores: { anarchist: 2 } },
-          { text: "ایجاد نظم مطلق، حفظ انسجام ملی و جهت‌دهی به تمام ابعاد جامعه", scores: { authoritarian: 2 } }
+          { text: "دولت باید مالک کل منابع و صنایع کلیدی باشد تا ناعدالتی از بین برود.", score: -2 },
+          { text: "دولت باید با قوانین و مالیات، صنایع را تنظیم کند اما مالکیت خصوصاً خصوصی باشد.", score: -1 },
+          { text: "بازار آزاد باید اولویت داشته باشد، ولی حضور حداقل دولت برای صنایع دفاعی لازم است.", score: 1 },
+          { text: "مالکیت باید ۱۰۰٪ خصوصی باشد و دولت هیچ دخالتی در صنایع نداشته باشد.", score: 2 }
         ]
       },
       {
-        q: "نظر شما درباره بازار آزاد و سیستم اقتصادی چیست؟",
+        text: "نظرتان درباره نظام خدمات درمان و آموزش چیست؟",
+        axis: "econ",
         options: [
-          { text: "رقابت آزاد و بازار بدون دخالت دولت، بهترین موتور پیشرفت بشر است", scores: { liberal: 2 } },
-          { text: "بازار آزاد باعث استثمار و نابرابری می‌شود و باید توسط جامعه یا دولت کنترل شود", scores: { socialist: 2 } },
-          { text: "اقتصاد باید بر اساس همکاری داوطلبانه و همیاری خودمختار اداره شود", scores: { anarchist: 2 } },
-          { text: "اقتصاد باید تماماً در خدمت منافع و قدرت اهداف ملی/دولتی قرار گیرد", scores: { authoritarian: 2 } }
+          { text: "باید کاملاً رایگان، دولتی و یکسان برای همه باشد.", score: -2 },
+          { text: "بخش دولتی رایگان وجود داشته باشد، اما بخش خصوصی هم مجاز باشد.", score: -1 },
+          { text: "باید بر اساس بیمه‌های خصوصی و بازار رقابتی مدیریت شود.", score: 1 },
+          { text: "آموزش و درمان تماماً کالاهایی خصوصی هستند و دولت نباید هزینه‌ای بدهد.", score: 2 }
         ]
       },
       {
-        q: "حقوق فردی در برابر خیر جمعی چه جایگاهی دارد؟",
+        text: "مالیات بر ثروت و درآمدهای بالا را چگونه ارزیابی می‌کنید؟",
+        axis: "econ",
         options: [
-          { text: "آزادی و حقوق فرد تحت هر شرایطی ارجح بر خواسته جامعه یا دولت است", scores: { liberal: 2 } },
-          { text: "آزادی‌های فردی مهم هستند اما نباید عدالت اجتماعی و رفاه عموم را تهدید کنند", scores: { socialist: 2 } },
-          { text: "فردیت مطلق است و هیچ ساختار قدرتی حق تعیین تکلیف برای فرد را ندارد", scores: { anarchist: 2 } },
-          { text: "منافع کل جامعه و حفظ اقتدار بر هرگونه آزادی فردی ترجیح دارد", scores: { authoritarian: 2 } }
+          { text: "باید مالیات‌های سنگین و تصاعدی بر ثروتمندان بسته شود تا شکاف طبقاتی کم شود.", score: -2 },
+          { text: "مالیات تصاعدی منصفانه برای تامین خدمات عمومی ضروری است.", score: -1 },
+          { text: "مالیات‌ها باید ثابت و کم باشند تا انگیزه سرمایه‌گذاری از بین نرود.", score: 1 },
+          { text: "مالیات نوعی دست‌اندازی دولت به دارایی شخصی است و باید لغو یا حداقل شود.", score: 2 }
         ]
       },
       {
-        q: "مفهوم «ملت» و مرزهای ملی از دیدگاه شما چیست؟",
+        text: "روابط کارگر و کارفرما در بازار کار چگونه باید تنظیم شود؟",
+        axis: "econ",
         options: [
-          { text: "چارچوبی حقوقی برای حفظ قانون و آزادی شهروندان متکثر", scores: { liberal: 1 } },
-          { text: "مرزها نباید مانع همبستگی انسان‌ها در برابر ناعدالتی شوند", scores: { socialist: 1 } },
-          { text: "مرزهای سیاسی اعتباری ندارند و باید حذف شوند", scores: { anarchist: 2 } },
-          { text: "ملت بالاترین هویت و انسجام‌بخش انسان‌ها در برابر دیگران است", scores: { authoritarian: 2 } }
+          { text: "اتحادیه‌ها و شوراهای کارگری باید قدرت اصلی در تصمیم‌گیری‌ها باشند.", score: -2 },
+          { text: "قوانین کار باید از حقوق کارگران حمایت کرده و حداقل دستمزد را تعیین کند.", score: -1 },
+          { text: "قرارداد بین کارگر و کارفرما بر اساس توافق طرفین و عرضه-تقاضا باشد.", score: 1 },
+          { text: "هیچ قانون حداقل دستمزدی نباید وجود داشته باشد و بازار آزاد همه‌چیز را تنظیم کند.", score: 2 }
         ]
       },
       {
-        q: "ریشه اصلی ناعدالتی‌ها و مشکلات جامعه چیست؟",
+        text: "تجارت بین‌الملل و واردات کالا باید دارای چه سیاست‌هایی باشد؟",
+        axis: "econ",
         options: [
-          { text: "دخالت بیش از حد دولت‌ها و انحصار در فرصت‌ها", scores: { liberal: 2 } },
-          { text: "توزیع ناعدالانه ثروت و ساختار طبقاتی سرمایه‌داری", scores: { socialist: 2 } },
-          { text: "وجود اصل سلسله‌مراتب و اقتدار اجباری دولتی", scores: { anarchist: 2 } },
-          { text: "سست شدن نظم، انحطاط اخلاقی و تضعیف اقتدار مرکزی", scores: { authoritarian: 2 } }
+          { text: "تعرفه‌های سنگین برای حمایت از تولید داخلی و خودکفایی کاملاً لازم است.", score: -2 },
+          { text: "حمایت هوشمند از صنایع داخلی همگام با تجارت جهانی صورت گیرد.", score: -1 },
+          { text: "تجارت آزاد با کشورهای جهان با حداقل تعرفه گمرکی صورت پذیرد.", score: 1 },
+          { text: "مرزهای اقتصادی کاملاً باز باشد و تعرفه‌های گمرکی به‌کلی حذف شوند.", score: 2 }
+        ]
+      },
+      {
+        text: "چگونه باید با بحران‌های اقتصادی و تورم مقابله کرد؟",
+        axis: "econ",
+        options: [
+          { text: "کنترل قیمت‌ها توسط دولت و تزریق یارانه مستقیم به اقشار کم‌درآمد.", score: -2 },
+          { text: "سیاست‌های کینزی (افزایش مخارج دولتی برای ایجاد اشتغال در رکود).", score: -1 },
+          { text: "کاهش هزینه‌های دولت، اصلاح نظام بانکی و مقررات‌زدایی از کسب‌وکارها.", score: 1 },
+          { text: "اجازه دادن به بازار برای اصلاح خودکار، بدون کوچک‌ترین مداخله مالی یا پولی.", score: 2 }
+        ]
+      },
+      {
+        text: "آزادی‌های مدنی و سبک زندگی فردی تا چه حد باید محترم شمرده شوند؟",
+        axis: "social",
+        options: [
+          { text: "جامعه و سنت‌ها باید چارچوب سبک زندگی افراد را تعیین کنند.", score: 2 },
+          { text: "ارزش‌های اخلاقی جامعه باید حفظ شوند، اما تا حدی انعطاف وجود داشته باشد.", score: 1 },
+          { text: "هر فرد تا زمانی که به دیگران آسیب نزند، آزادی مطلق در انتخاب سبک زندگی دارد.", score: -1 },
+          { text: "دولت و جامعه هیچ حقی برای دخالت در هیچ پوشش، عقیده یا رفتار شخصی ندارند.", score: -2 }
+        ]
+      },
+      {
+        text: "نظرتان درباره حفظ ساختارهای سنتی و نهاد خانواده در جامعه چیست؟",
+        axis: "social",
+        options: [
+          { text: "حفظ سنت‌ها و ارزش‌های دینی/ملی اولویت اصلی ثبات جامعه است.", score: 2 },
+          { text: "سنت‌ها آموزنده هستند اما باید با تغییرات روز منطبق شوند.", score: 1 },
+          { text: "ساختارهای سنتی نباید مانعی برای آزادی‌های فردی و برابری جنسیتی باشند.", score: -1 },
+          { text: "سنت‌های گذشته بازدارنده رشد فردی هستند و باید نقد و ساختارشکنی شوند.", score: -2 }
+        ]
+      },
+      {
+        text: "حدود سانسور، آزادی بیان و مطبوعات کجاست؟",
+        axis: "social",
+        options: [
+          { text: "رسانه‌ها باید تحت نظارت دقیق حکومت باشند تا امنیت و اخلاق حفظ شود.", score: 2 },
+          { text: "آزادی بیان لازم است، اما خطوط قرمزی برای امنیت ملی و باورها وجود دارد.", score: 1 },
+          { text: "آزادی بیان باید حداکثری باشد و سانسور ممانعت شود، مگر در موارد تشویق به خشونت.", score: -1 },
+          { text: "آزادی بیان و قلم باید مطلقا بدون هیچ قید، شرط یا سانسوری باشد.", score: -2 }
+        ]
+      },
+      {
+        text: "میزان اختیارات نیروهای امنیتی و پلیس در جامعه باید چگونه باشد؟",
+        axis: "social",
+        options: [
+          { text: "پلیس و نظارت نظامی باید قدرت بالایی داشته باشند تا نظمی متقن برقرار باشد.", score: 2 },
+          { text: "اختیارات کافی به پلیس داده شود اما نظارت قانونی هم برقرار باشد.", score: 1 },
+          { text: "حقوق شهروندی و حریم خصوصی بر هرگونه اختیارات فوق‌العاده پلیس ارجح است.", score: -1 },
+          { text: "نظارت پلیسی و کنترل شهروندان باید به حداقل ممکن (یا صفر) کاهش یابد.", score: -2 }
+        ]
+      },
+      {
+        text: "در مواجهه با مهاجرت و تنوع فرهنگی در کشور، چه موضعی دارید؟",
+        axis: "social",
+        options: [
+          { text: "مرزها باید سخت‌گیرانه کنترل شوند و هویت ملی/فرهنگی در اولویت باشد.", score: 2 },
+          { text: "مهاجرت باید قانونی، محدود و طبق نیازهای تخصصی کشور مدیریت شود.", score: 1 },
+          { text: "پذیرش مهاجران و پناهجویان همراه با ادغام فرهنگی گامی مثبت است.", score: -1 },
+          { text: "مرزهای جغرافیایی باید باز باشند و تنوع کثرت‌گرایانه پذیرفته شود.", score: -2 }
+        ]
+      },
+      {
+        text: "قوانین جزا و مجازات مجرمین باید بر چه پایه‌ای استوار باشد؟",
+        axis: "social",
+        options: [
+          { text: "مجازات‌های مجازات‌گرایانه و شدید (مانند اعدام) برای بازدارندگی ضروری است.", score: 2 },
+          { text: "ترکیبی از مجازات‌های قاطع و بازپروری زندانیان اعمال شود.", score: 1 },
+          { text: "تمرکز اصلی باید روی اصلاح، آموزش و ریشه‌یابی جرائم باشد، نه انتقام.", score: -1 },
+          { text: "مجازات‌های سلب‌کننده حیات (اعدام) به‌کلی لغو و نظام مجازات انسان‌محور شود.", score: -2 }
+        ]
+      },
+      {
+        text: "مسائل زیست‌محیطی در برابر توسعه صنعتی چه جایگاهی دارند؟",
+        axis: "econ",
+        options: [
+          { text: "رشد صنعتی و اشتغال در اولویت است؛ محیط زیست فرع بر توسعه است.", score: 2 },
+          { text: "باید تعادلی میان حفظ محیط زیست و توسعه کسب‌وکارها ایجاد شود.", score: 1 },
+          { text: "دولت باید قوانین و جریمه‌های سخت‌گیرانه‌ای برای کربن و آلودگی وضع کند.", score: -1 },
+          { text: "مبارزه با تغییرات اقلیمی اولویت حیاتی است، حتی اگر رشد اقتصادی کند شود.", score: -2 }
+        ]
+      },
+      {
+        text: "مواجهه حکومت با اقلیت‌های عقیدتی و قومی چگونه باید باشد؟",
+        axis: "social",
+        options: [
+          { text: "اقلیت‌ها باید قوانین اکثریت و مذهب/فرهنگ رسمی را کاملاً رعایت کنند.", score: 2 },
+          { text: "حقوق اولیه اقلیت‌ها حفظ شود اما چارچوب عمومی کشور دست‌نخورده بماند.", score: 1 },
+          { text: "حقوق برابری برای همه اقلیت‌ها تضمین شده و تبعیض مثبت اعمال شود.", score: -1 },
+          { text: "تمام اشکال تبعیض ساختاری محو شود و آزادی‌های قومی و عقیدتی بی‌قیدوشرط باشد.", score: -2 }
+        ]
+      },
+      {
+        text: "در نهایت، مفهوم «عدالت» را چگونه معنا می‌کنید؟",
+        axis: "econ",
+        options: [
+          { text: "عدالت یعنی برابر ساختن فرصت‌ها و پیامدهای زندگی برای همه طبق نیاز.", score: -2 },
+          { text: "عدالت یعنی ایجاد حداقل رفاه و فرصت برابر آموزشی برای تمام افراد.", score: -1 },
+          { text: "عدالت یعنی هرکس بر اساس تلاش و استعداد خود دستاورد داشته باشد.", score: 1 },
+          { text: "عدالت یعنی آزادی کامل در مبادله و عدم دستبرد به دارایی‌های مشروع فرد.", score: 2 }
         ]
       }
     ];
 
     let currentQuestion = 0;
-    let scores = { liberal: 0, socialist: 0, anarchist: 0, authoritarian: 0 };
+    let econScore = 0;
+    let socialScore = 0;
 
-    function openQuiz() {
+    function openQuizModal() {
       document.getElementById('quizModal').classList.add('active');
       resetQuiz();
     }
 
-    function closeQuiz() {
+    function closeQuizModal() {
       document.getElementById('quizModal').classList.remove('active');
     }
 
     function resetQuiz() {
       currentQuestion = 0;
-      scores = { liberal: 0, socialist: 0, anarchist: 0, authoritarian: 0 };
-      document.getElementById('quizBody').style.display = 'block';
-      document.getElementById('quizResult').style.display = 'none';
+      econScore = 0;
+      socialScore = 0;
+      document.getElementById('quiz-card').style.display = 'block';
+      document.getElementById('result-section').style.display = 'none';
       showQuestion();
     }
 
     function showQuestion() {
       const q = questions[currentQuestion];
-      document.getElementById('questionText').innerText = `سوال ${currentQuestion + 1} از ${questions.length}: ${q.q}`;
+      document.getElementById('q-number').innerText = `سوال ${currentQuestion + 1} از ${questions.length}`;
+      document.getElementById('q-text').innerText = q.text;
       
       const progressPercent = ((currentQuestion) / questions.length) * 100;
-      document.getElementById('progressBar').style.width = `${progressPercent}%`;
+      document.getElementById('progress').style.width = `${progressPercent}%`;
 
-      const optionsContainer = document.getElementById('optionsContainer');
+      const optionsContainer = document.getElementById('options-container');
       optionsContainer.innerHTML = '';
 
       q.options.forEach(opt => {
-        const btn = document.createElement('div');
-        btn.className = 'quiz-option';
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
         btn.innerText = opt.text;
-        btn.onclick = () => selectOption(opt.scores);
+        btn.onclick = () => handleAnswer(opt.score, q.axis);
         optionsContainer.appendChild(btn);
       });
     }
 
-    function selectOption(selectedScores) {
-      for (let key in selectedScores) {
-        scores[key] += selectedScores[key];
+    function handleAnswer(score, axis) {
+      if (axis === 'econ') {
+        econScore += score;
+      } else if (axis === 'social') {
+        socialScore += score;
       }
 
       currentQuestion++;
+
       if (currentQuestion < questions.length) {
         showQuestion();
       } else {
-        showResult();
+        renderResult();
       }
     }
 
-    function showResult() {
-      document.getElementById('quizBody').style.display = 'none';
-      const resultDiv = document.getElementById('quizResult');
-      resultDiv.style.display = 'block';
+    function renderResult() {
+      document.getElementById('quiz-card').style.display = 'none';
+      document.getElementById('result-section').style.display = 'flex';
 
-      let maxKey = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+      const econQuestions = questions.filter(q => q.axis === 'econ').length;
+      const socialQuestions = questions.filter(q => q.axis === 'social').length;
 
-      const resultsData = {
-        liberal: {
-          title: "تفکر شما بیشتر برپایه «لیبرالیسم» است",
-          desc: "شما بر آزادی‌های فردی، بازار آزاد و محدود بودن قدرت دولت تاکید دارید. برای درک ریشه‌های تاریخی این تفکر، پیشنهاد می‌کنیم قسمت‌های «۱: لیبرالیسم» و «۲: کاپیتالیسم» ایسم‌کست را بشنوید."
-        },
-        socialist: {
-          title: "تفکر شما بیشتر به «سوسیالیسم / مارکسیسم» نزدیک است",
-          desc: "دغدغه اصلی شما عدالت اجتماعی، کاهش فاصله طبقاتی و کنترل عمومی بر ثروت است. پیشنهاد می‌کنیم قسمت‌های «۴: مارکسیسم» و «۵: سوسیالیسم» ایسم‌کست را حتماً گوش کنید."
-        },
-        anarchist: {
-          title: "دیدگاه شما متأثر از «آنارشیسم» است",
-          desc: "شما به نفی اقتدار اجباری، ساختارهای دولتی و آزادی کامل انسان برپایه همکاری داوطلبانه باور دارید. پیشنهاد می‌کنیم قسمت «۱۱: آنارشیسم» را دنبال کنید."
-        },
-        authoritarian: {
-          title: "دیدگاه شما متمایل به «اقتدارگرایی / توتالیتاریسم» است",
-          desc: "شما برای نظم، اقتدار مرکزی و حفظ انسجام جامعیت ارجحیت قائل هستید. پیشنهاد می‌کنیم قسمت‌های «۸: فاشیسم» و «۱۰: توتالیتاریسم» ایسم‌کست را بشنوید تا ریشه‌های این ساختار را تحلیل کنید."
-        }
-      };
+      const maxEconScore = econQuestions * 2;
+      const maxSocialScore = socialQuestions * 2;
 
-      document.getElementById('resultTitle').innerText = resultsData[maxKey].title;
-      document.getElementById('resultDesc').innerText = resultsData[maxKey].desc;
+      const posX = 50 + (econScore / maxEconScore) * 40; 
+      const posY = 50 - (socialScore / maxSocialScore) * 40; 
+
+      const point = document.getElementById('point');
+      point.style.left = `${posX}%`;
+      point.style.top = `${posY}%`;
+
+      const titleElem = document.getElementById('result-title');
+      const portraitElem = document.getElementById('result-portrait');
+
+      if (econScore <= 0 && socialScore > 0) {
+        titleElem.innerText = "سوسیالیست اقتدارگرا (چپ سنتی)";
+        portraitElem.src = "figures/marx.png";
+      } else if (econScore > 0 && socialScore > 0) {
+        titleElem.innerText = "محافظه‌کار راست‌گرا";
+        portraitElem.src = "figures/smith.png";
+      } else if (econScore <= 0 && socialScore <= 0) {
+        titleElem.innerText = "سوسیال دمکرات / چپ لیبرال";
+        portraitElem.src = "figures/sanders.png";
+      } else {
+        titleElem.innerText = "لیبرتارین راست‌گرا (مبتنی بر بازار آزاد)";
+        portraitElem.src = "figures/locke.png";
+      }
+    }
+
+    function downloadInstagramStory(e) {
+      const exportArea = document.getElementById('export-container');
+      const btn = e.currentTarget;
+      const originalText = btn.innerText;
+
+      btn.innerText = "⏳ در حال ساخت عکس...";
+      btn.disabled = true;
+
+      const originalWidth = exportArea.style.width;
+      const originalMaxWidth = exportArea.style.maxWidth;
+
+      exportArea.style.width = '550px';
+      exportArea.style.maxWidth = 'none';
+
+      html2canvas(exportArea, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#14171a',
+        logging: false,
+        windowWidth: 1200
+      }).then(canvas => {
+        exportArea.style.width = originalWidth;
+        exportArea.style.maxWidth = originalMaxWidth;
+
+        const link = document.createElement('a');
+        link.download = 'IsmCast-Political-Compass.png';
+        link.href = canvas.toDataURL('image/png', 1.0);
+        link.click();
+
+        btn.innerText = originalText;
+        btn.disabled = false;
+      }).catch(err => {
+        exportArea.style.width = originalWidth;
+        exportArea.style.maxWidth = originalMaxWidth;
+        console.error("خطا در دانلود:", err);
+        alert("مشکلی در ساخت عکس پیش آمد.");
+        btn.innerText = originalText;
+        btn.disabled = false;
+      });
+    }
+
+    function shareTelegram() {
+      const title = document.getElementById('result-title').innerText;
+      const text = `نتیجه تست قطب‌نمای فکری من در ایسم‌کست: ${title}`;
+      window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    function shareTwitter() {
+      const title = document.getElementById('result-title').innerText;
+      const text = `نتیجه تست قطب‌نمای فکری من در ایسم‌کست: ${title}`;
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`, '_blank');
+    }
+
+    function copyResultLink() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        alert("لینک تست کپی شد!");
+      });
     }
   </script>
-
 </body>
 </html>
