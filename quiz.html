@@ -329,6 +329,59 @@
       color: var(--text-muted);
     }
 
+    /* نمایش هوشمند عکس برای تلگرام/اینستاگرام */
+    .img-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 9999;
+      padding: 20px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .img-modal-card {
+      background: #14171a;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 15px;
+      max-width: 90%;
+      max-height: 85vh;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .img-modal-card img {
+      max-width: 100%;
+      max-height: 60vh;
+      border-radius: 10px;
+      margin: 10px 0;
+    }
+
+    .img-modal-hint {
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .btn-close-modal {
+      background: var(--border);
+      color: #fff;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-family: inherit;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
     @media (max-width: 480px) {
       .container { padding: 16px 12px; }
       .compass-container { width: 240px; height: 240px; }
@@ -405,7 +458,7 @@
       <!-- دکمه‌ها -->
       <div class="action-buttons">
         <button class="btn-action btn-download" onclick="downloadCard()">
-          <i class="fa-solid fa-share-nodes"></i> ذخیره یا اشتراک‌گذاری عکس
+          <i class="fa-solid fa-share-nodes"></i> ذخیره یا اشتراک‌گذاری
         </button>
         <button class="btn-action btn-restart" onclick="restartQuiz()">
           <i class="fa-solid fa-rotate-right"></i> آزمون مجدد
@@ -414,6 +467,15 @@
 
     </div>
 
+  </div>
+
+  <!-- پاپ‌آپ هوشمند ذخیره (فقط برای مرورگرهای درون‌برنامه‌ای مثل تلگرام) -->
+  <div class="img-modal-overlay" id="imgModal">
+    <div class="img-modal-card">
+      <div class="img-modal-hint"><i class="fa-solid fa-circle-check"></i> عکس آماده شد! انگشتت رو روی عکس نگه دار و Save رو بزن</div>
+      <img id="renderedImg" src="" alt="نتیجه کوییز">
+      <button class="btn-close-modal" onclick="closeModal()">بستن</button>
+    </div>
   </div>
 
   <script>
@@ -648,7 +710,7 @@
       document.getElementById('resDesc').innerText = desc;
     }
 
-    // عملکرد کاملاً یوزرفرندلی بر پایه منوی بومی اشتراک‌گذاری/ذخیره سیستم‌عامل
+    // الگوریتم هوشمند و ضد قفل برای تولید و ذخیره عکس
     async function downloadCard() {
       const captureElement = document.getElementById('captureArea');
       const downloadBtn = document.querySelector('.btn-download');
@@ -658,40 +720,67 @@
       downloadBtn.disabled = true;
 
       try {
+        // ۱. تنظیمات ویژه برای جلوگیری از هنگ کردن html2canvas در موبایل
         const canvas = await html2canvas(captureElement, {
           backgroundColor: '#0f1215',
           scale: 2,
-          useCORS: true
+          useCORS: true,
+          allowTaint: true,
+          logging: false
         });
 
-        const dataUrl = canvas.toDataURL('image/png');
-        const res = await fetch(dataUrl);
-        const blob = await res.blob();
-        const file = new File([blob], 'IsmCast-Result.png', { type: 'image/png' });
+        const dataUrl = canvas.toDataURL('image/png', 1.0);
 
-        // ۱. استفاده مستقیم از منوی بومی گوشی (یک کلیک تا ذخیره در آلبوم یا ارسال)
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file],
-            title: 'نتیجه آزمون ایسم‌کست',
-            text: 'الگوی فکری و قطب‌نمای سیاسی من در آزمون ایسم‌کست!'
-          });
-        } else {
-          // ۲. دانلود مستقیم سریع در سیستم‌های دسکتاپ
-          const link = document.createElement('a');
-          link.download = 'IsmCast-Result.png';
-          link.href = dataUrl;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+        // ۲. آیا مرورگر اجازه Share مستقیم می‌دهد؟
+        let sharedSuccessfully = false;
+        if (navigator.share && navigator.canShare) {
+          try {
+            const blob = await (await fetch(dataUrl)).blob();
+            const file = new File([blob], 'IsmCast-Result.png', { type: 'image/png' });
+
+            if (navigator.canShare({ files: [file] })) {
+              await navigator.share({
+                files: [file],
+                title: 'نتیجه آزمون ایسم‌کست',
+                text: 'الگوی فکری من در آزمون ایسم‌کست'
+              });
+              sharedSuccessfully = true;
+            }
+          } catch (e) {
+            console.log('Share API skipped/canceled by user');
+          }
+        }
+
+        // ۳. اگر مرورگر Share را پشتیبانی نکرد یا تلگرام/اینستاگرام بود:
+        if (!sharedSuccessfully) {
+          const isWebView = /Telegram|Instagram|FB_IAB|FB4A|Snapchat/i.test(navigator.userAgent);
+          
+          if (isWebView) {
+            // نمایش عکس در لایت‌باکس هوشمند (چون تلگرام اجازه لینک دانلود مستقیم نمی‌دهد)
+            document.getElementById('renderedImg').src = dataUrl;
+            document.getElementById('imgModal').style.display = 'flex';
+          } else {
+            // دانلود استاندارد مرسوم روی کروم/سافاری
+            const link = document.createElement('a');
+            link.download = 'IsmCast-Result.png';
+            link.href = dataUrl;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }
         }
 
       } catch (error) {
-        console.log('Share/Download canceled or error:', error);
+        alert('خطا در پردازش تصویر. لطفاً دوباره امتحان کنید.');
+        console.error(error);
       } finally {
         downloadBtn.innerHTML = originalBtnText;
         downloadBtn.disabled = false;
       }
+    }
+
+    function closeModal() {
+      document.getElementById('imgModal').style.display = 'none';
     }
 
     function restartQuiz() {
