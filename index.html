@@ -128,6 +128,7 @@
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
+      margin-bottom: 30px;
     }
 
     .btn-platform {
@@ -149,6 +150,30 @@
       color: var(--accent);
       transform: translateY(-2px);
       box-shadow: 0 4px 15px rgba(229, 169, 60, 0.15);
+    }
+
+    /* دکمه طلایی ویژه کوییز */
+    .quiz-banner-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-bright));
+      color: #0b0d0e;
+      font-weight: 700;
+      font-size: 1.05rem;
+      padding: 14px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(229, 169, 60, 0.3);
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .quiz-banner-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 30px rgba(229, 169, 60, 0.5);
+      background: linear-gradient(135deg, var(--accent-bright), #ffffff);
     }
 
     .season-section {
@@ -197,7 +222,6 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
     }
 
-    /* استایل ویژه کارت‌های غیرفعال/به‌زودی */
     .card:has(.btn-disabled),
     .card.is-disabled {
       opacity: 0.75;
@@ -291,7 +315,6 @@
       font-size: 0.85rem;
     }
 
-    /* بهبود واکنش‌گرایی در نمایشگرهای کوچک */
     @media (max-width: 768px) {
       header {
         padding: 15px 5%;
@@ -324,7 +347,6 @@
     </div>
     <nav>
       <a href="#season1">فصل اول</a>
-      <a href="./quiz.html" style="color: var(--accent); font-weight: bold;">کوییز ایسم‌شناسی</a>
       <a href="https://t.me/ismcast" target="_blank">تلگرام</a>
       <a href="https://castbox.fm/channel/id30000510" target="_blank">کست‌باکس</a>
     </nav>
@@ -341,6 +363,14 @@
       <a href="https://podcasts.apple.com/us/podcast/ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA/id1896183960" target="_blank" class="btn-platform"><i class="fa-brands fa-apple"></i> اپل پادکست</a>
       <a href="https://fidibo.com/channel/30000510-ismcast-%D8%A7%DB%8C%D8%B3%D9%85-%DA%A9%D8%B3%D8%AA" target="_blank" class="btn-platform"><i class="fa-solid fa-book-open"></i> فیدیبو</a>
       <a href="https://t.me/ismcast" target="_blank" class="btn-platform"><i class="fa-brands fa-telegram"></i> کانال تلگرام</a>
+    </div>
+
+    <!-- دکمه زرد طلایی کوییز -->
+    <div>
+      <a href="./quiz.html" class="quiz-banner-btn">
+        <i class="fa-solid fa-brain"></i>
+        شما به کدام «ایسم» نزدیک‌ترید؟ (تست آنلاین)
+      </a>
     </div>
   </section>
 
