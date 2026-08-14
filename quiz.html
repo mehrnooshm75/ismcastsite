@@ -208,17 +208,6 @@
       width: fit-content;
     }
 
-    .res-avatar {
-      width: 65px;
-      height: 65px;
-      border-radius: 50%;
-      border: 2px solid var(--accent);
-      background: #000;
-      flex-shrink: 0;
-      background-size: cover;
-      background-position: center;
-    }
-
     .res-desc {
       color: var(--text-muted);
       font-size: 0.9rem;
@@ -340,10 +329,59 @@
       color: var(--text-muted);
     }
 
+    /* پاپ‌آپ ویژه ذخیره عکس در موبایل */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: #14171a;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      max-width: 450px;
+      width: 100%;
+      padding: 16px;
+      text-align: center;
+      position: relative;
+    }
+
+    .modal-content img {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .modal-hint {
+      color: var(--accent);
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .btn-close-modal {
+      background: var(--border);
+      color: #fff;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
     @media (max-width: 480px) {
       .container { padding: 16px 12px; }
       .compass-container { width: 240px; height: 240px; }
-      .top-result-card { flex-direction: column-reverse; text-align: center; gap: 10px; }
+      .top-result-card { flex-direction: column; text-align: center; gap: 10px; }
       .res-peer { margin: 4px auto 0; }
       .result-footer { flex-direction: column; text-align: center; }
       .action-buttons { flex-direction: column; }
@@ -384,10 +422,9 @@
         <div class="top-result-card">
           <div class="res-info">
             <span class="res-label">الگوی فکری اصلی شما:</span>
-            <div class="res-title" id="resTitle">آناشیسم و اقتدارزدایی</div>
+            <div class="res-title" id="resTitle">آنارشیسم و اقتدارزدایی</div>
             <div class="res-peer" id="resPeer">هم‌مسیر: میخائیل باکونین</div>
           </div>
-          <div class="res-avatar" id="resAvatar"></div>
         </div>
 
         <p class="res-desc" id="resDesc">توضیحات نتیجه</p>
@@ -417,7 +454,7 @@
       <!-- دکمه‌ها -->
       <div class="action-buttons">
         <button class="btn-action btn-download" onclick="downloadCard()">
-          <i class="fa-solid fa-download"></i> دانلود عکس نتیجه
+          <i class="fa-solid fa-download"></i> دریافت عکس کارت
         </button>
         <button class="btn-action btn-restart" onclick="restartQuiz()">
           <i class="fa-solid fa-rotate-right"></i> آزمون مجدد
@@ -426,6 +463,15 @@
 
     </div>
 
+  </div>
+
+  <!-- پاپ‌آپ نمایش عکس جهت ذخیره دستی در موبایل -->
+  <div class="modal-overlay" id="imgModal">
+    <div class="modal-content">
+      <div class="modal-hint">👇 انگشت خود را روی عکس بگذارید و نگه دارید (Save Image)</div>
+      <img id="generatedImg" src="" alt="کارت نتیجه ایسم‌کست">
+      <button class="btn-close-modal" onclick="closeModal()">بستن</button>
+    </div>
   </div>
 
   <script>
@@ -660,13 +706,13 @@
       document.getElementById('resDesc').innerText = desc;
     }
 
-    // تابع دانلود بازنویسی‌شده برای موبایل و دسکتاپ
+    // منطق متضمن ساخت عکس بدون وابستگی به مکانیزم مرورگر موبایل
     async function downloadCard() {
       const captureElement = document.getElementById('captureArea');
       const downloadBtn = document.querySelector('.btn-download');
       
       const originalBtnText = downloadBtn.innerHTML;
-      downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> در حال ساخت عکس...';
+      downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> در حال ساخت...';
       downloadBtn.disabled = true;
 
       try {
@@ -676,46 +722,28 @@
           useCORS: true
         });
 
+        const imgData = canvas.toDataURL('image/png');
+
+        // ۱. تلاش برای منوی Share بومی دستگاه
         canvas.toBlob(async (blob) => {
-          if (!blob) {
-            alert('خطا در تولید تصویر.');
-            resetBtn();
-            return;
-          }
-
-          const file = new File([blob], 'IsmCast-Result.png', { type: 'image/png' });
-
-          // ۱. استفاده از Web Share API در آیفون و اندروید
-          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          if (blob && navigator.canShare && navigator.canShare({ files: [new File([blob], 'IsmCast.png', {type: 'image/png'})] })) {
             try {
+              const file = new File([blob], 'IsmCast-Result.png', { type: 'image/png' });
               await navigator.share({
                 files: [file],
                 title: 'نتیجه آزمون ایسم‌کست',
-                text: 'الگوی فکری و قطب‌نمای سیاسی من در آزمون ایسم‌کست!'
+                text: 'الگوی فکری من در آزمون ایسم‌کست!'
               });
+              resetBtn();
+              return;
             } catch (err) {
-              console.log('Share canceled', err);
-            }
-          } 
-          // ۲. روش مستقیم در دسکتاپ
-          else {
-            const link = document.createElement('a');
-            link.download = 'IsmCast-Result.png';
-            link.href = URL.createObjectURL(blob);
-            
-            if ('download' in link) {
-              link.click();
-              URL.revokeObjectURL(link.href);
-            } else {
-              // ۳. پشتیبانی جایگزین در مرورگرهای محدود
-              const newTab = window.open();
-              if (newTab) {
-                newTab.document.write(`<img src="${canvas.toDataURL()}" style="width:100%; height:auto;" />`);
-              } else {
-                alert('لطفاً اجازه باز شدن Pop-up را در مرورگر خود بدهید.');
-              }
+              console.log('Share canceled');
             }
           }
+
+          // ۲. راهکار قطعی تضمینی: نمایش پاپ‌آپ جهت ذخیره دستی
+          document.getElementById('generatedImg').src = imgData;
+          document.getElementById('imgModal').style.display = 'flex';
           resetBtn();
         }, 'image/png');
 
@@ -729,6 +757,10 @@
         downloadBtn.innerHTML = originalBtnText;
         downloadBtn.disabled = false;
       }
+    }
+
+    function closeModal() {
+      document.getElementById('imgModal').style.display = 'none';
     }
 
     function restartQuiz() {
