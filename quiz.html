@@ -8,6 +8,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&family=Vazirmatn:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <!-- کتابخانه تبدیل HTML به عکس -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <style>
     :root {
@@ -31,7 +34,7 @@
       color: var(--text-main);
       font-family: 'Vazirmatn', sans-serif;
       line-height: 1.8;
-      padding: 20px 10px;
+      padding: 15px 10px;
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -40,11 +43,11 @@
 
     .container {
       width: 100%;
-      max-width: 780px;
+      max-width: 680px;
       background: #0f1215;
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 32px 28px;
+      padding: 24px 20px;
       position: relative;
       box-shadow: 0 10px 40px rgba(0,0,0,0.6);
     }
@@ -54,19 +57,19 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .header-titles h2 {
       font-family: 'Noto Naskh Arabic', serif;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       color: var(--text-main);
       font-weight: 700;
     }
 
     .header-titles .sub {
       color: var(--accent);
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 700;
       letter-spacing: 1px;
     }
@@ -75,15 +78,15 @@
       background: var(--accent);
       color: #000;
       font-weight: 700;
-      padding: 4px 16px;
+      padding: 4px 14px;
       border-radius: 20px;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
     }
 
     .divider {
       height: 1px;
       background: var(--border);
-      margin-bottom: 28px;
+      margin-bottom: 20px;
     }
 
     /* بخش آزمون */
@@ -96,7 +99,7 @@
       height: 8px;
       border-radius: 4px;
       overflow: hidden;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       border: 1px solid var(--border);
     }
 
@@ -108,74 +111,88 @@
     }
 
     .q-step {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: var(--accent);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       font-weight: 600;
     }
 
+    .q-cat {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
     .q-text {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 700;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       line-height: 1.6;
     }
 
     .options {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .opt-btn {
       background: var(--bg-card);
       border: 1px solid var(--border);
       color: var(--text-main);
-      padding: 14px 18px;
+      padding: 12px 16px;
       border-radius: 10px;
       font-family: inherit;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       cursor: pointer;
       text-align: right;
       transition: all 0.2s;
+      line-height: 1.5;
     }
 
-    .opt-btn:hover {
+    .opt-btn:hover, .opt-btn:active {
       border-color: var(--accent);
       background: #1a1e24;
       color: #fff;
     }
 
-    /* بخش نتیجه (منطبق بر تصویر) */
+    /* بخش نتیجه (جهت خروجی تصویر) */
     .result-box {
       display: none;
+    }
+
+    /* کارتی که اسکرین‌شات گرفته می‌شود */
+    #captureArea {
+      background: #0f1215;
+      padding: 20px;
+      border-radius: 14px;
     }
 
     .top-result-card {
       background: #12161b;
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 24px;
+      padding: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .res-info {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
     }
 
     .res-label {
       color: var(--text-muted);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
 
     .res-title {
       color: var(--accent);
-      font-size: 1.6rem;
+      font-size: 1.4rem;
       font-weight: 800;
       line-height: 1.3;
     }
@@ -184,17 +201,17 @@
       display: inline-block;
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.1);
-      padding: 4px 14px;
+      padding: 3px 12px;
       border-radius: 20px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--text-main);
-      margin-top: 6px;
+      margin-top: 4px;
       width: fit-content;
     }
 
     .res-avatar {
-      width: 75px;
-      height: 75px;
+      width: 65px;
+      height: 65px;
       border-radius: 50%;
       border: 2px solid var(--accent);
       background: #000;
@@ -205,18 +222,18 @@
 
     .res-desc {
       color: var(--text-muted);
-      font-size: 0.95rem;
-      line-height: 1.8;
+      font-size: 0.9rem;
+      line-height: 1.7;
       text-align: center;
-      margin-bottom: 30px;
-      padding: 0 10px;
+      margin-bottom: 24px;
+      padding: 0 5px;
     }
 
     /* نمودار قطب‌نما Political Compass */
     .compass-container {
-      width: 320px;
-      height: 320px;
-      margin: 0 auto 35px;
+      width: 290px;
+      height: 290px;
+      margin: 0 auto 25px;
       position: relative;
       border-radius: 12px;
       overflow: hidden;
@@ -231,53 +248,38 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 10px;
+      padding: 8px;
       text-align: center;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 700;
     }
 
-    /* چهار ربع بر اساس تصویر */
-    .quad-top-right {
-      background: #192838;
-      color: #4a9dec;
-    }
-    .quad-top-left {
-      background: #2d1b22;
-      color: #e54d5e;
-    }
-    .quad-bottom-left {
-      background: #16241d;
-      color: #43b581;
-    }
-    .quad-bottom-right {
-      background: #2e2417;
-      color: #e5a93c;
-    }
+    .quad-top-right { background: #192838; color: #4a9dec; }
+    .quad-top-left { background: #2d1b22; color: #e54d5e; }
+    .quad-bottom-left { background: #16241d; color: #43b581; }
+    .quad-bottom-right { background: #2e2417; color: #e5a93c; }
 
-    /* لیبل‌های محورها */
     .axis-label {
       position: absolute;
-      background: rgba(15, 18, 21, 0.85);
+      background: rgba(15, 18, 21, 0.9);
       color: var(--text-muted);
-      font-size: 0.72rem;
-      padding: 2px 8px;
+      font-size: 0.68rem;
+      padding: 2px 6px;
       border-radius: 4px;
       z-index: 5;
     }
 
-    .axis-top { top: 6px; left: 50%; transform: translateX(-50%); }
-    .axis-bottom { bottom: 6px; left: 50%; transform: translateX(-50%); }
-    .axis-left { left: 6px; top: 50%; transform: translateY(-50%); }
-    .axis-right { right: 6px; top: 50%; transform: translateY(-50%); }
+    .axis-top { top: 4px; left: 50%; transform: translateX(-50%); }
+    .axis-bottom { bottom: 4px; left: 50%; transform: translateX(-50%); }
+    .axis-left { left: 4px; top: 50%; transform: translateY(-50%); }
+    .axis-right { right: 4px; top: 50%; transform: translateY(-50%); }
 
-    /* نشانگر نتیجه (دایره طلایی) */
     .compass-pointer {
       position: absolute;
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       background: #fff;
-      border: 4px solid var(--accent);
+      border: 3px solid var(--accent);
       border-radius: 50%;
       transform: translate(-50%, -50%);
       box-shadow: 0 0 10px var(--accent);
@@ -285,50 +287,76 @@
       transition: all 0.5s ease;
     }
 
-    /* فوتر نتیجه */
+    /* فوتر داخل کارت */
     .result-footer {
       background: #12161b;
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 14px 20px;
+      padding: 12px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.85rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
     }
 
     .rf-item strong {
       color: var(--accent);
-      font-size: 0.95rem;
+      font-size: 0.85rem;
     }
 
-    .restart-btn {
-      display: block;
-      margin: 20px auto 0;
-      background: transparent;
+    /* دکمه‌های عملیاتی نتایج */
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn-action {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .btn-download {
+      background: linear-gradient(135deg, var(--accent), var(--accent-bright));
+      color: #000;
+    }
+
+    .btn-download:hover {
+      opacity: 0.9;
+    }
+
+    .btn-restart {
+      background: var(--bg-card);
       border: 1px solid var(--border);
       color: var(--text-muted);
-      padding: 8px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.2s;
     }
 
-    .restart-btn:hover {
-      color: var(--accent);
+    .btn-restart:hover {
       border-color: var(--accent);
+      color: var(--accent);
     }
 
-    @media (max-width: 600px) {
-      .container { padding: 20px 16px; }
-      .compass-container { width: 260px; height: 260px; }
-      .top-result-card { flex-direction: column-reverse; text-align: center; gap: 12px; }
-      .res-peer { margin: 6px auto 0; }
+    @media (max-width: 480px) {
+      .container { padding: 16px 12px; }
+      .compass-container { width: 240px; height: 240px; }
+      .top-result-card { flex-direction: column-reverse; text-align: center; gap: 10px; }
+      .res-peer { margin: 4px auto 0; }
       .result-footer { flex-direction: column; text-align: center; }
+      .action-buttons { flex-direction: column; }
     }
   </style>
 </head>
@@ -353,96 +381,250 @@
         <div class="progress-bar-fill" id="progressBar"></div>
       </div>
       <div class="q-step" id="qStep">سوال ۱ از ۱۵</div>
+      <div class="q-cat" id="qCat">دسته‌بندی</div>
       <div class="q-text" id="qText">در حال بارگذاری...</div>
 
-      <div class="options">
-        <button class="opt-btn" onclick="answer(2)">کاملاً موافقم</button>
-        <button class="opt-btn" onclick="answer(1)">موافقم</button>
-        <button class="opt-btn" onclick="answer(-1)">مخالفم</button>
-        <button class="opt-btn" onclick="answer(-2)">کاملاً مخالفم</button>
+      <div class="options" id="optionsBox">
+        <!-- گزینه‌ها به صورت دینامیک ساخته می‌شوند -->
       </div>
     </div>
 
     <!-- بخش نتیجه -->
     <div class="result-box" id="resultBox">
       
-      <div class="top-result-card">
-        <div class="res-info">
-          <span class="res-label">الگوی فکری اصلی شما:</span>
-          <div class="res-title" id="resTitle">آناشیسم و اقتدارزدایی</div>
-          <div class="res-peer" id="resPeer">هم‌مسیر: میخائیل باکونین</div>
+      <!-- ناحیه ثبت تصویر (کارت نتیجه) -->
+      <div id="captureArea">
+        <div class="top-result-card">
+          <div class="res-info">
+            <span class="res-label">الگوی فکری اصلی شما:</span>
+            <div class="res-title" id="resTitle">آناشیسم و اقتدارزدایی</div>
+            <div class="res-peer" id="resPeer">هم‌مسیر: میخائیل باکونین</div>
+          </div>
+          <div class="res-avatar" id="resAvatar"></div>
         </div>
-        <div class="res-avatar" id="resAvatar"></div>
+
+        <p class="res-desc" id="resDesc">
+          توضیحات نتیجه
+        </p>
+
+        <!-- نمودار قطب‌نما -->
+        <div class="compass-container">
+          <span class="axis-label axis-top">اقتدارگرایی</span>
+          <span class="axis-label axis-bottom">آزادی‌خواهی</span>
+          <span class="axis-label axis-left">اقتصاد چپ</span>
+          <span class="axis-label axis-right">اقتصاد راست</span>
+
+          <div class="quadrant quad-top-left">چپ اقتدارگرا</div>
+          <div class="quadrant quad-top-right">راست اقتدارگرا</div>
+          <div class="quadrant quad-bottom-left">چپ آزادی‌خواه</div>
+          <div class="quadrant quad-bottom-right">راست آزادی‌خواه</div>
+
+          <div class="compass-pointer" id="pointer" style="left: 50%; top: 50%;"></div>
+        </div>
+
+        <!-- فوتر کارت -->
+        <div class="result-footer">
+          <div class="rf-item">اینستاگرام و تلگرام: <strong>IsmCast@</strong></div>
+          <div class="rf-item"><i class="fa-solid fa-headphones"></i> کست‌باکس: <strong>IsmCast / ایسم‌کست</strong></div>
+        </div>
       </div>
 
-      <p class="res-desc" id="resDesc">
-        شما به تمرکز قدرت و نهادهای اجبارکننده مانند دولت بی‌اعتماد هستید. جامعه آرمانی از نظر شما بر پایه همکاری داوطلبانه، خودمختاری محلی و حذف سلطه بنا می‌شود.
-      </p>
-
-      <!-- نمودار قطب‌نما -->
-      <div class="compass-container">
-        <!-- لیبل محورها -->
-        <span class="axis-label axis-top">اقتدارگرایی</span>
-        <span class="axis-label axis-bottom">آزادی‌خواهی</span>
-        <span class="axis-label axis-left">اقتصاد چپ</span>
-        <span class="axis-label axis-right">اقتصاد راست</span>
-
-        <!-- چهار ربع -->
-        <div class="quadrant quad-top-left">چپ اقتدارگرا</div>
-        <div class="quadrant quad-top-right">راست اقتدارگرا</div>
-        <div class="quadrant quad-bottom-left">چپ آزادی‌خواه</div>
-        <div class="quadrant quad-bottom-right">راست آزادی‌خواه</div>
-
-        <!-- دایره نشانگر -->
-        <div class="compass-pointer" id="pointer" style="left: 35%; top: 85%;"></div>
+      <!-- دکمه‌های عملیاتی -->
+      <div class="action-buttons">
+        <button class="btn-action btn-download" onclick="downloadCard()">
+          <i class="fa-solid fa-download"></i> دانلود عکس نتیجه
+        </button>
+        <button class="btn-action btn-restart" onclick="restartQuiz()">
+          <i class="fa-solid fa-rotate-right"></i> آزمون مجدد
+        </button>
       </div>
 
-      <!-- فوتر -->
-      <div class="result-footer">
-        <div class="rf-item">اینستاگرام و تلگرام: <strong>IsmCast@</strong></div>
-        <div class="rf-item"><i class="fa-solid fa-headphones"></i> شنیدن پادکست در کست‌باکس: <strong>IsmCast / ایسم‌کست</strong></div>
-      </div>
-
-      <button class="restart-btn" onclick="restartQuiz()"><i class="fa-solid fa-rotate-right"></i> آزمون مجدد</button>
     </div>
 
   </div>
 
   <script>
-    // ۱۵ سوال سنجش دقیق دو محور (اقتصادی X و اجتماعی Y)
+    // ۱۵ سوال با ۴ گزینه اختصاصی بر روی دو محور X (اقتصاد) و Y (اجتماعی/سیاسی)
+    // وزن‌دهی: گزینه‌های ۱ تا ۴ مقادیر از منفی به مثبت روی محورها دارند.
     const questions = [
-      { text: "بازار آزاد و رقابت بدون مداخله دولت، بهترین راه برای توزیع عادلانه ثروت و پیشرفت جامعه است.", axis: "X", factor: 1 },
-      { text: "خدمات کلیدی مانند بهداشت، آموزش و صنایع بزرگ باید تماماً تحت کنترل و مالکیت عمومی یا دولت باشند.", axis: "X", factor: -1 },
-      { text: "دولت باید برای کاهش فاصله طبقاتی، مالیات‌های سنگین بر ثروتمندان وضع کند.", axis: "X", factor: -1 },
-      { text: "مالکیت خصوصی یک حق بنیادی و مقدس است که دولت تحت هیچ شرایطی نباید آن را محدود کند.", axis: "X", factor: 1 },
-      { text: "سرمایه‌داری ماهيتاً باعث استثمار نیروی کار و ایجاد ناعدالتی در جامعه می‌شود.", axis: "X", factor: -1 },
-      { text: "ارزش یک محصول یا خدمت را فقط میزان عرضه و تقاضا تعیین می‌کند، نه ارزش‌گذاری دولتی.", axis: "X", factor: 1 },
-      { text: "ارتقای رفاه همگانی بر سودآوری کسب‌وکارهای خصوصی اولویت دارد.", axis: "X", factor: -1 },
-      { text: "امنیت ملی و حفظ نظم جامعه بر آزادی‌های فردی و شهروندی ارجحیت دارد.", axis: "Y", factor: 1 },
-      { text: "هیچ مرجعی (حتی دولت) حق ندارد تصمیمات شخصی، سبک زندگی یا باورهای افراد را کنترل کند.", axis: "Y", factor: -1 },
-      { text: "وجود یک رهبر قدرتمند و ساختار متمرکز برای هدایت صحیح جامعه ضروری است.", axis: "Y", factor: 1 },
-      { text: "ساختارهای قدرت و قوانین اجباری دولت در نهایت به انحطاط و سلب آزادی انسان ختم می‌شوند.", axis: "Y", factor: -1 },
-      { text: "سنت‌ها و ارزش‌های اخلاقی جامعه باید توسط قوانین سخت‌گیرانه حفظ شوند.", axis: "Y", factor: 1 },
-      { text: "خودمختاری محلی و شوراها داوطلبانه بسیار بهتر از دولت‌های متمرکز کشور را اداره می‌کنند.", axis: "Y", factor: -1 },
-      { text: "تجمعات، اعتراضات و اعتصابات اگر نظم عمومی را برهم بزنند باید سرکوب شوند.", axis: "Y", factor: 1 },
-      { text: "شهروندان باید اختیار کامل داشته باشند تا بدون سانسور ایده‌های خود را بیان کنند.", axis: "Y", factor: -1 }
+      {
+        cat: "۱. نقش دولت در اقتصاد و صنایع",
+        text: "نقش دولت در مدیریت و مالکیت صنایع و منابع کشور باید چگونه باشد؟",
+        options: [
+          { txt: "دولت باید مالک کل منابع و صنایع کلیدی باشد تا ناعدالتی از بین برود.", scoreX: -3, scoreY: 1 },
+          { txt: "دولت باید با قوانین و مالیات، صنایع را تنظیم کند اما مالکیت عمدتاً خصوصی باشد.", scoreX: -1, scoreY: 0 },
+          { txt: "بازار آزاد باید اولویت داشته باشد، ولی حضور حداقل دولت برای صنایع دفاعی لازم است.", scoreX: 1, scoreY: 0 },
+          { txt: "مالکیت باید ۱۰۰٪ خصوصی باشد و دولت هیچ دخالتی در صنایع نداشته باشد.", scoreX: 3, scoreY: -1 }
+        ]
+      },
+      {
+        cat: "۲. خدمات درمان و آموزش",
+        text: "نظرتان درباره نظام خدمات درمان و آموزش چیست؟",
+        options: [
+          { txt: "باید کاملاً رایگان، دولتی و یکسان برای همه باشد.", scoreX: -3, scoreY: 1 },
+          { txt: "بخش دولتی رایگان وجود داشته باشد، اما بخش خصوصی هم مجاز باشد.", scoreX: -1, scoreY: 0 },
+          { txt: "باید بر اساس بیمه‌های خصوصی و بازار رقابتی مدیریت شود.", scoreX: 1, scoreY: -1 },
+          { txt: "آموزش و درمان تماماً کالاهایی خصوصی هستند و دولت نباید هزینه‌ای بدهد.", scoreX: 3, scoreY: -2 }
+        ]
+      },
+      {
+        cat: "۳. سیاست‌های مالیاتی",
+        text: "مالیات بر ثروت و درآمدهای بالا را چگونه ارزیابی می‌کنید؟",
+        options: [
+          { txt: "باید مالیات‌های سنگین و تصاعدی بر ثروتمندان بسته شود تا شکاف طبقاتی کم شود.", scoreX: -3, scoreY: 0 },
+          { txt: "مالیات تصاعدی منصفانه برای تامین خدمات عمومی ضروری است.", scoreX: -1, scoreY: 0 },
+          { txt: "مالیات‌ها باید ثابت و کم باشند تا انگیزه سرمایه‌گذاری از بین نرود.", scoreX: 1, scoreY: 0 },
+          { txt: "مالیات نوعی دست‌اندازی دولت به دارایی شخصی است و باید لغو یا حداقل شود.", scoreX: 3, scoreY: -1 }
+        ]
+      },
+      {
+        cat: "۴. بازار کار و حقوق کارگران",
+        text: "روابط کارگر و کارفرما در بازار کار چگونه باید تنظیم شود؟",
+        options: [
+          { txt: "اتحادیه‌ها و شوراهای کارگری باید قدرت اصلی در تصمیم‌گیری‌ها باشند.", scoreX: -3, scoreY: -1 },
+          { txt: "قوانین کار باید از حقوق کارگران حمایت کرده و حداقل دستمزد را تعیین کند.", scoreX: -1, scoreY: 0 },
+          { txt: "قرارداد بین کارگر و کارفرما بر اساس توافق طرفین و عرضه-تقاضا باشد.", scoreX: 1, scoreY: 0 },
+          { txt: "هیچ قانون حداقل دستمزدی نباید وجود داشته باشد و بازار آزاد همه‌چیز را تنظیم کند.", scoreX: 3, scoreY: -1 }
+        ]
+      },
+      {
+        cat: "۵. تجارت و تعرفه‌های گمرکی",
+        text: "تجارت بین‌الملل و واردات کالا باید دارای چه سیاست‌هایی باشد؟",
+        options: [
+          { txt: "تعرفه‌های سنگین برای حمایت از تولید داخلی و خودکفایی کاملاً لازم است.", scoreX: -2, scoreY: 2 },
+          { txt: "حمایت هوشمند از صنایع داخلی همگام با تجارت جهانی صورت گیرد.", scoreX: -1, scoreY: 0 },
+          { txt: "تجارت آزاد با کشورهای جهان با حداقل تعرفه گمرکی صورت پذیرد.", scoreX: 1, scoreY: -1 },
+          { txt: "مرزهای اقتصادی کاملاً باز باشد و تعرفه‌های گمرکی به‌کلی حذف شوند.", scoreX: 3, scoreY: -2 }
+        ]
+      },
+      {
+        cat: "۶. مهار تورم و رکود",
+        text: "چگونه باید با بحران‌های اقتصادی و تورم مقابله کرد؟",
+        options: [
+          { txt: "کنترل قیمت‌ها توسط دولت و تزریق یارانه مستقیم به اقشار کم‌درآمد.", scoreX: -3, scoreY: 1 },
+          { txt: "سیاست‌های افزایش مخارج دولتی برای ایجاد اشتغال در دوران رکود.", scoreX: -1, scoreY: 0 },
+          { txt: "کاهش هزینه‌های دولت، اصلاح نظام بانکی و مقررات‌زدایی از کسب‌وکارها.", scoreX: 1, scoreY: 0 },
+          { txt: "اجازه دادن به بازار برای اصلاح خودکار، بدون کوچک‌ترین مداخله مالی یا پولی.", scoreX: 3, scoreY: -1 }
+        ]
+      },
+      {
+        cat: "۷. آزادی‌های فردی و سبک زندگی",
+        text: "آزادی‌های مدنی و سبک زندگی فردی تا چه حد باید محترم شمرده شوند؟",
+        options: [
+          { txt: "جامعه و سنت‌ها باید چارچوب سبک زندگی افراد را تعیین کنند.", scoreX: 0, scoreY: 3 },
+          { txt: "ارزش‌های اخلاقی جامعه باید حفظ شوند، اما تا حدی انعطاف وجود داشته باشد.", scoreX: 0, scoreY: 1 },
+          { txt: "هر فرد تا زمانی که به دیگران آسیب نزند، آزادی مطلق در انتخاب سبک زندگی دارد.", scoreX: 0, scoreY: -2 },
+          { txt: "دولت و جامعه هیچ حقی برای دخالت در هیچ پوشش، عقیده یا رفتار شخصی ندارند.", scoreX: 0, scoreY: -3 }
+        ]
+      },
+      {
+        cat: "۸. جایگاه سنت‌ها و خانواده",
+        text: "نظرتان درباره حفظ ساختارهای سنتی و نهاد خانواده در جامعه چیست؟",
+        options: [
+          { txt: "حفظ سنت‌ها و ارزش‌های دینی/ملی اولویت اصلی ثبات جامعه است.", scoreX: 0, scoreY: 3 },
+          { txt: "سنت‌ها آموزنده هستند اما باید با تغییرات روز منطبق شوند.", scoreX: 0, scoreY: 1 },
+          { txt: "ساختارهای سنتی نباید مانعی برای آزادی‌های فردی و برابری جنسیتی باشند.", scoreX: 0, scoreY: -1 },
+          { txt: "سنت‌های گذشته بازدارنده رشد فردی هستند و باید نقد و ساختارشکنی شوند.", scoreX: -1, scoreY: -3 }
+        ]
+      },
+      {
+        cat: "۹. آزادی بیان و مطبوعات",
+        text: "حدود سانسور، آزادی بیان و مطبوعات کجاست؟",
+        options: [
+          { txt: "رسانه‌ها باید تحت نظارت دقیق حکومت باشند تا امنیت و اخلاق حفظ شود.", scoreX: 0, scoreY: 3 },
+          { txt: "آزادی بیان لازم است، اما خطوط قرمزی برای امنیت ملی و باورها وجود دارد.", scoreX: 0, scoreY: 1 },
+          { txt: "آزادی بیان باید حداکثری باشد و سانسور ممانعت شود، مگر در موارد تشویق به خشونت.", scoreX: 0, scoreY: -2 },
+          { txt: "آزادی بیان و قلم باید مطلقا بدون هیچ قید، شرط یا سانسوری باشد.", scoreX: 0, scoreY: -3 }
+        ]
+      },
+      {
+        cat: "۱۰. اختیارات پلیس و نیروهای امنیتی",
+        text: "میزان اختیارات نیروهای امنیتی و پلیس در جامعه باید چگونه باشد؟",
+        options: [
+          { txt: "پلیس و نظارت نظامی باید قدرت بالایی داشته باشند تا نظمی متقن برقرار باشد.", scoreX: 0, scoreY: 3 },
+          { txt: "اختیارات کافی به پلیس داده شود اما نظارت قانونی هم برقرار باشد.", scoreX: 0, scoreY: 1 },
+          { txt: "حقوق شهروندی و حریم خصوصی بر هرگونه اختیارات فوق‌العاده پلیس ارجح است.", scoreX: 0, scoreY: -2 },
+          { txt: "نظارت پلیسی و کنترل شهروندان باید به حداقل ممکن کاهش یابد.", scoreX: 0, scoreY: -3 }
+        ]
+      },
+      {
+        cat: "۱۱. مهاجرت و مرزها",
+        text: "در مواجهه با مهاجرت و تنوع فرهنگی در کشور، چه موضعی دارید؟",
+        options: [
+          { txt: "مرزها باید سخت‌گیرانه کنترل شوند و هویت ملی/فرهنگی در اولویت باشد.", scoreX: 0, scoreY: 3 },
+          { txt: "مهاجرت باید قانونی، محدود و طبق نیازهای تخصصی کشور مدیریت شود.", scoreX: 0, scoreY: 1 },
+          { txt: "پذیرش مهاجران و پناهجویان همراه با ادغام فرهنگی گامی مثبت است.", scoreX: -1, scoreY: -1 },
+          { txt: "مرزهای جغرافیایی باید باز باشند و تنوع کثرت‌گرایانه پذیرفته شود.", scoreX: -1, scoreY: -3 }
+        ]
+      },
+      {
+        cat: "۱۲. نظام قضایی و مجازات",
+        text: "قوانین جزا و مجازات مجرمین باید بر چه پایه‌ای استوار باشد؟",
+        options: [
+          { txt: "مجازات‌های مجازات‌گرایانه و شدید (مانند اعدام) برای بازدارندگی ضروری است.", scoreX: 0, scoreY: 3 },
+          { txt: "ترکیبی از مجازات‌های قاطع و بازپروری زندانیان اعمال شود.", scoreX: 0, scoreY: 1 },
+          { txt: "تمرکز اصلی باید روی اصلاح، آموزش و ریشه‌یابی جرائم باشد، نه انتقام.", scoreX: -1, scoreY: -1 },
+          { txt: "مجازات‌های سلب‌کننده حیات (اعدام) به‌کلی لغو و نظام مجازات انسان‌محور شود.", scoreX: -1, scoreY: -3 }
+        ]
+      },
+      {
+        cat: "۱۳. محیط زیست و صنعت",
+        text: "مسائل زیست‌محیطی در برابر توسعه صنعتی چه جایگاهی دارند؟",
+        options: [
+          { txt: "رشد صنعتی و اشتغال در اولویت است؛ محیط زیست فرع بر توسعه است.", scoreX: 1, scoreY: 1 },
+          { txt: "باید تعادلی میان حفظ محیط زیست و توسعه کسب‌وکارها ایجاد شود.", scoreX: 0, scoreY: 0 },
+          { txt: "دولت باید قوانین و جریمه‌های سخت‌گیرانه‌ای برای کربن و آلودگی وضع کند.", scoreX: -2, scoreY: 1 },
+          { txt: "مبارزه با تغییرات اقلیمی اولویت حیاتی است، حتی اگر رشد اقتصادی کند شود.", scoreX: -3, scoreY: -1 }
+        ]
+      },
+      {
+        cat: "۱۴. حقوق اقلیت‌ها",
+        text: "مواجهه حکومت با اقلیت‌های عقیدتی و قومی چگونه باید باشد؟",
+        options: [
+          { txt: "اقلیت‌ها باید قوانین اکثریت و مذهب/فرهنگ رسمی را کاملاً رعایت کنند.", scoreX: 0, scoreY: 3 },
+          { txt: "حقوق اولیه اقلیت‌ها حفظ شود اما چارچوب عمومی کشور دست‌نخورده بماند.", scoreX: 0, scoreY: 1 },
+          { txt: "حقوق برابری برای همه اقلیت‌ها تضمین شده و تبعیض مثبت اعمال شود.", scoreX: -1, scoreY: -1 },
+          { txt: "تمام اشکال تبعیض ساختاری محو شود و آزادی‌های قومی و عقیدتی بی‌قیدوشرط باشد.", scoreX: -1, scoreY: -3 }
+        ]
+      },
+      {
+        cat: "۱۵. تعریف عدالت اجتماعی",
+        text: "در نهایت، مفهوم «عدالت» را چگونه معنا می‌کنید؟",
+        options: [
+          { txt: "عدالت یعنی برابر ساختن فرصت‌ها و پیامدهای زندگی برای همه طبق نیاز.", scoreX: -3, scoreY: 0 },
+          { txt: "عدالت یعنی ایجاد حداقل رفاه و فرصت برابر آموزشی برای تمام افراد.", scoreX: -1, scoreY: 0 },
+          { txt: "عدالت یعنی هرکس بر اساس تلاش و استعداد خود دستاورد داشته باشد.", scoreX: 1, scoreY: 0 },
+          { txt: "عدالت یعنی آزادی کامل در مبادله و عدم دستبرد به دارایی‌های مشروع فرد.", scoreX: 3, scoreY: -1 }
+        ]
+      }
     ];
 
     let currentQ = 0;
-    let scoreX = 0; // منفی = چپ ، مثبت = راست
-    let scoreY = 0; // منفی = آزادی‌خواه ، مثبت = اقتدارگرا
+    let scoreX = 0; // اقتصاد: چپ (-) تا راست (+)
+    let scoreY = 0; // اجتماعی: آزادی‌خواه (-) تا اقتدارگرا (+)
 
     function showQuestion() {
       const q = questions[currentQ];
       document.getElementById('qStep').innerText = `سوال ${currentQ + 1} از ${questions.length}`;
+      document.getElementById('qCat').innerText = q.cat;
       document.getElementById('qText').innerText = q.text;
       document.getElementById('progressBar').style.width = `${((currentQ) / questions.length) * 100}%`;
+
+      const optionsBox = document.getElementById('optionsBox');
+      optionsBox.innerHTML = '';
+
+      q.options.forEach((opt) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn';
+        btn.innerText = opt.txt;
+        btn.onclick = () => answer(opt.scoreX, opt.scoreY);
+        optionsBox.appendChild(btn);
+      });
     }
 
-    function answer(val) {
-      const q = questions[currentQ];
-      if (q.axis === "X") scoreX += val * q.factor;
-      if (q.axis === "Y") scoreY += val * q.factor;
+    function answer(sx, sy) {
+      scoreX += sx;
+      scoreY += sy;
 
       currentQ++;
       if (currentQ < questions.length) {
@@ -456,51 +638,61 @@
       document.getElementById('quizBox').style.display = 'none';
       document.getElementById('resultBox').style.display = 'block';
 
-      // محاسبه درصد موقعیت در قطب‌نما (دامنه از ۱۰- تا ۱۰+)
-      // محور X: از چپ (0%) تا راست (100%)
-      // محور Y: از اقتدارگرا (0% بالا) تا آزادی‌خواه (100% پایین)
-      let maxScore = 14; 
-      let xPercent = Math.min(Math.max(((scoreX + maxScore) / (maxScore * 2)) * 100, 10), 90);
-      let yPercent = Math.min(Math.max(((scoreY + maxScore) / (maxScore * 2)) * 100, 10), 90);
+      // دامنه مجاز امتیازها برای نگاشت روی نمودار
+      let maxScoreX = 35; 
+      let maxScoreY = 35;
 
-      // چون در CSS بالا top: 0 یعنی اقتدارگرا و top: 100% یعنی آزادی‌خواه:
-      // اگر scoreY مثبت باشد -> اقتدارگرا -> top کمتر می‌شود.
+      let xPercent = Math.min(Math.max(((scoreX + maxScoreX) / (maxScoreX * 2)) * 100, 10), 90);
+      let yPercent = Math.min(Math.max(((scoreY + maxScoreY) / (maxScoreY * 2)) * 100, 10), 90);
+
+      // در نمودار Y=0 بالا (اقتدارگرا) و Y=100 پایین (آزادی‌خواه) است.
+      // scoreY مثبت -> اقتدارگرا (top کمتر)
       let topPercent = 100 - yPercent;
 
       const pointer = document.getElementById('pointer');
       pointer.style.left = `${xPercent}%`;
       pointer.style.top = `${topPercent}%`;
 
-      // تعیین ایده و چهره بر اساس موقعیت
       let title = "";
       let peer = "";
       let desc = "";
 
       if (scoreX <= 0 && scoreY <= 0) {
-        // چپ آزادی‌خواه (Anarchism / Libertarian Left)
-        title = "آنارشیسم و اقتدارزدایی";
+        title = "آنارشیسم و چپ آزادی‌خواه";
         peer = "هم‌مسیر: میخائیل باکونین / نوام چامسکی";
-        desc = "شما به تمرکز قدرت و نهادهای اجبارکننده مانند دولت بی‌اعتماد هستید. جامعه آرمانی از نظر شما بر پایه همکاری داوطلبانه، خودمختاری محلی و حذف سلطه بنا می‌شود.";
+        desc = "شما به تمرکز قدرت، دولت‌ها و ناعدالتی اقتصادی بی‌اعتماد هستید. جامعه آرمانی شما بر پایه همکاری داوطلبانه، شوراهای محلی، عدالت اجتماعی و حذف سلطه بنا می‌شود.";
       } else if (scoreX > 0 && scoreY <= 0) {
-        // راست آزادی‌خواه (Liberalism / Libertarian Right)
-        title = "لیبرالیسم و بازار آزاد";
+        title = "لیبرالیسم و راست آزادی‌خواه";
         peer = "هم‌مسیر: آدام اسمیت / آین رند";
-        desc = "شما بر آزادی‌های فردی و مالکیت خصوصی تاکید دارید. باور دارید که بهترین محرک جامعه، رقابت آزاد و حداقل مداخله دولت در امور اقتصادی و شخصی است.";
+        desc = "شما بر آزادی‌های فردی و بازار آزاد تاکید دارید. باور دارید که بهترین محرک جامعه، عدم مداخله دولت، رقابت اقتصادی و احترام کامل به حقوق و مالکیت خصوصی است.";
       } else if (scoreX <= 0 && scoreY > 0) {
-        // چپ اقتدارگرا (Marxism / Socialism)
         title = "سوسیالیسم متمرکز و مارکسیسم";
         peer = "هم‌مسیر: کارل مارکس / ولادیمیر لنین";
-        desc = "شما عدالت اجتماعی و حذف بهره‌کشی اقتصادی را اولویت اصلی می‌دانید و معتقدید برای تحقق آن، ساختار قدرت متمرکز و کنترل عمومی بر منابع ضروری است.";
+        desc = "شما اولویت را بر برابری، حذف طبقات اجتماعی و مهار سرمایه‌داری می‌دانید و معتقدید برای تحقق عدالت واقعی، اقتدار دولتی و مدیریت متمرکز منابع لازم است.";
       } else {
-        // راست اقتدارگرا (Fascism / Conservatism)
-        title = "ناسیونالیسم و اقتدارگرایی";
-        peer = "هم‌مسیر: توماس هابز / اقتدارگرایان سنتی";
-        desc = "شما برای حفظ نظم، امنیت و اقتدار ملی ارزش زیادی قائلید و باور دارید بدون یک دولت مقتدر و قوانین مستحکم، جامعه دچار هرج‌ومرج و فروپاشی می‌شود.";
+        title = "ناسیونالیسم و محافظه‌کاری اقتدارگرا";
+        peer = "هم‌مسیر: توماس هابز / سنت‌گرایان";
+        desc = "شما برای حفظ نظم، امنیت، ارزش‌های سنتی و اقتدار ملی ارزش بالایی قائلید و معتقدید ساختار حاکمیتی مقتدر برای پیشگیری از هرج‌ومرج و حفظ انسجام ضروری است.";
       }
 
       document.getElementById('resTitle').innerText = title;
       document.getElementById('resPeer').innerText = peer;
       document.getElementById('resDesc').innerText = desc;
+    }
+
+    // دانلود کارت به صورت تصویر
+    function downloadCard() {
+      const captureElement = document.getElementById('captureArea');
+      
+      html2canvas(captureElement, {
+        backgroundColor: '#0f1215',
+        scale: 2 // کیفیت بالای خروجی
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'IsmCast-Political-Compass.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
     }
 
     function restartQuiz() {
@@ -512,7 +704,7 @@
       showQuestion();
     }
 
-    // شروع
+    // شروع آزمون
     showQuestion();
   </script>
 </body>
